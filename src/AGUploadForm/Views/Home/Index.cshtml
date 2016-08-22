@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    //ViewData["Title"] = "Home Page";
 }
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
@@ -11,6 +11,7 @@
     </ol>
     <div class="carousel-inner" role="listbox">
         <div class="item active">
+            
             <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
             <div class="carousel-caption" role="option">
                 <p>
@@ -68,6 +69,7 @@
 <div class="row">
     <div class="col-md-3">
         <h2>Application uses</h2>
+        @ViewData["Title"] - @ViewData["Updates"]
         <ul>
             <li>Sample pages using ASP.NET Core MVC</li>
             <li><a href="http://go.microsoft.com/fwlink/?LinkId=518004">Bower</a> for managing client-side libraries</li>
