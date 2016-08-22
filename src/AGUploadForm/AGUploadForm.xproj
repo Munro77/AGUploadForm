@@ -14,6 +14,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
+    <ApplicationInsightsResourceId>/subscriptions/2b6f455c-9081-49ca-9c29-db8caedace4c/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/AGUploadForm</ApplicationInsightsResourceId>
   </PropertyGroup>
   <ItemGroup>
     <DnxInvisibleContent Include="bower.json" />
