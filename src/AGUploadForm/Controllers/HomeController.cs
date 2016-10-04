@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+//using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using AGUploadForm.Models;
+using AGUploadForm.Models.Settings;
 using Microsoft.Extensions.Options;
 
 namespace AGUploadForm.Controllers
@@ -16,12 +18,17 @@ namespace AGUploadForm.Controllers
         public HomeController(IOptions<FormSettings> settingsOptions)
         {
             _settings = settingsOptions.Value;
+            
+            //string output = JsonConvert.SerializeObject(_settings);
+
         }
 
         public IActionResult Index()
         {
             ViewData["Title"] = _settings.Title;
             ViewData["Updates"] = _settings.Updates;
+            _settings.Offices.ForEach(x => { ViewData["Office"] = x.Name; });
+            ViewData["Office"] += " AND dept email = " + _settings.Offices[0].Departments[0].Email;
             return View();
         }
 

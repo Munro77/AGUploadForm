@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AGUploadForm.Data;
 using AGUploadForm.Models;
+using AGUploadForm.Models.Settings;
 using AGUploadForm.Services;
 
 namespace AGUploadForm
@@ -36,6 +37,11 @@ namespace AGUploadForm
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            IEnumerable<IConfigurationSource> a = builder.Sources;
+            
+
+            
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -61,6 +67,8 @@ namespace AGUploadForm
 
             services.AddOptions();
             services.Configure<FormSettings>(Configuration);
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace AGUploadForm.Models
 {
-    public class FormSettings
+    public class Job
     {
-        public string Title { get; set; }
-        public int Updates { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+
     }
 }
