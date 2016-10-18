@@ -25,10 +25,11 @@ namespace AGUploadForm.Controllers
 
         public IActionResult Index()
         {
-            ViewData["Title"] = _settings.Title;
+            //Test the data from the config file
+            /*ViewData["Title"] = _settings.Title;
             ViewData["Updates"] = _settings.Updates;
             _settings.Offices.ForEach(x => { ViewData["Office"] = x.Name; });
-            ViewData["Office"] += " AND dept email = " + _settings.Offices[0].Departments[0].Email;
+            ViewData["Office"] += " AND dept email = " + _settings.Offices[0].Departments[0].Email;*/
             return View();
         }
 
@@ -50,5 +51,18 @@ namespace AGUploadForm.Controllers
         {
             return View();
         }
+
+        // jQuery UI theme for Bootloader - copied directly from Demo
+        public IActionResult JQueryUI()
+        {
+            return View();
+        }
+
+        // BasicPlusUI theme for Bootloader - copied directly from Demo
+        public IActionResult BasicPlusUI()
+        {
+            return View();
+        }
+
     }
 }

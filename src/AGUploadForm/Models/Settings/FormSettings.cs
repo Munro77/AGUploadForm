@@ -22,11 +22,6 @@ namespace AGUploadForm.Models.Settings
 
     }
 
-    //public class Offices
-    //{
-    //    public List<Office> Office { get; set; }
-    //}
-    
     public class FormSettings
     {
         public string Title { get; set; }

@@ -13,6 +13,7 @@ using AGUploadForm.Data;
 using AGUploadForm.Models;
 using AGUploadForm.Models.Settings;
 using AGUploadForm.Services;
+using Backload.MiddleWare;
 
 namespace AGUploadForm
 {
@@ -97,6 +98,15 @@ namespace AGUploadForm
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+
+            //Adding Backload for handling files
+            // Invoke the internal handler only if path contains /Backload/FileHandler
+            app.MapWhen(
+               context => context.Request.Path.Value.Contains("/Backload/FileHandler"),
+               appBranch =>
+               {
+                   appBranch.UseBackload();
+               });
 
             app.UseMvc(routes =>
             {
