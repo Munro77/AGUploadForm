@@ -10,7 +10,8 @@
         "Departments": [
           {
             "Name": "CADD",
-            "Email": "cadd@email.com"
+            "Email": "cadd@email.com",
+            "SaveLocation": "\\NetworkLocation1\test1"
           }
         ]
         
@@ -20,10 +21,15 @@
         "HoursStart": "9",
         "HoursFinish": "17",
         "SaveLocation": "\\NetworkLocation1\test2",
-        "Email": "test@email.com"
+        "Email": "test@email.com",
+        "Departments": [
+          {
+            "Name": "CADD",
+            "Email": "caddwellington@email.com",
+            "SaveLocation": "\\NetworkLocation1\test1"
+          }
+        ]
       }
     ]
-  ,
-  "Title": "Different Title",
-  "Updates": "7"
+  
 }

@@ -16,7 +16,7 @@ namespace AGUploadForm.Controllers
 
         public JobsController(ApplicationDbContext context)
         {
-            _context = context;    
+            _context = context;
         }
 
         // GET: Jobs

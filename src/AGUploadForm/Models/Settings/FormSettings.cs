@@ -9,6 +9,8 @@ namespace AGUploadForm.Models.Settings
     {
         public string Name { get; set; }
         public string Email { get; set; }
+        public string SaveLocation { get; set; }
+
     }
 
     public class Office
@@ -24,9 +26,6 @@ namespace AGUploadForm.Models.Settings
 
     public class FormSettings
     {
-        public string Title { get; set; }
-        public string Updates { get; set; }
-        //public Offices Offices { get; set; }
         public List<Office> Offices { get; set; }
     }
 
