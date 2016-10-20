@@ -17,9 +17,14 @@ namespace AGUploadForm.Models.FormViewModels
         [Display(Name = "Choose Department")]
         public string SelectedDepartmentName { get; set; }
 
+        public JobInformationViewModel JobInformation { get; }
+        public ContactInformationViewModel ContactInformation { get; }
+
         public FormViewModel(FormSettings formSettings)
         {
             OfficeSelectList = new SelectList(formSettings.Offices, "Name", "Name");
+            JobInformation = new JobInformationViewModel();
+            ContactInformation = new ContactInformationViewModel();
         }
     }
 }

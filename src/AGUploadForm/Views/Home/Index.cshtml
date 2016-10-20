@@ -7,7 +7,7 @@
     $(document).ready(function () {
         $("#SelectedOfficeName").change(function () {
             $("#SelectedDepartmentName").empty();
-            $("#SelectedDepartmentName").append('<option value=""></option>');
+            $("#SelectedDepartmentName").append('<option value="">Select One</option>');
             if ($("#SelectedOfficeName").val() != "") {
                 $.ajax({
                     type: 'POST',
@@ -26,11 +26,121 @@
             }
             return false;
         });
+        $('input[type="reset"]').click(function () {
+            $("#SelectedOfficeName").val("");
+            $("#SelectedOfficeName").trigger('change');
+        });
     });
 </script>
 
-@Html.LabelFor(model => model.SelectedOfficeName)
-@Html.DropDownListFor(model => model.SelectedOfficeName, Model.OfficeSelectList, "", new { @class = "form-control" })
+<form>
+    <div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.SelectedOfficeName)
+        </div>
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.SelectedOfficeName, Model.OfficeSelectList, "Select One", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.SelectedDepartmentName)
+        </div>
+        <div class="col-md-8">
+            @Html.DropDownList("SelectedDepartmentName", new SelectList(string.Empty, "Value", "Text"), "Select One", new { @class = "form-control" })
+        </div>
+    </div>
 
-@Html.LabelFor(mode => mode.SelectedDepartmentName)
-@Html.DropDownList("SelectedDepartmentName", new SelectList(string.Empty, "Value", "Text"), "", new { @class = "form-control" })
+    <!-- Job Information -->
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <h3>
+                Job Information
+            </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.JobInformation.DueDateTime)
+        </div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.JobInformation.DueDateTime, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.JobInformation.AccountNumber)
+        </div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.JobInformation.AccountNumber, new { @class = "form-control" })
+        </div>
+    </div><div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.JobInformation.ProjectNumber)
+        </div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.JobInformation.ProjectNumber, new { @class = "form-control" })
+        </div>
+    </div><div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.JobInformation.Instructions)
+        </div>
+        <div class="col-md-8">
+            @Html.TextAreaFor(model => model.JobInformation.Instructions, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <h3>
+                Contact Infromation
+            </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.ContactInformation.Name)
+        </div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.ContactInformation.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.ContactInformation.Company)
+        </div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.ContactInformation.Company, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.ContactInformation.Address)
+        </div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.ContactInformation.Address, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.ContactInformation.Email)
+        </div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.ContactInformation.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-right">
+            @Html.LabelFor(model => model.ContactInformation.PhoneNumber)
+        </div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.ContactInformation.PhoneNumber, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-11 text-right">
+            <input type="reset" value="Clear All Fields" />
+        </div>
+    </div>
+</form>
