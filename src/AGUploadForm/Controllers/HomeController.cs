@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using AGUploadForm.Models;
 using AGUploadForm.Models.Settings;
 using Microsoft.Extensions.Options;
+using AGUploadForm.Models.FormViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AGUploadForm.Controllers
 {
@@ -30,7 +32,7 @@ namespace AGUploadForm.Controllers
             ViewData["Updates"] = _settings.Updates;
             _settings.Offices.ForEach(x => { ViewData["Office"] = x.Name; });
             ViewData["Office"] += " AND dept email = " + _settings.Offices[0].Departments[0].Email;*/
-            return View();
+            return View(new FormViewModel(_settings));
         }
 
         public IActionResult About()
@@ -70,5 +72,9 @@ namespace AGUploadForm.Controllers
             return View();
         }
 
+        public JsonResult GetDepartmentSelectListByOfficeName(string officeName)
+        {
+            return Json(new SelectList(_settings.Offices.Find(o => o.Name.Equals(officeName)).Departments.ToList(), "Name", "Name"));
+        }
     }
 }
