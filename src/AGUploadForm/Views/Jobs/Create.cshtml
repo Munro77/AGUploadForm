@@ -5,17 +5,30 @@
 }
 
 @section HeadScripts{
- <!-- Bootstrap styles -->
-<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap styles -->
+    <!-- Original
+     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    -->
+    <!-- .Net Core -->
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
 
-<!-- jQquery File Upload Plugin and Gallery styles -->
-<link href="~/Backload/Client/blueimp/bundles/css/jquery.fileupload.bundle.min.css" rel="stylesheet" />
-<link href="~/Backload/Client/blueimp/gallery/css/blueimp-gallery.min.css" rel="stylesheet" />
+    <!-- jQquery File Upload Plugin and Gallery styles -->
+    <link href="~/Backload/Client/blueimp/bundles/css/jquery.fileupload.bundle.min.css" rel="stylesheet" />
+    <link href="~/Backload/Client/blueimp/gallery/css/blueimp-gallery.min.css" rel="stylesheet" />
 
 
-<!-- The main application styles -->
-<link href="~/Content/demo.styles.css" rel="stylesheet" />
-       
+    <!-- The main application styles -->
+    <link href="~/Content/demo.styles.css" rel="stylesheet" />
+
 }
 
 <h2>Create</h2>
@@ -189,9 +202,30 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <!-- Scripts below are from the backload demo - need to reconcile with design scripts for bootstrap, jquery etc.-->
-     <!-- jQuery and Bootstrap script files -->
+    <!-- jQuery and Bootstrap script files -->
+    <!-- ORIGINAL
     <script src="~/Scripts/jquery-1.12.3.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    -->
+    >
+    <!-- .Net Core using Bower -->
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
 
     <!-- jQquery File Upload Plugin script bundle (BasicPlusUI theme) -->
     <script src="~/Backload/Client/blueimp/bundles/js/jquery.fileupload.basicplusui.min.js"></script>

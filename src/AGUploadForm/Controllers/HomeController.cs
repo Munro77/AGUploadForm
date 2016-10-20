@@ -64,5 +64,11 @@ namespace AGUploadForm.Controllers
             return View();
         }
 
+        //A plain version of the BlueImp plugin wired up using packaging
+        public IActionResult PlainBlueImp()
+        {
+            return View();
+        }
+
     }
 }

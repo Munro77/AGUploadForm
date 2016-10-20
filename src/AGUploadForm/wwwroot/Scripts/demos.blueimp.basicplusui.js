@@ -22,8 +22,6 @@ $(document).ready(function () {
     });
 
 
-
-
     // Load existing files:
     $('#fileupload').addClass('fileupload-processing');
     $.ajax({
