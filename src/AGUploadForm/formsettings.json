@@ -12,6 +12,16 @@
             "Name": "CADD",
             "Email": "cadd@email.com",
             "SaveLocation": "\\NetworkLocation1\test1"
+          },
+          {
+            "Name": "Colour",
+            "Email": "cadd@email.com",
+            "SaveLocation": "\\NetworkLocation1\test1"
+          },
+          {
+            "Name": "Offset",
+            "Email": "cadd@email.com",
+            "SaveLocation": "\\NetworkLocation1\test1"
           }
         ]
         
