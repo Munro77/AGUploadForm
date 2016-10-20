@@ -7,7 +7,7 @@
     $(document).ready(function () {
         $("#SelectedOfficeName").change(function () {
             $("#SelectedDepartmentName").empty();
-            $("#SelectedDepartmentName").append('<option value="">Select One</option>');
+            $("#SelectedDepartmentName").append('<option value="">Select One</option>').prop('disabled',false);
             if ($("#SelectedOfficeName").val() != "") {
                 $.ajax({
                     type: 'POST',
@@ -23,6 +23,11 @@
                         alert('Failed to retrieve departments.' + ex);
                     }
                 });
+            }
+            else
+            {
+                $("#SelectedDepartmentName").empty();
+                $("#SelectedDepartmentName").append('<option value="">Choose a Location</option>').prop('disabled', true);
             }
             return false;
         });
@@ -47,7 +52,7 @@
             @Html.LabelFor(model => model.SelectedDepartmentName)
         </div>
         <div class="col-md-8">
-            @Html.DropDownList("SelectedDepartmentName", new SelectList(string.Empty, "Value", "Text"), "Select One", new { @class = "form-control" })
+            @Html.DropDownList("SelectedDepartmentName", new SelectList(string.Empty, "Value", "Text"), "Choose a Location", new { @class = "form-control", @disabled = "true" })
         </div>
     </div>
 
