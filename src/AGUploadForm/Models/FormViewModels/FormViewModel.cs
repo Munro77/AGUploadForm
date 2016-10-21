@@ -28,5 +28,11 @@ namespace AGUploadForm.Models.FormViewModels
             JobInformation = new JobInformationViewModel();
             ContactInformation = new ContactInformationViewModel();
         }
+
+        public FormViewModel()
+        {
+            JobInformation = new JobInformationViewModel();
+            ContactInformation = new ContactInformationViewModel();
+        }
     }
 }

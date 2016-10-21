@@ -51,7 +51,7 @@
             $("#SelectedOfficeName").trigger('change');
         });
         $("#SubmitButton").click(function () {
-            // $("#SubmitForm").submit();
+            $("#SubmitForm").submit();
         });
     });
 </script>
@@ -134,7 +134,7 @@
     {% } %}
 </script>
 
-<form id="SubmitForm" method="post" action='@Url.Action("PostForm")'>
+<form id="SubmitForm" method="post" action='@Url.Action("Submit")'>
     @Html.HiddenFor(model => model.ObjectContextId)
     <div class="row">
         <div class="col-md-3 text-right">

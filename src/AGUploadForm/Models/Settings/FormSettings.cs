@@ -21,6 +21,7 @@ namespace AGUploadForm.Models.Settings
         public string SaveLocation { get; set; }
         public string Email { get; set; }
         public List<Department> Departments { get; set; }
+        public string FallbackOfficeName { get; set; }
 
     }
 

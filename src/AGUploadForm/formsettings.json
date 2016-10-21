@@ -4,7 +4,7 @@
       {
         "Name": "Carnforth",
         "HoursStart": "9",
-        "HoursFinish": "17",
+        "HoursFinish": "12",
         "SaveLocation": "\\NetworkLocation1\test1",
         "Email": "test@email.com",
         "Departments": [
@@ -23,12 +23,12 @@
             "Email": "cadd@email.com",
             "SaveLocation": "\\NetworkLocation1\test1"
           }
-        ]
-        
+        ],
+        "FallbackOfficeName": "Wellington"
       },
       {
         "Name": "Wellington",
-        "HoursStart": "9",
+        "HoursStart": "12",
         "HoursFinish": "17",
         "SaveLocation": "\\NetworkLocation1\test2",
         "Email": "test@email.com",
@@ -38,7 +38,8 @@
             "Email": "caddwellington@email.com",
             "SaveLocation": "\\NetworkLocation1\test1"
           }
-        ]
+        ],
+        "FallbackOfficeName": "Carnforth"
       }
     ]
   

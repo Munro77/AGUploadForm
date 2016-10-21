@@ -9,6 +9,7 @@ using AGUploadForm.Models.Settings;
 using Microsoft.Extensions.Options;
 using AGUploadForm.Models.FormViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using AGUploadForm.Data;
 
 namespace AGUploadForm.Controllers
 {
@@ -16,10 +17,12 @@ namespace AGUploadForm.Controllers
     {
 
         private readonly FormSettings _settings;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(IOptions<FormSettings> settingsOptions)
+        public HomeController(IOptions<FormSettings> settingsOptions, ApplicationDbContext context)
         {
             _settings = settingsOptions.Value;
+            _context = context;
             
             //string output = JsonConvert.SerializeObject(_settings);
 
@@ -75,6 +78,37 @@ namespace AGUploadForm.Controllers
         public JsonResult GetDepartmentSelectListByOfficeName(string officeName)
         {
             return Json(new SelectList(_settings.Offices.Find(o => o.Name.Equals(officeName)).Departments.ToList(), "Name", "Name"));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Submit(FormViewModel formViewModel)
+        {
+            // Use FallbackOffice if outside office hours
+            Office office = _settings.Offices.Find(o => o.Name.Equals(formViewModel.SelectedOfficeName));
+            int currentHour = DateTime.Now.Hour;
+            string officeName = formViewModel.SelectedOfficeName;
+            if (currentHour < office.HoursStart || currentHour >= office.HoursFinish)
+            {
+                officeName = office.FallbackOfficeName;
+            }
+
+            Job job = new Models.Job();
+            job.OfficeName = officeName;
+            job.DepartmentName = formViewModel.SelectedDepartmentName;
+            job.DueDateTime = formViewModel.JobInformation.DueDateTime;
+            job.AccountNumber = formViewModel.JobInformation.AccountNumber;
+            job.ProjectNumber = formViewModel.JobInformation.ProjectNumber;
+            job.Instructions = formViewModel.JobInformation.Instructions;
+            job.ContactName = formViewModel.ContactInformation.Name;
+            job.ContactCompanyName = formViewModel.ContactInformation.Company;
+            job.ContactAddress = formViewModel.ContactInformation.Address;
+            job.ContactEmail = formViewModel.ContactInformation.Email;
+            job.ContactPhoneNumber = formViewModel.ContactInformation.PhoneNumber;
+
+            _context.Add(job);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("About");
         }
     }
 }
