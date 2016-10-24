@@ -10,8 +10,7 @@ namespace AGUploadForm.Models.FormViewModels
     {
         [Required(ErrorMessage = "*")]
         [Display(Name = "Due Date/Time")]
-        [DataType(DataType.DateTime)]
-        public DateTime DueDateTime { get; set; }
+        public string DueDateTime { get; set; }
         [Display(Name = "Account No.")]
         public string AccountNumber { get; set; }
         [Display(Name = "Project/PO No.")]

@@ -68,6 +68,7 @@ namespace AGUploadForm
 
             services.AddOptions();
             services.Configure<FormSettings>(Configuration);
+            services.Configure<AppSettings>(Configuration);
             
 
         }

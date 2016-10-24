@@ -10,7 +10,7 @@ namespace AGUploadForm.Models
         public int ID { get; set; }
         public string OfficeName { get; set; }
         public string DepartmentName { get; set; }
-        public DateTime DueDateTime { get; set; }
+        public string DueDateTime { get; set; }
         public string AccountNumber { get; set; }
         public string ProjectNumber { get; set; }
         public string Instructions { get; set; }

@@ -136,29 +136,33 @@
     {% } %}
 </script>
 
-<form id="SubmitForm" method="post">
+<form asp-controller="Home" asp-action="Index" id="SubmitForm" method="post">
     <div class="form-horizontal">
-        @Html.HiddenFor(model => model.ObjectContextId)
+        <input type="hidden" asp-for="ObjectContextId" />
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.SelectedOfficeName)
+                <label asp-for="SelectedOfficeName"></label>
             </div>
             <div class="col-md-3">
-                @Html.DropDownListFor(model => model.SelectedOfficeName, Model.OfficeSelectList, "Select One", new { @class = "form-control" })
+                <select asp-for="SelectedOfficeName" asp-items="Model.OfficeSelectList" class="form-control">
+                    <option value="">Select One</option>
+                </select>
             </div>
             <div class="col-md-3">
-                @Html.ValidationMessageFor(model => model.SelectedOfficeName)
+                <span asp-validation-for="SelectedOfficeName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.SelectedDepartmentName)
+                <label asp-for="SelectedDepartmentName"></label>
             </div>
             <div class="col-md-3">
-                @Html.DropDownListFor(model => model.SelectedDepartmentName, Model.DepartmentSelectList, "Choose a Location", new { @class = "form-control" })
+                <select asp-for="SelectedDepartmentName" asp-items="Model.DepartmentSelectList" class="form-control">
+                    <option value="">Choose a Location</option>
+                </select>
             </div>
             <div class="col-md-3">
-                @Html.ValidationMessageFor(model => model.SelectedDepartmentName)
+                <span asp-validation-for="SelectedDepartmentName" class="text-danger"></span>
             </div>
         </div>
 
@@ -172,40 +176,40 @@
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.JobInformation.DueDateTime)
+                <label asp-for="JobInformation.DueDateTime"></label>
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.JobInformation.DueDateTime, new { @class = "form-control" })
+                <input type="text" asp-for="JobInformation.DueDateTime" class="form-control" />
             </div>
             <div class="col-md-3">
-                @Html.ValidationMessageFor(model => model.JobInformation.DueDateTime)
+                <span asp-validation-for="JobInformation.DueDateTime" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.JobInformation.AccountNumber)
+                <label asp-for="JobInformation.AccountNumber"></label>
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.JobInformation.AccountNumber, new { @class = "form-control" })
+                <input type="text" asp-for="JobInformation.AccountNumber" class="form-control" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.JobInformation.ProjectNumber)
+                <label asp-for="JobInformation.ProjectNumber"></label>
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.JobInformation.ProjectNumber, new { @class = "form-control" })
+                <input type="text" asp-for="JobInformation.ProjectNumber" class="form-control" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.JobInformation.Instructions)
+                <label asp-for="JobInformation.Instructions"></label>
             </div>
             <div class="col-md-3">
-                @Html.TextAreaFor(model => model.JobInformation.Instructions, new { @class = "form-control" })
+                <textarea asp-for="JobInformation.Instructions" class="form-control"></textarea>
             </div>
             <div class="col-md-3">
-                @Html.ValidationMessageFor(model => model.JobInformation.Instructions)
+                <span asp-validation-for="JobInformation.Instructions" class="text-danger"></span>
             </div>
         </div>
 
@@ -219,54 +223,54 @@
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.ContactInformation.Name)
+                <label asp-for="ContactInformation.Name"></label>
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.ContactInformation.Name, new { @class = "form-control" })
+                <input type="text" asp-for="ContactInformation.Name" class="form-control" />
             </div>
             <div class="col-md-3">
-                @Html.ValidationMessageFor(model => model.ContactInformation.Name)
+                <span asp-validation-for="ContactInformation.Name" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.ContactInformation.Company)
+                <label asp-for="ContactInformation.Company"></label>
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.ContactInformation.Company, new { @class = "form-control" })
+                <input type="text" asp-for="ContactInformation.Company" class="form-control" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.ContactInformation.Address)
+                <label asp-for="ContactInformation.Address"></label>
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.ContactInformation.Address, new { @class = "form-control" })
+                <input type="text" asp-for="ContactInformation.Address" class="form-control" />
             </div>
             <div class="col-md-3">
-                @Html.ValidationMessageFor(model => model.ContactInformation.Address)
+                <span asp-validation-for="ContactInformation.Address" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.ContactInformation.Email)
+                <label asp-for="ContactInformation.Email"></label>
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.ContactInformation.Email, new { @class = "form-control" })
+                <input type="text" asp-for="ContactInformation.Email" class="form-control" />
             </div>
             <div class="col-md-3">
-                @Html.ValidationMessageFor(model => model.ContactInformation.Email)
+                <span asp-validation-for="ContactInformation.Email" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-3 text-right">
-                @Html.LabelFor(model => model.ContactInformation.PhoneNumber)
+                <label asp-for="ContactInformation.PhoneNumber"></label>
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.ContactInformation.PhoneNumber, new { @class = "form-control" })
+                <input type="text" asp-for="ContactInformation.PhoneNumber" class="form-control" />
             </div>
             <div class="col-md-3">
-                @Html.ValidationMessageFor(model => model.ContactInformation.PhoneNumber)
+                <span asp-validation-for="ContactInformation.PhoneNumber" class="text-danger"></span>
             </div>
         </div>
         <div class="row">
@@ -279,7 +283,7 @@
 
 <!-- File Upload -->
 <form id="fileupload" action="/Backload/FileHandler" method="POST" enctype="multipart/form-data">
-    @Html.Hidden("objectContext", Model.ObjectContextId)
+    <input type="hidden" id="objectContext" name="objectContext" value="@Model.ObjectContextId" />
     <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
     <div class="row fileupload-buttonbar">
         <div class="col-md-7">
