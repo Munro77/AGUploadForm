@@ -11,12 +11,15 @@ namespace AGUploadForm.Models.FormViewModels
     public class FormViewModel
     {
         public Guid ObjectContextId { get; set; }
+        [Required(ErrorMessage = "*")]
         [Display(Name = "Choose Printer Location")]
         public string SelectedOfficeName { get; set; }
-        public SelectList OfficeSelectList { get; }
+        public SelectList OfficeSelectList { get; set; }
 
+        [Required(ErrorMessage = "*")]
         [Display(Name = "Choose Department")]
         public string SelectedDepartmentName { get; set; }
+        public SelectList DepartmentSelectList { get; set; }
 
         public JobInformationViewModel JobInformation { get; }
         public ContactInformationViewModel ContactInformation { get; }
@@ -25,6 +28,7 @@ namespace AGUploadForm.Models.FormViewModels
         {
             ObjectContextId = Guid.NewGuid();
             OfficeSelectList = new SelectList(formSettings.Offices, "Name", "Name");
+            DepartmentSelectList = new SelectList(string.Empty, "Value", "Text");
             JobInformation = new JobInformationViewModel();
             ContactInformation = new ContactInformationViewModel();
         }

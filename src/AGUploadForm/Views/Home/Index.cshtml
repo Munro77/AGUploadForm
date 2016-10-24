@@ -53,6 +53,8 @@
         $("#SubmitButton").click(function () {
             $("#SubmitForm").submit();
         });
+
+        $("#SelectedDepartmentName").prop('disabled', ($("#SelectedOfficeName").val() == ""));
     });
 </script>
 
@@ -134,115 +136,143 @@
     {% } %}
 </script>
 
-<form id="SubmitForm" method="post" action='@Url.Action("Submit")'>
-    @Html.HiddenFor(model => model.ObjectContextId)
-    <div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.SelectedOfficeName)
+<form id="SubmitForm" method="post">
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.ObjectContextId)
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.SelectedOfficeName)
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.SelectedOfficeName, Model.OfficeSelectList, "Select One", new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.ValidationMessageFor(model => model.SelectedOfficeName)
+            </div>
         </div>
-        <div class="col-md-8">
-            @Html.DropDownListFor(model => model.SelectedOfficeName, Model.OfficeSelectList, "Select One", new { @class = "form-control" })
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.SelectedDepartmentName)
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.SelectedDepartmentName, Model.DepartmentSelectList, "Choose a Location", new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.ValidationMessageFor(model => model.SelectedDepartmentName)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.SelectedDepartmentName)
-        </div>
-        <div class="col-md-8">
-            @Html.DropDownList("SelectedDepartmentName", new SelectList(string.Empty, "Value", "Text"), "Choose a Location", new { @class = "form-control", @disabled = "true" })
-        </div>
-    </div>
 
-    <!-- Job Information -->
-    <div class="row">
-        <div class="col-md-3 text-right">
-            <h3>
-                Job Information
-            </h3>
+        <!-- Job Information -->
+        <div class="row">
+            <div class="col-md-3 text-right">
+                <h3>
+                    Job Information
+                </h3>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.JobInformation.DueDateTime)
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.JobInformation.DueDateTime)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.JobInformation.DueDateTime, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.ValidationMessageFor(model => model.JobInformation.DueDateTime)
+            </div>
         </div>
-        <div class="col-md-8">
-            @Html.TextBoxFor(model => model.JobInformation.DueDateTime, new { @class = "form-control" })
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.JobInformation.AccountNumber)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.JobInformation.AccountNumber, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.JobInformation.AccountNumber)
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.JobInformation.ProjectNumber)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.JobInformation.ProjectNumber, new { @class = "form-control" })
+            </div>
         </div>
-        <div class="col-md-8">
-            @Html.TextBoxFor(model => model.JobInformation.AccountNumber, new { @class = "form-control" })
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.JobInformation.Instructions)
+            </div>
+            <div class="col-md-3">
+                @Html.TextAreaFor(model => model.JobInformation.Instructions, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.ValidationMessageFor(model => model.JobInformation.Instructions)
+            </div>
         </div>
-    </div><div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.JobInformation.ProjectNumber)
-        </div>
-        <div class="col-md-8">
-            @Html.TextBoxFor(model => model.JobInformation.ProjectNumber, new { @class = "form-control" })
-        </div>
-    </div><div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.JobInformation.Instructions)
-        </div>
-        <div class="col-md-8">
-            @Html.TextAreaFor(model => model.JobInformation.Instructions, new { @class = "form-control" })
-        </div>
-    </div>
 
-    <!-- Contact Information -->
-    <div class="row">
-        <div class="col-md-3 text-right">
-            <h3>
-                Contact Infromation
-            </h3>
+        <!-- Contact Information -->
+        <div class="row">
+            <div class="col-md-3 text-right">
+                <h3>
+                    Contact Infromation
+                </h3>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.ContactInformation.Name)
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.ContactInformation.Name)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.ContactInformation.Name, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.ValidationMessageFor(model => model.ContactInformation.Name)
+            </div>
         </div>
-        <div class="col-md-8">
-            @Html.TextBoxFor(model => model.ContactInformation.Name, new { @class = "form-control" })
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.ContactInformation.Company)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.ContactInformation.Company, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.ContactInformation.Company)
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.ContactInformation.Address)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.ContactInformation.Address, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.ValidationMessageFor(model => model.ContactInformation.Address)
+            </div>
         </div>
-        <div class="col-md-8">
-            @Html.TextBoxFor(model => model.ContactInformation.Company, new { @class = "form-control" })
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.ContactInformation.Email)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.ContactInformation.Email, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.ValidationMessageFor(model => model.ContactInformation.Email)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.ContactInformation.Address)
+        <div class="form-group">
+            <div class="col-md-3 text-right">
+                @Html.LabelFor(model => model.ContactInformation.PhoneNumber)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.ContactInformation.PhoneNumber, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.ValidationMessageFor(model => model.ContactInformation.PhoneNumber)
+            </div>
         </div>
-        <div class="col-md-8">
-            @Html.TextBoxFor(model => model.ContactInformation.Address, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.ContactInformation.Email)
-        </div>
-        <div class="col-md-8">
-            @Html.TextBoxFor(model => model.ContactInformation.Email, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 text-right">
-            @Html.LabelFor(model => model.ContactInformation.PhoneNumber)
-        </div>
-        <div class="col-md-8">
-            @Html.TextBoxFor(model => model.ContactInformation.PhoneNumber, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-11 text-right">
-            <input type="reset" class="btn btn-warning" value="Clear All Fields" />
+        <div class="row">
+            <div class="col-md-10 text-right">
+                <input type="reset" class="btn btn-warning" value="Clear All Fields" />
+            </div>
         </div>
     </div>
 </form>
@@ -252,7 +282,7 @@
     @Html.Hidden("objectContext", Model.ObjectContextId)
     <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
     <div class="row fileupload-buttonbar">
-        <div class="col-lg-7">
+        <div class="col-md-7">
             <!-- The fileinput-button span is used to style the file input field as button -->
             <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -278,7 +308,7 @@
             <span class="fileupload-process"></span>
         </div>
         <!-- The global progress state -->
-        <div class="col-lg-5 fileupload-progress fade">
+        <div class="col-md-5 fileupload-progress fade">
             <!-- The global progress bar -->
             <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                 <div class="progress-bar progress-bar-success" style="width:0%;"></div>
@@ -292,7 +322,7 @@
 </form>
 
 <div class="row">
-    <div class="col-md-11 text-right">
+    <div class="col-md-10 text-right">
         <button type="button" class="btn btn-success" id="SubmitButton">
             <span>Submit</span>
         </button>

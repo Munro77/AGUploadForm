@@ -19,5 +19,11 @@ namespace AGUploadForm.Models
         public string ContactAddress { get; set; }
         public string ContactEmail { get; set; }
         public string ContactPhoneNumber { get; set; }
+        public DateTime Created { get; protected set; }
+
+        public Job()
+        {
+            Created = DateTime.Now;
+        }
     }
 }

@@ -10,20 +10,23 @@ using Microsoft.Extensions.Options;
 using AGUploadForm.Models.FormViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AGUploadForm.Data;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AGUploadForm.Controllers
 {
     public class HomeController : Controller
     {
-
         private readonly FormSettings _settings;
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public HomeController(IOptions<FormSettings> settingsOptions, ApplicationDbContext context)
+        public HomeController(IOptions<FormSettings> settingsOptions, ApplicationDbContext context, IHostingEnvironment hostingEnvironment)
         {
             _settings = settingsOptions.Value;
             _context = context;
-            
+            _hostingEnvironment = hostingEnvironment;
+
             //string output = JsonConvert.SerializeObject(_settings);
 
         }
@@ -81,15 +84,48 @@ namespace AGUploadForm.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Submit(FormViewModel formViewModel)
+        public async Task<IActionResult> Index(FormViewModel formViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                formViewModel.OfficeSelectList = new SelectList(_settings.Offices, "Name", "Name");
+                if (string.IsNullOrEmpty(formViewModel.SelectedOfficeName))
+                {
+                    formViewModel.DepartmentSelectList = new SelectList(string.Empty, "Name", "Name");
+                }
+                else
+                {
+                    formViewModel.DepartmentSelectList = new SelectList(_settings.Offices.Find(o => o.Name.Equals(formViewModel.SelectedOfficeName)).Departments, "Name", "Name");
+                }
+                return View(formViewModel);
+            }
+
             // Use FallbackOffice if outside office hours
-            Office office = _settings.Offices.Find(o => o.Name.Equals(formViewModel.SelectedOfficeName));
-            int currentHour = DateTime.Now.Hour;
             string officeName = formViewModel.SelectedOfficeName;
+            Office office = _settings.Offices.Find(o => o.Name.Equals(officeName));
+            int currentHour = DateTime.Now.Hour;
             if (currentHour < office.HoursStart || currentHour >= office.HoursFinish)
             {
                 officeName = office.FallbackOfficeName;
+                office = _settings.Offices.Find(o => o.Name.Equals(officeName));
+            }
+
+            // TODO: Replace Hardocded with Upload Path Lookup
+            string uploadPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "Uploads"), formViewModel.ObjectContextId.ToString());
+            string saveLocation = office.SaveLocation;
+            Department department = office.Departments.Find(d => d.Name.Equals(formViewModel.SelectedDepartmentName));
+            if (department != null)
+            {
+                saveLocation = department.SaveLocation;
+            }
+            if (Directory.Exists(uploadPath))
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(uploadPath);
+                foreach (FileInfo fileInfo in directoryInfo.GetFiles())
+                {
+                    fileInfo.MoveTo(Path.Combine(office.SaveLocation, fileInfo.Name));
+                }
+                directoryInfo.Delete(true);
             }
 
             Job job = new Models.Job();

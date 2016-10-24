@@ -8,7 +8,7 @@ namespace AGUploadForm.Models.FormViewModels
 {
     public class JobInformationViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "*")]
         [Display(Name = "Due Date/Time")]
         [DataType(DataType.DateTime)]
         public DateTime DueDateTime { get; set; }
@@ -16,6 +16,7 @@ namespace AGUploadForm.Models.FormViewModels
         public string AccountNumber { get; set; }
         [Display(Name = "Project/PO No.")]
         public string ProjectNumber { get; set; }
+        [Required(ErrorMessage = "*")]
         [Display(Name = "Instructions")]
         public string Instructions { get; set; }
     }
