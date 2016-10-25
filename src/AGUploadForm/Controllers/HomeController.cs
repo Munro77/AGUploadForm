@@ -23,19 +23,22 @@ namespace AGUploadForm.Controllers
     {
         private readonly AppSettings _appSettings;
         private readonly FormSettings _settings;
+        private readonly VIPSettings _vipsettings;
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IServiceProvider _serviceProvider;
 
         public HomeController(
             IOptions<AppSettings> appSettingsOptions, 
-            IOptions<FormSettings> settingsOptions, 
+            IOptions<FormSettings> settingsOptions,
+            IOptions<VIPSettings> vipSettingsOptions,
             ApplicationDbContext context, 
             IHostingEnvironment hostingEnvironment,
             IServiceProvider serviceProvider)
         {
             _appSettings = appSettingsOptions.Value;
             _settings = settingsOptions.Value;
+            _vipsettings = vipSettingsOptions.Value;
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _serviceProvider = serviceProvider;
@@ -44,14 +47,21 @@ namespace AGUploadForm.Controllers
 
         }
 
-        public IActionResult Index()
-        {
+        //public IActionResult Index()
+        ///{
             //Test the data from the config file
             /*ViewData["Title"] = _settings.Title;
             ViewData["Updates"] = _settings.Updates;
             _settings.Offices.ForEach(x => { ViewData["Office"] = x.Name; });
             ViewData["Office"] += " AND dept email = " + _settings.Offices[0].Departments[0].Email;*/
-            return View(new FormViewModel(_settings));
+        //    return View(new FormViewModel(_settings));
+        //}
+
+        //Updated to include VIP Settings and the identifier to set them up in the view model
+        public IActionResult Index(string id)
+        {
+            return View(new FormViewModel(_settings, _vipsettings, id));
+            //TODO:  Alter form fields based on the model info (in the view)
         }
 
         public IActionResult About()
