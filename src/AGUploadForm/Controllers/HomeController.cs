@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace AGUploadForm.Controllers
 {
@@ -24,13 +25,20 @@ namespace AGUploadForm.Controllers
         private readonly FormSettings _settings;
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IServiceProvider _serviceProvider;
 
-        public HomeController(IOptions<AppSettings> appSettingsOptions, IOptions<FormSettings> settingsOptions, ApplicationDbContext context, IHostingEnvironment hostingEnvironment)
+        public HomeController(
+            IOptions<AppSettings> appSettingsOptions, 
+            IOptions<FormSettings> settingsOptions, 
+            ApplicationDbContext context, 
+            IHostingEnvironment hostingEnvironment,
+            IServiceProvider serviceProvider)
         {
             _appSettings = appSettingsOptions.Value;
             _settings = settingsOptions.Value;
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _serviceProvider = serviceProvider;
 
             //string output = JsonConvert.SerializeObject(_settings);
 
@@ -181,38 +189,24 @@ namespace AGUploadForm.Controllers
                     smtpClient.EnableSsl = _appSettings.SmtpSettings.EnableSsl;
                     smtpClient.Credentials = new NetworkCredential(_appSettings.SmtpSettings.Username, _appSettings.SmtpSettings.Password);
 
-                    // TODO: Change to Template?
-                    StringBuilder mailMesssageBody = new StringBuilder();
-                    mailMesssageBody.Append(
-                        string.Format(
-                            "Office: {0}<br/>" +
-                            "Department: {1}<br/><br/>" +
-                            "Job Information<br/>" +
-                            "Due Date/Time: {2}<br/>" +
-                            "Account No.: {3}<br/>" +
-                            "Project/PO No.: {4}<br/>" +
-                            "Instructions: {5}<br/><br/>" +
-                            "Contact Information<br/>" +
-                            "Name: {6}<br/>" +
-                            "Company: {7}<br/>" +
-                            "Address: {8}<br/>" +
-                            "Email: {9}<br/>" +
-                            "Phone Number: {10}<br/><br/>" +
-                            "File(s) Uploaded<br/>",
-                            job.OfficeName,
-                            job.DepartmentName,
-                            job.DueDateTime,
-                            job.AccountNumber,
-                            job.ProjectNumber,
-                            job.Instructions.Replace("\r\n", "<br/>"),
-                            job.ContactName,
-                            job.ContactCompanyName,
-                            job.ContactAddress,
-                            job.ContactEmail,
-                            job.ContactPhoneNumber));
-                    foreach (string fileUploadPath in fileUploadPaths)
+                    string viewName = "FileSubmissionEmailTemplate";
+                    ViewData.Model = new JobEmailViewModel(job, fileUploadPaths);
+                    string mailMessageBody = string.Empty;
+                    using (StringWriter stringWriter = new StringWriter())
                     {
-                        mailMesssageBody.Append(string.Format("{0}<br/>", fileUploadPath));
+                        ICompositeViewEngine compositeViewEngine =_serviceProvider.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+                        ViewEngineResult viewEngineResult = compositeViewEngine.FindView(ControllerContext, viewName, false);
+                        ViewContext viewContext = new ViewContext(
+                            ControllerContext,
+                            viewEngineResult.View,
+                            ViewData,
+                            TempData,
+                            stringWriter,
+                            new Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelperOptions());
+
+                        Task task = viewEngineResult.View.RenderAsync(viewContext);
+                        task.Wait();
+                        mailMessageBody = stringWriter.GetStringBuilder().ToString();
                     }
 
                     MailMessage mailMessage = new MailMessage();
@@ -220,7 +214,7 @@ namespace AGUploadForm.Controllers
                     mailMessage.From = new MailAddress(_appSettings.SmtpSettings.FromAddress);
                     mailMessage.To.Add(email);
                     mailMessage.Subject = "File Submission";
-                    mailMessage.Body = mailMesssageBody.ToString();
+                    mailMessage.Body = mailMessageBody;
                     smtpClient.Send(mailMessage);
                 }
             }

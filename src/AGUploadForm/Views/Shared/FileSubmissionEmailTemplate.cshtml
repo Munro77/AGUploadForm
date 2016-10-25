@@ -1,0 +1,62 @@
+@using Microsoft.AspNetCore.Http.Extensions
+@model AGUploadForm.Models.FormViewModels.JobEmailViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <div>
+        <label asp-for="Job.OfficeName"></label>
+        <input asp-for="Job.OfficeName" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="Job.DepartmentName"></label>
+        <input asp-for="Job.DepartmentName" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="Job.DueDateTime"></label>
+        <input asp-for="Job.DueDateTime" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="Job.AccountNumber"></label>
+        <input asp-for="Job.AccountNumber" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="Job.ProjectNumber"></label>
+        <input asp-for="Job.ProjectNumber" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="Job.Instructions"></label>
+        <textarea asp-for="Job.Instructions" readonly="readonly"></textarea>
+    </div>
+    <div>
+        <label asp-for="Job.ContactName"></label>
+        <input asp-for="Job.ContactName" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="Job.ContactCompanyName"></label>
+        <input asp-for="Job.ContactCompanyName" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="Job.ContactAddress"></label>
+        <input asp-for="Job.ContactAddress" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="Job.ContactEmail"></label>
+        <input asp-for="Job.ContactEmail" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="Job.ContactPhoneNumber"></label>
+        <input asp-for="Job.ContactPhoneNumber" readonly="readonly" />
+    </div>
+    <div>
+        <label asp-for="UploadedFiles"></label>
+        @foreach (string uploadedFile in Model.UploadedFiles)
+        {
+            <div>@uploadedFile</div>
+
+        }
+    </div>
+</body>
+</html>
