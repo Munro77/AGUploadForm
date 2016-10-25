@@ -133,11 +133,8 @@ namespace AGUploadForm.Controllers
                 office = _settings.Offices.Find(o => o.Name.Equals(officeName));
             }
 
-            // TODO: Replace Hardocded with Upload Path Lookup
-            string uploadPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "Uploads"), formViewModel.ObjectContextId.ToString());
             string saveLocation = office.SaveLocation;
             string email = office.Email;
-            List<string> fileUploadPaths = new List<string>();
             Department department = office.Departments.Find(d => d.Name.Equals(formViewModel.SelectedDepartmentName));
             if (department != null)
             {
@@ -150,29 +147,60 @@ namespace AGUploadForm.Controllers
                     email = department.Email;
                 }
             }
-            if (Directory.Exists(uploadPath))
+
+            IList<string> fileUploadPaths = MoveUploadedFiles(saveLocation, formViewModel);
+
+            Job job = CreateJob(officeName, formViewModel);
+            _context.Add(job);
+            await _context.SaveChangesAsync();
+
+            if (!string.IsNullOrEmpty(email))
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(uploadPath);
-                foreach (FileInfo fileInfo in directoryInfo.GetFiles())
-                {
-                    int? suffix = null;
-                    string filenameWithoutExtension = Path.GetFileNameWithoutExtension(fileInfo.FullName);
-                    string fileExtension = Path.GetExtension(fileInfo.FullName);
-                    string fileUploadPath = Path.Combine(saveLocation, (filenameWithoutExtension + fileExtension));
-                    while (System.IO.File.Exists(fileUploadPath))
-                    {
-                        if (!suffix.HasValue)
-                        {
-                            suffix = 1;
-                        }
-                        fileUploadPath = Path.Combine(saveLocation, (filenameWithoutExtension + "_" + suffix++.ToString() + fileExtension));
-                    }
-                    fileUploadPaths.Add(fileUploadPath);
-                    fileInfo.MoveTo(fileUploadPath);
-                }
-                directoryInfo.Delete(true);
+                SendMail(
+                    _appSettings.SmtpSettings.FromAddress,
+                    new List<string>() { email },
+                    "File Submission",
+                    GetMailMessageBody(job, fileUploadPaths));
             }
 
+            return RedirectToAction("About");
+        }
+
+        private IList<string> MoveUploadedFiles(string saveLocation, FormViewModel formViewModel)
+        {
+            string uploadDirectoryPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "Uploads"), formViewModel.ObjectContextId.ToString());
+            IList<string> fileUploadPaths = new List<string>();
+            if (Directory.Exists(uploadDirectoryPath))
+            {
+                foreach (string uploadedFilename in formViewModel.UploadedFilenames)
+                {
+                    string uploadedFilePath = Path.Combine(uploadDirectoryPath, uploadedFilename);
+                    if (System.IO.File.Exists(uploadedFilePath))
+                    {
+                        FileInfo fileInfo = new FileInfo(uploadedFilePath);
+                        int? suffix = null;
+                        string filenameWithoutExtension = Path.GetFileNameWithoutExtension(fileInfo.FullName);
+                        string fileExtension = Path.GetExtension(fileInfo.FullName);
+                        string fileUploadPath = Path.Combine(saveLocation, (filenameWithoutExtension + fileExtension));
+                        while (System.IO.File.Exists(fileUploadPath))
+                        {
+                            if (!suffix.HasValue)
+                            {
+                                suffix = 1;
+                            }
+                            fileUploadPath = Path.Combine(saveLocation, (filenameWithoutExtension + "_" + suffix++.ToString() + fileExtension));
+                        }
+                        fileUploadPaths.Add(fileUploadPath);
+                        fileInfo.MoveTo(fileUploadPath);
+                    }
+                }
+                Directory.Delete(uploadDirectoryPath, true);
+            }
+            return fileUploadPaths;
+        }
+
+        private Job CreateJob(string officeName, FormViewModel formViewModel)
+        {
             Job job = new Models.Job();
             job.OfficeName = officeName;
             job.DepartmentName = formViewModel.SelectedDepartmentName;
@@ -185,51 +213,54 @@ namespace AGUploadForm.Controllers
             job.ContactAddress = formViewModel.ContactInformation.Address;
             job.ContactEmail = formViewModel.ContactInformation.Email;
             job.ContactPhoneNumber = formViewModel.ContactInformation.PhoneNumber;
+            return job;
+        }
 
-            _context.Add(job);
-            await _context.SaveChangesAsync();
-
-            if (!string.IsNullOrEmpty(office.Email))
+        private string GetMailMessageBody(Job job, IList<string> fileUploadPaths)
+        {
+            string viewName = "FileSubmissionEmailTemplate";
+            ViewData.Model = new JobEmailViewModel(job, fileUploadPaths);
+            string mailMessageBody = string.Empty;
+            using (StringWriter stringWriter = new StringWriter())
             {
-                using (SmtpClient smtpClient = new SmtpClient())
-                {
-                    smtpClient.UseDefaultCredentials = false;
-                    smtpClient.Host = _appSettings.SmtpSettings.Host;
-                    smtpClient.Port = _appSettings.SmtpSettings.Port;
-                    smtpClient.EnableSsl = _appSettings.SmtpSettings.EnableSsl;
-                    smtpClient.Credentials = new NetworkCredential(_appSettings.SmtpSettings.Username, _appSettings.SmtpSettings.Password);
+                ICompositeViewEngine compositeViewEngine = _serviceProvider.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+                ViewEngineResult viewEngineResult = compositeViewEngine.FindView(ControllerContext, viewName, false);
+                ViewContext viewContext = new ViewContext(
+                    ControllerContext,
+                    viewEngineResult.View,
+                    ViewData,
+                    TempData,
+                    stringWriter,
+                    new Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelperOptions());
 
-                    string viewName = "FileSubmissionEmailTemplate";
-                    ViewData.Model = new JobEmailViewModel(job, fileUploadPaths);
-                    string mailMessageBody = string.Empty;
-                    using (StringWriter stringWriter = new StringWriter())
-                    {
-                        ICompositeViewEngine compositeViewEngine =_serviceProvider.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
-                        ViewEngineResult viewEngineResult = compositeViewEngine.FindView(ControllerContext, viewName, false);
-                        ViewContext viewContext = new ViewContext(
-                            ControllerContext,
-                            viewEngineResult.View,
-                            ViewData,
-                            TempData,
-                            stringWriter,
-                            new Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelperOptions());
-
-                        Task task = viewEngineResult.View.RenderAsync(viewContext);
-                        task.Wait();
-                        mailMessageBody = stringWriter.GetStringBuilder().ToString();
-                    }
-
-                    MailMessage mailMessage = new MailMessage();
-                    mailMessage.IsBodyHtml = true;
-                    mailMessage.From = new MailAddress(_appSettings.SmtpSettings.FromAddress);
-                    mailMessage.To.Add(email);
-                    mailMessage.Subject = "File Submission";
-                    mailMessage.Body = mailMessageBody;
-                    smtpClient.Send(mailMessage);
-                }
+                Task task = viewEngineResult.View.RenderAsync(viewContext);
+                task.Wait();
+                mailMessageBody = stringWriter.GetStringBuilder().ToString();
             }
+            return mailMessageBody;
+        }
 
-            return RedirectToAction("About");
+        private void SendMail(string fromAddress, IList<string> toAddresses, string subject, string body)
+        {
+            using (SmtpClient smtpClient = new SmtpClient())
+            {
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Host = _appSettings.SmtpSettings.Host;
+                smtpClient.Port = _appSettings.SmtpSettings.Port;
+                smtpClient.EnableSsl = _appSettings.SmtpSettings.EnableSsl;
+                smtpClient.Credentials = new NetworkCredential(_appSettings.SmtpSettings.Username, _appSettings.SmtpSettings.Password);
+
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.IsBodyHtml = true;
+                mailMessage.From = new MailAddress(_appSettings.SmtpSettings.FromAddress);
+                foreach (string toAddress in toAddresses)
+                {
+                    mailMessage.To.Add(toAddress);
+                }
+                mailMessage.Subject = subject;
+                mailMessage.Body = body;
+                smtpClient.Send(mailMessage);
+            }
         }
     }
 }

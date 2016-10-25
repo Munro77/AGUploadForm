@@ -51,11 +51,10 @@
         <input asp-for="Job.ContactPhoneNumber" readonly="readonly" />
     </div>
     <div>
-        <label asp-for="UploadedFiles"></label>
-        @foreach (string uploadedFile in Model.UploadedFiles)
+        <label asp-for="UploadedFilePaths"></label>
+        @foreach (string uploadedFilePath in Model.UploadedFilePaths)
         {
-            <div>@uploadedFile</div>
-
+            <div>@uploadedFilePath</div>
         }
     </div>
 </body>

@@ -10,12 +10,12 @@ namespace AGUploadForm.Models.FormViewModels
     {
         public Job Job { get; set; }
         [Display(Name = "File(s) Uploaded")]
-        public IList<string> UploadedFiles { get; set; }
+        public IList<string> UploadedFilePaths { get; set; }
 
-        public JobEmailViewModel(Job job, IList<string> uploadedFiles)
+        public JobEmailViewModel(Job job, IList<string> uploadedFilePaths)
         {
             Job = job;
-            UploadedFiles = uploadedFiles;
+            UploadedFilePaths = uploadedFilePaths;
         }
     }
 }
