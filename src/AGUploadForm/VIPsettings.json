@@ -1,0 +1,29 @@
+﻿{
+  "VIPs": [
+    {
+      "Name": "HoltRenfrew",
+      "QueryStringCode": "HR",
+      "Fields": [
+        {
+          "ID": "Address",
+          "Options": [
+            {
+              "Value": "123 Bloor Street",
+              "Editable": "true"
+            }
+          ]
+        },
+        {
+          "ID": "Branch",
+          "Options": [
+            {
+              "Value": "Carnforth",
+              "Editable": "false",
+              "Shown":  "false"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

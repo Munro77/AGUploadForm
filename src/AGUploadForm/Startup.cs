@@ -25,7 +25,8 @@ namespace AGUploadForm
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("formsettings.json");
+                .AddJsonFile("formsettings.json")
+                .AddJsonFile("VIPSettings.json",optional:true);
 
             if (env.IsDevelopment())
             {
@@ -68,6 +69,7 @@ namespace AGUploadForm
 
             services.AddOptions();
             services.Configure<FormSettings>(Configuration);
+            services.Configure<VIPSettings>(Configuration);
             services.Configure<AppSettings>(Configuration);
             
 
@@ -114,8 +116,13 @@ namespace AGUploadForm
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-                    //template: "{controller=Jobs}/{action=Index}/{id?}");
-                    //template: "{controller=Home}/{action=BasicPlusUI}/{id?}");
+                //template: "{controller=Jobs}/{action=Index}/{id?}");
+                //template: "{controller=Home}/{action=BasicPlusUI}/{id?}");
+                routes.MapRoute(
+                    "vip",                                              // Route name
+                    "vip/{id}",                           // URL with parameters
+                    new { controller = "Home", action = "Index" }  // Parameter defaults
+                    );
             });
         }
     }

@@ -24,13 +24,25 @@ namespace AGUploadForm.Models.FormViewModels
         public JobInformationViewModel JobInformation { get; }
         public ContactInformationViewModel ContactInformation { get; }
 
-        public FormViewModel(FormSettings formSettings)
+        //Field Settings used to store VIP field setup info
+        public VIP VIPInfo { get; }
+        //public VIPFieldSettingsModel VIPFieldSettings { get; }
+
+        public FormViewModel(FormSettings formSettings, VIPSettings vipSettings = null, string VIPQstring = "") // Default with no VIP, use VIPQString: "Value" if it exists when constructing
         {
             ObjectContextId = Guid.NewGuid();
             OfficeSelectList = new SelectList(formSettings.Offices, "Name", "Name");
             DepartmentSelectList = new SelectList(string.Empty, "Value", "Text");
             JobInformation = new JobInformationViewModel();
             ContactInformation = new ContactInformationViewModel();
+
+            //set the VIP Field Options if a query string was passed in (easier to work with in the form)
+            if (vipSettings != null && !String.IsNullOrEmpty(VIPQstring))
+            {
+                VIPInfo = vipSettings.VIPs.Find(x => x.QueryStringCode.Contains(VIPQstring));
+                //VIPFieldSettings = FormViewModels.VIPFieldSettingsModel.GetSettings(vipSettings, VIPQstring);
+            }
+            
         }
 
         public FormViewModel()
