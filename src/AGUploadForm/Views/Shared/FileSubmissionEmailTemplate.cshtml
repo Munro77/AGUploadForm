@@ -80,75 +80,75 @@
     <p>
         Files have been uploaded for fulfillment. They can be found at the following location(s):<br/>
         <a href="@Model.UploadDirectoryPath">@Model.UploadDirectoryPath</a>
-        <table>
-            <tbody>
+    </p>
+    <table>
+        <tbody>
+            <tr>
+                <th colspan="2">CLIENT INFORMATION</th>
+                <th colspan="2">JOB INFORMATION</th>
+            </tr>
+            <tr>
+                <td width="100">Account</td>
+                <td class="txt">@Model.Job.AccountNumber</td>
+                <td width="100">Job Received</td>
+                <td class="txt">@Model.Job.Created.ToString("MM/dd/yyyy HH:mm:ss tt")</td>
+            </tr>
+            <tr>
+                <td width="100">Name</td>
+                <td class="txt">@Model.Job.ContactName</td>
+                <td width="100" valign="top">Job Due</td>
+                <td class="txt" style="font-weight: bold; font-size: 10pt; color: #FF0000" valign="top">@Model.Job.DueDateTime</td>
+            </tr>
+            <tr>
+                <td width="100">Company</td>
+                <td class="txt">@Model.Job.ContactCompanyName</td>
+                <td width="100">Branch</td>
+                <td class="txt">@Model.Job.OfficeName</td>
+            </tr>
+            <tr>
+                <td width="100">Address</td>
+                <td class="txt">@Model.Job.ContactAddress</td>
+                <td width="100">Department</td>
+                <td class="txt">@Model.Job.DepartmentName</td>
+            </tr>
+            <tr>
+                <td width="100">Phone Number</td>
+                <td class="txt">@Model.Job.ContactPhoneNumber</td>
+                <td width="100">Project / PO#</td>
+                <td class="txt">@Model.Job.ProjectNumber</td>
+            </tr>
+            <tr>
+                <td width="100" valign="top">Email Address</td>
+                <td class="txt" valign="top">@Model.Job.ContactEmail</td>
+                <td width="100">Total Files/Size</td>
+                <td class="txt">
+                    @string.Format("Total Files: {0} -- Total Size: {1}", Model.UploadedFiles.Count, Model.FormatToHumanReadableFileSize(Model.UploadedFiles.Sum(f => f.Length)))
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody>
+            <tr>
+                <th>INSTRUCTIONS / NOTES</th>
+            </tr>
+            <tr>
+                <td valign="top" class="txt">@(new HtmlString(Model.Job.Instructions.Replace("\r\n", "<br/>").Replace("\n", "<br/>")))</td>
+            </tr>
+            <tr>
+                <th>
+                    @string.Format("FILES (Expected {0} / Received {1})", Model.OriginalUploadedFilePaths.Count, Model.UploadedFiles.Count)
+                </th>
+            </tr>
+            @for (int index = 0; index < Model.UploadedFiles.Count; index++)
+            {
                 <tr>
-                    <th colspan="2">CLIENT INFORMATION</th>
-                    <th colspan="2">JOB INFORMATION</th>
-                </tr>
-                <tr>
-                    <td width="100">Account</td>
-                    <td class="txt">@Model.Job.AccountNumber</td>
-                    <td width="100">Job Received</td>
-                    <td class="txt">@Model.Job.Created.ToString("MM/dd/yyyy HH:mm:ss tt")</td>
-                </tr>
-                <tr>
-                    <td width="100">Name</td>
-                    <td class="txt">@Model.Job.ContactName</td>
-                    <td width="100" valign="top">Job Due</td>
-                    <td class="txt" style="font-weight: bold; font-size: 10pt; color: #FF0000" valign="top">@Model.Job.DueDateTime</td>
-                </tr>
-                <tr>
-                    <td width="100">Company</td>
-                    <td class="txt">@Model.Job.ContactCompanyName</td>
-                    <td width="100">Branch</td>
-                    <td class="txt">@Model.Job.OfficeName</td>
-                </tr>
-                <tr>
-                    <td width="100">Address</td>
-                    <td class="txt">@Model.Job.ContactAddress</td>
-                    <td width="100">Department</td>
-                    <td class="txt">@Model.Job.DepartmentName</td>
-                </tr>
-                <tr>
-                    <td width="100">Phone Number</td>
-                    <td class="txt">@Model.Job.ContactPhoneNumber</td>
-                    <td width="100">Project / PO#</td>
-                    <td class="txt">@Model.Job.ProjectNumber</td>
-                </tr>
-                <tr>
-                    <td width="100" valign="top">Email Address</td>
-                    <td class="txt" valign="top">@Model.Job.ContactEmail</td>
-                    <td width="100">Total Files/Size</td>
                     <td class="txt">
-                        @string.Format("Total Files: {0} -- Total Size: {1}", Model.UploadedFiles.Count, Model.FormatToHumanReadableFileSize(Model.UploadedFiles.Sum(f => f.Length)))
+                        @string.Format("{0}: {1} ({2})", (index + 1).ToString(), Model.UploadedFiles[index].Name, Model.FormatToHumanReadableFileSize(Model.UploadedFiles[index].Length))
                     </td>
                 </tr>
-            </tbody>
-        </table>
-        <table>
-            <tbody>
-                <tr>
-                    <th>INSTRUCTIONS / NOTES</th>
-                </tr>
-                <tr>
-                    <td valign="top" class="txt">@(new HtmlString(Model.Job.Instructions.Replace("\r\n", "<br/>").Replace("\n", "<br/>")))</td>
-                </tr>
-                <tr>
-                    <th>
-                        @string.Format("FILES (Expected {0} / Received {1})", Model.OriginalUploadedFilePaths.Count, Model.UploadedFiles.Count)
-                    </th>
-                </tr>
-                @for (int index = 0; index < Model.UploadedFiles.Count; index++)
-                {
-                    <tr>
-                        <td class="txt">
-                            @string.Format("{0}: {1} ({2})", (index + 1).ToString(), Model.UploadedFiles[index].Name, Model.FormatToHumanReadableFileSize(Model.UploadedFiles[index].Length))
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </p>
+            }
+        </tbody>
+    </table>
 </body>
 </html>

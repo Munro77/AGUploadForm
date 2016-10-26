@@ -11,6 +11,7 @@
     // Initialize the jQuery File Upload widget:
     var up = $('#fileupload');
     $('#fileupload').fileupload({
+        autoUpload: true,
         url: url,
         acceptFileTypes: /(jpg)|(jpeg)|(png)|(gif)|(tif)|(pdf)$/i              // Allowed file types
     });
