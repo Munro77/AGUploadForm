@@ -150,7 +150,7 @@ namespace AGUploadForm.Controllers
                 }
             }
 
-            IList<string> fileUploadPaths = MoveUploadedFiles(saveLocation, formViewModel, errors);
+            IList<FileInfo> uploadedFiles = MoveUploadedFiles(saveLocation, formViewModel, errors);
 
             Job job = CreateJob(officeName, formViewModel);
             try
@@ -168,17 +168,21 @@ namespace AGUploadForm.Controllers
                 SendMail(
                     _appSettings.SmtpSettings.FromAddress,
                     new List<string>() { email },
-                    "File Submission",
-                    GetMailMessageBody(job, fileUploadPaths, errors));
+                    string.Format(
+                        "File(s) Uploaded by {0}{1}{2}",
+                        job.ContactName,
+                        (string.IsNullOrEmpty(job.ContactCompanyName) ? string.Empty : string.Format(" ({0})", job.ContactCompanyName)),
+                        (string.IsNullOrEmpty(job.DueDateTime) ? string.Empty : string.Format(" -- due: {0}", job.DueDateTime))),
+                    GetMailMessageBody(saveLocation, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
             }
 
             return RedirectToAction("About");
         }
 
-        private IList<string> MoveUploadedFiles(string saveLocation, FormViewModel formViewModel, IList<string> errors)
+        private IList<FileInfo> MoveUploadedFiles(string saveLocation, FormViewModel formViewModel, IList<string> errors)
         {
             string uploadDirectoryPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "Uploads"), formViewModel.ObjectContextId.ToString());
-            IList<string> fileUploadPaths = new List<string>();
+            IList<FileInfo> uploadedFiles = new List<FileInfo>();
             if (Directory.Exists(uploadDirectoryPath))
             {
                 foreach (string uploadedFilename in formViewModel.UploadedFilenames)
@@ -201,8 +205,8 @@ namespace AGUploadForm.Controllers
                         }
                         try
                         {
-                            fileUploadPaths.Add(fileUploadPath);
                             fileInfo.MoveTo(fileUploadPath);
+                            uploadedFiles.Add(new FileInfo(fileUploadPath));
                         }
                         catch (Exception e)
                         {
@@ -218,7 +222,7 @@ namespace AGUploadForm.Controllers
                 {
                     Directory.Delete(uploadDirectoryPath, true);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     errors.Add(string.Format("The uploaded directory {0} cannot be deleted", uploadDirectoryPath));
                 }
@@ -227,7 +231,7 @@ namespace AGUploadForm.Controllers
             {
                 errors.Add(string.Format("The upload directory {0} does not exist", uploadDirectoryPath));
             }
-            return fileUploadPaths;
+            return uploadedFiles;
         }
 
         private Job CreateJob(string officeName, FormViewModel formViewModel)
@@ -247,10 +251,10 @@ namespace AGUploadForm.Controllers
             return job;
         }
 
-        private string GetMailMessageBody(Job job, IList<string> fileUploadPaths, IList<string> errors)
+        private string GetMailMessageBody(string saveLocation, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
         {
             string viewName = "FileSubmissionEmailTemplate";
-            ViewData.Model = new JobEmailViewModel(job, fileUploadPaths, errors);
+            ViewData.Model = new JobEmailViewModel(saveLocation, job, originalUploadedFilePaths, uploadedFiles, errors);
             string mailMessageBody = string.Empty;
             using (StringWriter stringWriter = new StringWriter())
             {

@@ -1,71 +1,154 @@
+@using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Http.Extensions
 @model AGUploadForm.Models.FormViewModels.JobEmailViewModel
 
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+    <style>
+        body {
+            font: 76%/160% 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+        }
+
+        a:link {
+            color: #d42945;
+            text-decoration: none;
+            border-bottom: 1px dotted #ffbac8;
+        }
+
+        a:visited {
+            color: #d42945;
+            border-bottom: none;
+            text-decoration: none;
+        }
+
+        a:hover, a:focus {
+            color: #f03b58;
+            border-bottom: 1px solid #f03b58;
+            text-decoration: none;
+        }
+
+        table a, table a:link, table a:visited {
+            border: none;
+        }
+
+        table {
+            width: 99%;
+            border-top: 1px solid #e3f1fe;
+            border-right: 1px solid #e3f1fe;
+            border-collapse: collapse;
+        }
+
+        td {
+            color: #678197;
+            border-bottom: 1px solid #e3f1fe;
+            border-left: 1px solid #e5eff8;
+            padding: .3em 1em;
+            text-align: left;
+            font-size: 8pt;
+        }
+
+        th {
+            font-weight: bold;
+            color: #678197;
+            text-align: left;
+            border-bottom: 1px solid #e3f1fe;
+            border-left: 1px solid #e5eff8;
+            padding: .3em 1em;
+            background: #f9fcfe;
+        }
+
+        thead th {
+            background: #f4f9fe;
+            text-align: center;
+            font: bold 10pt 'Century Gothic', 'Trebuchet MS', Arial, Helvetica, sans-serif;
+            color: #66a3d3;
+        }
+
+        .txt, p {
+            color: #000000;
+        }
+
+        .source {
+            font: 9px 'Courier New', 'Courier, monospace'; 
+            color: #0000ff; 
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <label asp-for="Job.OfficeName"></label>
-        <input asp-for="Job.OfficeName" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="Job.DepartmentName"></label>
-        <input asp-for="Job.DepartmentName" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="Job.DueDateTime"></label>
-        <input asp-for="Job.DueDateTime" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="Job.AccountNumber"></label>
-        <input asp-for="Job.AccountNumber" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="Job.ProjectNumber"></label>
-        <input asp-for="Job.ProjectNumber" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="Job.Instructions"></label>
-        <textarea asp-for="Job.Instructions" readonly="readonly"></textarea>
-    </div>
-    <div>
-        <label asp-for="Job.ContactName"></label>
-        <input asp-for="Job.ContactName" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="Job.ContactCompanyName"></label>
-        <input asp-for="Job.ContactCompanyName" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="Job.ContactAddress"></label>
-        <input asp-for="Job.ContactAddress" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="Job.ContactEmail"></label>
-        <input asp-for="Job.ContactEmail" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="Job.ContactPhoneNumber"></label>
-        <input asp-for="Job.ContactPhoneNumber" readonly="readonly" />
-    </div>
-    <div>
-        <label asp-for="UploadedFilePaths"></label>
-        @foreach (string uploadedFilePath in Model.UploadedFilePaths)
-        {
-            <div>@uploadedFilePath</div>
-        }
-    </div>
-    @if (Model.Errors != null && Model.Errors.Count > 0)
-    {
-        <div>
-            <label asp-for="Errors"></label>
-            @foreach (string error in Model.Errors)
-            {
-                <div>@error</div>
-            }
-        </div>
-    }
+    <p>
+        Files have been uploaded for fulfillment. They can be found at the following location(s):<br/>
+        <a href="@Model.UploadDirectoryPath">@Model.UploadDirectoryPath</a>
+        <table>
+            <tbody>
+                <tr>
+                    <th colspan="2">CLIENT INFORMATION</th>
+                    <th colspan="2">JOB INFORMATION</th>
+                </tr>
+                <tr>
+                    <td width="100">Account</td>
+                    <td class="txt">@Model.Job.AccountNumber</td>
+                    <td width="100">Job Received</td>
+                    <td class="txt">@Model.Job.Created.ToString("MM/dd/yyyy HH:mm:ss tt")</td>
+                </tr>
+                <tr>
+                    <td width="100">Name</td>
+                    <td class="txt">@Model.Job.ContactName</td>
+                    <td width="100" valign="top">Job Due</td>
+                    <td class="txt" style="font-weight: bold; font-size: 10pt; color: #FF0000" valign="top">@Model.Job.DueDateTime</td>
+                </tr>
+                <tr>
+                    <td width="100">Company</td>
+                    <td class="txt">@Model.Job.ContactCompanyName</td>
+                    <td width="100">Branch</td>
+                    <td class="txt">@Model.Job.OfficeName</td>
+                </tr>
+                <tr>
+                    <td width="100">Address</td>
+                    <td class="txt">@Model.Job.ContactAddress</td>
+                    <td width="100">Department</td>
+                    <td class="txt">@Model.Job.DepartmentName</td>
+                </tr>
+                <tr>
+                    <td width="100">Phone Number</td>
+                    <td class="txt">@Model.Job.ContactPhoneNumber</td>
+                    <td width="100">Project / PO#</td>
+                    <td class="txt">@Model.Job.ProjectNumber</td>
+                </tr>
+                <tr>
+                    <td width="100" valign="top">Email Address</td>
+                    <td class="txt" valign="top">@Model.Job.ContactEmail</td>
+                    <td width="100">Total Files/Size</td>
+                    <td class="txt">
+                        @string.Format("Total Files: {0} -- Total Size: {1}", Model.UploadedFiles.Count, Model.FormatToHumanReadableFileSize(Model.UploadedFiles.Sum(f => f.Length)))
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <tbody>
+                <tr>
+                    <th>INSTRUCTIONS / NOTES</th>
+                </tr>
+                <tr>
+                    <td valign="top" class="txt">@(new HtmlString(Model.Job.Instructions.Replace("\r\n", "<br/>").Replace("\n", "<br/>")))</td>
+                </tr>
+                <tr>
+                    <th>
+                        @string.Format("FILES (Expected {0} / Received {1})", Model.OriginalUploadedFilePaths.Count, Model.UploadedFiles.Count)
+                    </th>
+                </tr>
+                @for (int index = 0; index < Model.UploadedFiles.Count; index++)
+                {
+                    <tr>
+                        <td class="txt">
+                            @string.Format("{0}: {1} ({2})", (index + 1).ToString(), Model.UploadedFiles[index].Name, Model.FormatToHumanReadableFileSize(Model.UploadedFiles[index].Length))
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </p>
 </body>
 </html>
