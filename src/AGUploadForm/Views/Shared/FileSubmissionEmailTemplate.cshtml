@@ -57,5 +57,15 @@
             <div>@uploadedFilePath</div>
         }
     </div>
+    @if (Model.Errors != null && Model.Errors.Count > 0)
+    {
+        <div>
+            <label asp-for="Errors"></label>
+            @foreach (string error in Model.Errors)
+            {
+                <div>@error</div>
+            }
+        </div>
+    }
 </body>
 </html>

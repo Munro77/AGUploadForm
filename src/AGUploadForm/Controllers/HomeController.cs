@@ -123,6 +123,8 @@ namespace AGUploadForm.Controllers
                 return View(formViewModel);
             }
 
+            IList<string> errors = new List<string>();
+
             // Use FallbackOffice if outside office hours
             string officeName = formViewModel.SelectedOfficeName;
             Office office = _settings.Offices.Find(o => o.Name.Equals(officeName));
@@ -148,11 +150,18 @@ namespace AGUploadForm.Controllers
                 }
             }
 
-            IList<string> fileUploadPaths = MoveUploadedFiles(saveLocation, formViewModel);
+            IList<string> fileUploadPaths = MoveUploadedFiles(saveLocation, formViewModel, errors);
 
             Job job = CreateJob(officeName, formViewModel);
-            _context.Add(job);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Add(job);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                errors.Add(string.Format("Job failed to persist: {0}", e.Message));
+            }
 
             if (!string.IsNullOrEmpty(email))
             {
@@ -160,13 +169,13 @@ namespace AGUploadForm.Controllers
                     _appSettings.SmtpSettings.FromAddress,
                     new List<string>() { email },
                     "File Submission",
-                    GetMailMessageBody(job, fileUploadPaths));
+                    GetMailMessageBody(job, fileUploadPaths, errors));
             }
 
             return RedirectToAction("About");
         }
 
-        private IList<string> MoveUploadedFiles(string saveLocation, FormViewModel formViewModel)
+        private IList<string> MoveUploadedFiles(string saveLocation, FormViewModel formViewModel, IList<string> errors)
         {
             string uploadDirectoryPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "Uploads"), formViewModel.ObjectContextId.ToString());
             IList<string> fileUploadPaths = new List<string>();
@@ -190,11 +199,33 @@ namespace AGUploadForm.Controllers
                             }
                             fileUploadPath = Path.Combine(saveLocation, (filenameWithoutExtension + "_" + suffix++.ToString() + fileExtension));
                         }
-                        fileUploadPaths.Add(fileUploadPath);
-                        fileInfo.MoveTo(fileUploadPath);
+                        try
+                        {
+                            fileUploadPaths.Add(fileUploadPath);
+                            fileInfo.MoveTo(fileUploadPath);
+                        }
+                        catch (Exception e)
+                        {
+                            errors.Add(string.Format("The uploaded file {0} cannot be moved: {1}", uploadedFilePath, e.Message));
+                        }
+                    }
+                    else
+                    {
+                        errors.Add(string.Format("The uploaded file {0} cannot be found", uploadedFilePath));
                     }
                 }
-                Directory.Delete(uploadDirectoryPath, true);
+                try
+                {
+                    Directory.Delete(uploadDirectoryPath, true);
+                }
+                catch (Exception e)
+                {
+                    errors.Add(string.Format("The uploaded directory {0} cannot be deleted", uploadDirectoryPath));
+                }
+            }
+            else
+            {
+                errors.Add(string.Format("The upload directory {0} does not exist", uploadDirectoryPath));
             }
             return fileUploadPaths;
         }
@@ -216,10 +247,10 @@ namespace AGUploadForm.Controllers
             return job;
         }
 
-        private string GetMailMessageBody(Job job, IList<string> fileUploadPaths)
+        private string GetMailMessageBody(Job job, IList<string> fileUploadPaths, IList<string> errors)
         {
             string viewName = "FileSubmissionEmailTemplate";
-            ViewData.Model = new JobEmailViewModel(job, fileUploadPaths);
+            ViewData.Model = new JobEmailViewModel(job, fileUploadPaths, errors);
             string mailMessageBody = string.Empty;
             using (StringWriter stringWriter = new StringWriter())
             {
