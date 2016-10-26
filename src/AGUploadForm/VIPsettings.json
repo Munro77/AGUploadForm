@@ -5,23 +5,20 @@
       "QueryStringCode": "HR",
       "Fields": [
         {
-          "ID": "Address",
-          "Options": [
-            {
-              "Value": "123 Bloor Street",
-              "Editable": "true"
-            }
-          ]
+          "AGFieldId": "Address",
+          "Value": "123 Bloor Street",
+          "Disabled": "false"
         },
         {
-          "ID": "Branch",
-          "Options": [
-            {
-              "Value": "Carnforth",
-              "Editable": "false",
-              "Shown":  "false"
-            }
-          ]
+          "AGFieldId": "Branch",
+          "Value": "Carnforth",
+          "Disabled": "true",
+          "Visible": "false"
+        },
+        {
+          "AGFieldId": "Department",
+          "Value": "CADD",
+          "Disabled": "false"
         }
       ]
     }

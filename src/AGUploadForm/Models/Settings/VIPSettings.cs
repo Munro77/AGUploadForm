@@ -14,15 +14,10 @@ namespace AGUploadForm.Models.Settings
 
     public class Field
     {
-        public string ID { get; set; }
-        public List<Option> Options { get; set; }
-    }
-
-    public class Option
-    {
+        public string AGFieldId { get; set; }
         public string Value { get; set; }
-        public bool Editable { get; set; } = true;
-        public bool Shown { get; set; } = true;
+        public bool Disabled { get; set; } = true;
+        public bool Visible { get; set; } = true;
     }
 
     public class VIPSettings
