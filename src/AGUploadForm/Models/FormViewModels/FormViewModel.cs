@@ -23,6 +23,7 @@ namespace AGUploadForm.Models.FormViewModels
 
         public JobInformationViewModel JobInformation { get; }
         public ContactInformationViewModel ContactInformation { get; }
+        public IList<string> UploadedFilenames { get; set; }
 
         //Field Settings used to store VIP field setup info
         public VIP VIPInfo { get; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,12 +11,46 @@ namespace AGUploadForm.Models.FormViewModels
     {
         public Job Job { get; set; }
         [Display(Name = "File(s) Uploaded")]
-        public IList<string> UploadedFiles { get; set; }
+        public IList<FileInfo> UploadedFiles { get; set; }
+        public IList<string> Errors { get; set; }
+        public string UploadDirectoryPath { get; set; }
+        public IList<string> OriginalUploadedFilePaths { get; set; }
 
-        public JobEmailViewModel(Job job, IList<string> uploadedFiles)
+        public string FormatToHumanReadableFileSize(object value)
         {
+            try
+            {
+                string[] suffixNames = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+                var counter = 0;
+                decimal dValue = 0;
+                Decimal.TryParse(value.ToString(), out dValue);
+                while (Math.Round(dValue / 1024) >= 1)
+                {
+                    dValue /= 1024;
+                    counter++;
+                }
+
+                return string.Format("{0:n1} {1}", dValue, suffixNames[counter]);
+            }
+            catch (Exception)
+            {
+                //catch and handle the exception
+                return string.Empty;
+            }
+        }
+
+        public JobEmailViewModel(
+            string uploadDirectoryPath, 
+            Job job,
+            IList<string> originalUploadedFilePaths, 
+            IList<FileInfo> uploadedFiles, 
+            IList<string> errors)
+        {
+            UploadDirectoryPath = uploadDirectoryPath;
             Job = job;
-            UploadedFiles = uploadedFiles;
+            OriginalUploadedFilePaths = ((originalUploadedFilePaths == null) ? new List<string>() : originalUploadedFilePaths);
+            UploadedFiles = ((uploadedFiles == null) ? new List<FileInfo>() : uploadedFiles);
+            Errors = ((errors == null) ? new List<string>() : errors);
         }
     }
 }

@@ -10,54 +10,6 @@
 <!-- The main application styles -->
 <link href="~/Content/demo.styles.css" rel="stylesheet" />
 
-<script src="~/Backload/Client/blueimp/bundles/js/jquery.fileupload.basicplusui.min.js"></script>
-
-<!-- Gallery script (image preview) -->
-<script src="~/Backload/Client/blueimp/gallery/js/jquery.blueimp-gallery.min.js"></script>
-
-<!-- The demo application script -->
-<script src="~/Scripts/demos.blueimp.basicplusui.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#SelectedOfficeName").change(function () {
-            $("#SelectedDepartmentName").empty();
-            $("#SelectedDepartmentName").append('<option value="">Select One</option>').prop('disabled',false);
-            if ($("#SelectedOfficeName").val() != "") {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("GetDepartmentSelectListByOfficeName")',
-                    dataType: 'json',
-                    data: { officeName: $("#SelectedOfficeName").val() },
-                    success: function (departments) {
-                        $.each(departments, function (i, department) {
-                            $("#SelectedDepartmentName").append('<option value="' + department.value + '">' + department.text + '</option>');
-                        });
-                    },
-                    error: function (ex) {
-                        alert('Failed to retrieve departments.' + ex);
-                    }
-                });
-            }
-            else
-            {
-                $("#SelectedDepartmentName").empty();
-                $("#SelectedDepartmentName").append('<option value="">Choose a Location</option>').prop('disabled', true);
-            }
-            return false;
-        });
-        $('input[type="reset"]').click(function () {
-            $("#SelectedOfficeName").val("");
-            $("#SelectedOfficeName").trigger('change');
-        });
-        $("#SubmitButton").click(function () {
-            $("#SubmitForm").submit();
-        });
-
-        $("#SelectedDepartmentName").prop('disabled', ($("#SelectedOfficeName").val() == ""));
-    });
-</script>
-
 <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
@@ -136,7 +88,7 @@
     {% } %}
 </script>
 
-<form asp-controller="Home" asp-action="Index" id="SubmitForm" method="post">
+<form asp-controller="Home" id="SubmitForm" method="post">
     <div class="form-horizontal">
         <input type="hidden" asp-for="ObjectContextId" />
         <div class="form-group">
@@ -283,10 +235,9 @@
 
 <!-- File Upload -->
 <form id="fileupload" action="/Backload/FileHandler" method="POST" enctype="multipart/form-data">
-    <input type="hidden" id="objectContext" name="objectContext" value="@Model.ObjectContextId" />
     <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
     <div class="row fileupload-buttonbar">
-        <div class="col-md-7">
+        <div class="col-md-5">
             <!-- The fileinput-button span is used to style the file input field as button -->
             <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -332,3 +283,19 @@
         </button>
     </div>
 </div>
+
+@section scripts
+{
+    <script src="~/Backload/Client/blueimp/bundles/js/jquery.fileupload.basicplusui.min.js"></script>
+
+    <!-- Gallery script (image preview) -->
+    <script src="~/Backload/Client/blueimp/gallery/js/jquery.blueimp-gallery.min.js"></script>
+
+    <!-- The demo application script -->
+    <!-- <script src="~/Scripts/demos.blueimp.basicplusui.js"></script> -->
+
+    <script id="formsubmission.js" src="~/Scripts/filesubmission.js"
+            data-object-context="@Model.ObjectContextId"
+            data-get-department-list-url="@Url.Action("GetDepartmentSelectListByOfficeName")">
+    </script>
+}
