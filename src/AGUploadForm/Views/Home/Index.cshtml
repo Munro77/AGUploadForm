@@ -88,7 +88,7 @@
     {% } %}
 </script>
 
-<form asp-controller="Home" id="SubmitForm" method="post">
+<form id="SubmitForm" method="post" action="@Context.Request.Path">
     <div class="form-horizontal">
         <input type="hidden" asp-for="ObjectContextId" />
         <div class="form-group">
