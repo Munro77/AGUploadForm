@@ -23,6 +23,19 @@ namespace AGUploadForm.Models.Settings
     public class VIPSettings
     {
         public List<VIP> VIPs { get; set; }
+
+        public VIP GetVIPByID(string id)
+        {
+            //set the VIP Field Options if a query string was passed in (easier to work with in the form)
+            if (!String.IsNullOrEmpty(id))
+            {
+                VIP info = VIPs.Find(x => x.QueryStringCode.Contains(id));
+                //VIPFieldSettings = FormViewModels.VIPFieldSettingsModel.GetSettings(vipSettings, VIPQstring);
+                return info;
+            }
+            else
+                return null;
+        }
     }
 
 }

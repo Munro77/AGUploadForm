@@ -29,10 +29,10 @@ namespace AGUploadForm.Controllers
         private readonly IServiceProvider _serviceProvider;
 
         public HomeController(
-            IOptions<AppSettings> appSettingsOptions, 
+            IOptions<AppSettings> appSettingsOptions,
             IOptions<FormSettings> settingsOptions,
             IOptions<VIPSettings> vipSettingsOptions,
-            ApplicationDbContext context, 
+            ApplicationDbContext context,
             IHostingEnvironment hostingEnvironment,
             IServiceProvider serviceProvider)
         {
@@ -49,19 +49,77 @@ namespace AGUploadForm.Controllers
 
         //public IActionResult Index()
         ///{
-            //Test the data from the config file
-            /*ViewData["Title"] = _settings.Title;
-            ViewData["Updates"] = _settings.Updates;
-            _settings.Offices.ForEach(x => { ViewData["Office"] = x.Name; });
-            ViewData["Office"] += " AND dept email = " + _settings.Offices[0].Departments[0].Email;*/
+        //Test the data from the config file
+        /*ViewData["Title"] = _settings.Title;
+        ViewData["Updates"] = _settings.Updates;
+        _settings.Offices.ForEach(x => { ViewData["Office"] = x.Name; });
+        ViewData["Office"] += " AND dept email = " + _settings.Offices[0].Departments[0].Email;*/
         //    return View(new FormViewModel(_settings));
         //}
 
         //Updated to include VIP Settings and the identifier to set them up in the view model
         public IActionResult Index(string id)
         {
-            return View(new FormViewModel(_settings, _vipsettings, id));
+            //return View(new FormViewModel(_settings, _vipsettings, id));
             //TODO:  Alter form fields based on the model info (in the view)
+
+            FormViewModel formViewModel = new FormViewModel(_settings, _vipsettings, id);
+
+            SetUpdateFieldScript(id);
+            /*
+            if (!string.IsNullOrEmpty(id))
+            {
+                VIP selectedVIP = _vipsettings.GetVIPByID(id);
+
+                if (selectedVIP != null && selectedVIP.Fields.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    selectedVIP.Fields.ForEach(x =>
+                    {
+                        //Write out scripts to manage fields
+                        string val;
+                        //Due to interdependance the Branch and Department can't have values set in Javascript, will be set in code
+                        if (string.Compare(x.AGFieldId, "Branch", true) != 0 || string.Compare(x.AGFieldId, "Department", true) != 0)
+                            val = x.Value;
+                        sb.AppendFormat("updateAGField('{0}','{1}',{2},{3});", x.AGFieldId, x.Value, x.Disabled.ToString().ToLower(), x.Visible.ToString().ToLower());
+                    });
+
+                    ViewData["updateFieldScript"] = sb.ToString();
+
+                    
+                }
+            }*/
+
+            return View(formViewModel);
+
+
+        }
+
+        private void SetUpdateFieldScript(string id)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(id))
+            {
+                VIP selectedVIP = _vipsettings.GetVIPByID(id);
+
+                if (selectedVIP != null && selectedVIP.Fields.Count > 0)
+                {
+                    
+                    selectedVIP.Fields.ForEach(x =>
+                    {
+                        //Write out scripts to manage fields
+                        string val;
+                        //Due to interdependance the Branch and Department can't have values set in Javascript, will be set in code
+                        if (string.Compare(x.AGFieldId, "Branch", true) != 0 || string.Compare(x.AGFieldId, "Department", true) != 0)
+                            val = x.Value;
+                        sb.AppendFormat("updateAGField('{0}','{1}',{2},{3});", x.AGFieldId, x.Value, x.Disabled.ToString().ToLower(), x.Visible.ToString().ToLower());
+                    });
+
+                    ViewData["updateFieldScript"] = sb.ToString();
+                    
+                }
+            }
+
         }
 
         public IActionResult About()
@@ -113,6 +171,8 @@ namespace AGUploadForm.Controllers
             {
                 //formViewModel.OfficeSelectList = new SelectList(_settings.Offices, "Name", "Name");
                 formViewModel.SetDropDowns(_settings, _vipsettings, id);
+                formViewModel.VIPId = id;
+                SetUpdateFieldScript(id);
                 if (string.IsNullOrEmpty(formViewModel.SelectedOfficeName))
                 {
                     //formViewModel.DepartmentSelectList = new SelectList(string.Empty, "Name", "Name");

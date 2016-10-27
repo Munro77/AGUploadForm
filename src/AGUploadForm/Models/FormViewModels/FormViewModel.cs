@@ -26,18 +26,17 @@ namespace AGUploadForm.Models.FormViewModels
         public IList<string> UploadedFilenames { get; set; }
         public bool BranchAndDepartmentSelected { get; set; } = false;
 
-        //Field Settings used to store VIP field setup info
-        public VIP VIPInfo { get; set; }
-        //public VIPFieldSettingsModel VIPFieldSettings { get; }
+        public string VIPId { get; set; }
 
-        public void SetDropDowns(FormSettings formSettings, VIPSettings vipSettings, string vipQString)
+        public void SetDropDowns(FormSettings formSettings, VIPSettings vipSettings = null, string vipQString = "")
         {
-            VIP item = GetVIPByID(vipSettings, vipQString);
-            SetDropDowns(formSettings, item);
-        }
+            VIP vip = null;
+            //VIP item = GetVIPByID(vipSettings, vipQString);
 
-        public void SetDropDowns(FormSettings formSettings, VIP vip)
-        {
+            if (!string.IsNullOrEmpty(vipQString) && vipSettings != null)
+            {
+                vip = vipSettings.GetVIPByID(vipQString);
+            }
 
             //Create the OfficeSelectList
             //Not using the Razor tag helper way of having "Select One" as we don't want that to appear if we are pre-selecting the 
@@ -92,31 +91,16 @@ namespace AGUploadForm.Models.FormViewModels
                         list.Insert(0, new Department() { Name = "Select One" });
                         DepartmentSelectList = new SelectList(list, "Name", "Name");
                         DepartmentSelectList.First().Value = "";
-
-                        //DepartmentSelectList = new SelectList(Branch.Departments, "Name", "Name");
                     }
                 }
             }
         }
 
-        public VIP GetVIPByID(VIPSettings vipSettings, string VIPQString)
-        {
-
-            //set the VIP Field Options if a query string was passed in (easier to work with in the form)
-            if (vipSettings != null && !String.IsNullOrEmpty(VIPQString))
-            {
-                VIP info = vipSettings.VIPs.Find(x => x.QueryStringCode.Contains(VIPQString));
-                //VIPFieldSettings = FormViewModels.VIPFieldSettingsModel.GetSettings(vipSettings, VIPQstring);
-                return info;
-            }
-            return null;
-        }
-
         public FormViewModel(FormSettings formSettings, VIPSettings vipSettings = null, string vipQstring = "") // Default with no VIP, use VIPQString: "Value" if it exists when constructing
         {
             ObjectContextId = Guid.NewGuid();
-            VIPInfo = GetVIPByID(vipSettings, vipQstring);
-            SetDropDowns(formSettings, VIPInfo);
+            VIPId = vipQstring;
+            SetDropDowns(formSettings, vipSettings, vipQstring);
             JobInformation = new JobInformationViewModel();
             ContactInformation = new ContactInformationViewModel();
 

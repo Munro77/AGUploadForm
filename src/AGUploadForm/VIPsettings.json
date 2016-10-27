@@ -7,13 +7,13 @@
         {
           "AGFieldId": "Address",
           "Value": "123 Bloor Street",
-          "Disabled": "false"
+          "Disabled": "true"
         },
         {
           "AGFieldId": "Branch",
           "Value": "Carnforth",
           "Disabled": "true",
-          "Visible": "false"
+          "Visible": "true"
         },
         {
           "AGFieldId": "Department",
