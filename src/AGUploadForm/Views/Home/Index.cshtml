@@ -10,6 +10,18 @@
 <!-- The main application styles -->
 <link href="~/Content/demo.styles.css" rel="stylesheet" />
 
+<script type="text/javascript">
+    var updateAGField = function (agFieldId, value, disabled, visible) {
+        var field = '*[data-ag-field="' + agFieldId + '"';
+        $(field).val(value);
+        $(field).prop('disabled', disabled);
+        if (!visible) $(field).parents(".form-group").hide(); else $(field).parents(".form-group").show();
+
+        //Need to trigger the change for the select boxes to work (changing to implement server side using tag helpers).
+        //$(field).trigger('change');
+    }
+</script>
+
 <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
@@ -25,7 +37,7 @@
             <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
         </td>
         <td>
-            {% if (!i && !o.options.autoUpload) { %}
+    {% if (!i && !o.options.autoUpload) { %}
             <button class="btn btn-primary start" disabled>
                 <i class="glyphicon glyphicon-upload"></i>
                 <span>Start</span>
@@ -39,7 +51,7 @@
             {% } %}
         </td>
     </tr>
-    {% } %}
+            {% } %}
 </script>
 
 <!-- The template to display files available for download -->
@@ -97,7 +109,6 @@
             </div>
             <div class="col-md-3">
                 <select asp-for="SelectedOfficeName" asp-items="Model.OfficeSelectList" class="form-control">
-                    <option value="">Select One</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -110,7 +121,6 @@
             </div>
             <div class="col-md-3">
                 <select asp-for="SelectedDepartmentName" asp-items="Model.DepartmentSelectList" class="form-control">
-                    <option value="">Choose a Location</option>
                 </select>
             </div>
             <div class="col-md-3">

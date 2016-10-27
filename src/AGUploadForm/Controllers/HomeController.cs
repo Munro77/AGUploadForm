@@ -107,18 +107,24 @@ namespace AGUploadForm.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(FormViewModel formViewModel)
+        public async Task<IActionResult> Index(FormViewModel formViewModel, string id)
         {
             if (!ModelState.IsValid)
             {
-                formViewModel.OfficeSelectList = new SelectList(_settings.Offices, "Name", "Name");
+                //formViewModel.OfficeSelectList = new SelectList(_settings.Offices, "Name", "Name");
+                formViewModel.SetDropDowns(_settings, _vipsettings, id);
                 if (string.IsNullOrEmpty(formViewModel.SelectedOfficeName))
                 {
-                    formViewModel.DepartmentSelectList = new SelectList(string.Empty, "Name", "Name");
+                    //formViewModel.DepartmentSelectList = new SelectList(string.Empty, "Name", "Name");
+                    formViewModel.DepartmentSelectList = new SelectList(new List<SelectListItem> {
+                        new SelectListItem { Selected = true, Text = "Choose a Location", Value = ""} }, "Value", "Text");
                 }
-                else
+                else if (!formViewModel.BranchAndDepartmentSelected)
                 {
-                    formViewModel.DepartmentSelectList = new SelectList(_settings.Offices.Find(o => o.Name.Equals(formViewModel.SelectedOfficeName)).Departments, "Name", "Name");
+                    List<Department> list = _settings.Offices.Find(o => o.Name.Equals(formViewModel.SelectedOfficeName)).Departments.ToList();
+                    list.Insert(0, new Department() { Name = "Select One" });
+                    formViewModel.DepartmentSelectList = new SelectList(list, "Name", "Name");
+                    formViewModel.DepartmentSelectList.First().Value = "";
                 }
                 return View(formViewModel);
             }
