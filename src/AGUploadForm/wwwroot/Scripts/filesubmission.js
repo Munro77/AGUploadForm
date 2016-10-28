@@ -16,6 +16,14 @@
         acceptFileTypes: /(jpg)|(jpeg)|(png)|(gif)|(tif)|(pdf)$/i              // Allowed file types
     });
 
+    $('#fileupload')
+        .bind('fileuploaddone', function (e, data) {
+            $('#SubmitButton').prop('disabled', ($(this).fileupload('option').getNumberOfFiles() <= 0));
+        })
+        .bind('fileuploaddestroyed', function (e, data) {
+            $('#SubmitButton').prop('disabled', ($(this).fileupload('option').getNumberOfFiles() <= 0));
+        });
+
     // Load existing files:
     $('#fileupload').addClass('fileupload-processing');
     $.ajax({
@@ -29,6 +37,7 @@
     }).done(function (result) {
         $(this).fileupload('option', 'done')
             .call(this, $.Event('done'), { result: result });
+        $('#SubmitButton').prop('disabled', ($('#fileupload').fileupload('option').getNumberOfFiles() <= 0));
     });
 
     $("#SelectedOfficeName").change(function () {
