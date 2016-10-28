@@ -129,32 +129,7 @@ namespace AGUploadForm.Controllers
             return View();
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
         public IActionResult Error()
-        {
-            return View();
-        }
-
-        // jQuery UI theme for Bootloader - copied directly from Demo
-        public IActionResult JQueryUI()
-        {
-            return View();
-        }
-
-        // BasicPlusUI theme for Bootloader - copied directly from Demo
-        public IActionResult BasicPlusUI()
-        {
-            return View();
-        }
-
-        //A plain version of the BlueImp plugin wired up using packaging
-        public IActionResult PlainBlueImp()
         {
             return View();
         }

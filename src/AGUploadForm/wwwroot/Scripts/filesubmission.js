@@ -56,10 +56,6 @@
         }
         return false;
     });
-    $('input[type="reset"]').click(function () {
-        $("#SelectedOfficeName").val("");
-        $("#SelectedOfficeName").trigger('change');
-    });
     $("#SubmitButton").click(function () {
         var index = 0;
         $("#fileupload table > tbody.files > tr.template-download > td > span > a").each(function () {
@@ -71,3 +67,17 @@
 
     $("#SelectedDepartmentName").prop('disabled', ($("#SelectedOfficeName").val() == ""));
 });
+
+var isAgDisabled = function (e) {
+    var attr = e.prop("data-ag-disabled");
+    return (typeof attr !== typeof undefined && attr === true);
+};
+
+var resetSubmitForm = function () {
+    if (!(isAgDisabled($("#SelectedOfficeName")))) {
+        $("#SelectedOfficeName").val("");
+        $("#SelectedOfficeName").trigger('change');
+    }
+
+    $('#SubmitForm').find('input, textarea').filter(function () { return !isAgDisabled($(this)); }).not('[readonly], [disabled], :button, :hidden').val('');
+};

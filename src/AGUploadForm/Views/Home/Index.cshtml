@@ -223,7 +223,7 @@
         </div>
         <div class="row">
             <div class="col-md-10 text-right">
-                <input type="reset" class="btn btn-warning" value="Clear All Fields" />
+                <input type="button" onclick="resetSubmitForm()" class="btn btn-warning" value="Clear All Fields" />
             </div>
         </div>
     </div>
@@ -300,6 +300,7 @@
             var field = '*[data-ag-field="' + agFieldId + '"';
             $(field).val(value);
             $(field).prop('readonly', disabled);
+            $(field).prop('data-ag-disabled', disabled);
             if (!visible) $(field).parents(".form-group").hide(); else $(field).parents(".form-group").show();
 
             //Need to trigger the change for the select boxes to work (changing to implement server side using tag helpers).
