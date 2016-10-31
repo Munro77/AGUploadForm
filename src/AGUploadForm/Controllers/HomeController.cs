@@ -65,7 +65,7 @@ namespace AGUploadForm.Controllers
 
             FormViewModel formViewModel = new FormViewModel(_settings, _vipsettings, id);
 
-            SetUpdateFieldScript(id);
+            //SetUpdateFieldScript(id);
             /*
             if (!string.IsNullOrEmpty(id))
             {
@@ -95,6 +95,7 @@ namespace AGUploadForm.Controllers
 
         }
 
+        /*
         private void SetUpdateFieldScript(string id)
         {
             StringBuilder sb = new StringBuilder();
@@ -121,6 +122,7 @@ namespace AGUploadForm.Controllers
             }
 
         }
+        */
 
         public IActionResult About()
         {
@@ -147,7 +149,11 @@ namespace AGUploadForm.Controllers
                 //formViewModel.OfficeSelectList = new SelectList(_settings.Offices, "Name", "Name");
                 formViewModel.SetDropDowns(_settings, _vipsettings, id);
                 formViewModel.VIPId = id;
-                SetUpdateFieldScript(id);
+                if (!string.IsNullOrEmpty(id) && _vipsettings != null)
+                {
+                    formViewModel.Vip = _vipsettings.GetVIPByID(id);
+                }
+                //SetUpdateFieldScript(id);
                 if (string.IsNullOrEmpty(formViewModel.SelectedOfficeName))
                 {
                     //formViewModel.DepartmentSelectList = new SelectList(string.Empty, "Name", "Name");

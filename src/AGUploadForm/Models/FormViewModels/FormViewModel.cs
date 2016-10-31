@@ -27,15 +27,16 @@ namespace AGUploadForm.Models.FormViewModels
         public bool BranchAndDepartmentSelected { get; set; } = false;
 
         public string VIPId { get; set; }
+        public VIP Vip { get; set; }
 
         public void SetDropDowns(FormSettings formSettings, VIPSettings vipSettings = null, string vipQString = "")
         {
-            VIP vip = null;
+            Vip = null;
             //VIP item = GetVIPByID(vipSettings, vipQString);
 
             if (!string.IsNullOrEmpty(vipQString) && vipSettings != null)
             {
-                vip = vipSettings.GetVIPByID(vipQString);
+                Vip = vipSettings.GetVIPByID(vipQString);
             }
 
             //Create the OfficeSelectList
@@ -54,12 +55,12 @@ namespace AGUploadForm.Models.FormViewModels
 
 
             //TODO:  Pre-select branch and populate/select the department if the VIP Settings choose them
-            if (vip != null)
+            if (Vip != null)
             {
                 //Lookup and see if the Branch or Department fields are set, if so, configure the dropdowns appropriately
                 Field BranchField;
-                if (vip.Fields.Count > 0 &&
-                    (BranchField = vip.Fields.Find(x => x.AGFieldId.Contains("Branch"))) != null)
+                if (Vip.Fields.Count > 0 &&
+                    (BranchField = Vip.Fields.Find(x => x.AGFieldId.Contains("Branch"))) != null)
                 {
                     Office Branch = formSettings.Offices.Find(x => x.Name.Contains(BranchField.Value));
                     if (Branch == null)
@@ -76,7 +77,7 @@ namespace AGUploadForm.Models.FormViewModels
                     SelectedOfficeName = BranchField.Value;
 
                     //If the branch field has been set, then set department.  Department cannot be set unless branch field is set
-                    Field DepartmentField = vip.Fields.Find(x => x.AGFieldId.Contains("Department"));
+                    Field DepartmentField = Vip.Fields.Find(x => x.AGFieldId.Contains("Department"));
                     if (DepartmentField != null)
                     {
                         DepartmentSelectList = new SelectList(new List<SelectListItem> {
@@ -100,6 +101,10 @@ namespace AGUploadForm.Models.FormViewModels
         {
             ObjectContextId = Guid.NewGuid();
             VIPId = vipQstring;
+            if (!string.IsNullOrEmpty(vipQstring) && vipSettings != null)
+            {
+                Vip = vipSettings.GetVIPByID(vipQstring);
+            }
             SetDropDowns(formSettings, vipSettings, vipQstring);
             JobInformation = new JobInformationViewModel();
             ContactInformation = new ContactInformationViewModel();

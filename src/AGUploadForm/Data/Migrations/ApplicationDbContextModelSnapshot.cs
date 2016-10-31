@@ -70,7 +70,29 @@ namespace AGUploadForm.Data.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("AccountNumber");
+
+                    b.Property<string>("ContactAddress");
+
+                    b.Property<string>("ContactCompanyName");
+
+                    b.Property<string>("ContactEmail");
+
+                    b.Property<string>("ContactName");
+
+                    b.Property<string>("ContactPhoneNumber");
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<string>("DepartmentName");
+
+                    b.Property<string>("DueDateTime");
+
+                    b.Property<string>("Instructions");
+
+                    b.Property<string>("OfficeName");
+
+                    b.Property<string>("ProjectNumber");
 
                     b.HasKey("ID");
 

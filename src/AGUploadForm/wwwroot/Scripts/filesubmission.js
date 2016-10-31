@@ -75,6 +75,12 @@
     });
 
     $("#SelectedDepartmentName").prop('disabled', ($("#SelectedOfficeName").val() == ""));
+
+    if ($vars.vip != null) {
+        $.each($vars.vip.fields, function (i, field) {
+            updateAGField(field.agFieldId, field.value, field.disabled, field.visible);
+        });
+    }
 });
 
 var isAgDisabled = function (e) {
@@ -90,3 +96,14 @@ var resetSubmitForm = function () {
 
     $('#SubmitForm').find('input, textarea').filter(function () { return !isAgDisabled($(this)); }).not('[readonly], [disabled], :button, :hidden').val('');
 };
+
+var updateAGField = function (agFieldId, value, disabled, visible) {
+    var field = '*[data-ag-field="' + agFieldId + '"';
+    $(field).val(value);
+    $(field).prop('readonly', disabled);
+    $(field).prop('data-ag-disabled', disabled);
+    if (!visible) $(field).parents(".form-group").hide(); else $(field).parents(".form-group").show();
+
+    //Need to trigger the change for the select boxes to work (changing to implement server side using tag helpers).
+    //$(field).trigger('change');
+}

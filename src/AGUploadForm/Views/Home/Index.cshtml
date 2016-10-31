@@ -292,28 +292,7 @@
 
     <script id="formsubmission.js" src="~/Scripts/filesubmission.js"
             data-object-context="@Model.ObjectContextId"
-            data-get-department-list-url="@Url.Action("GetDepartmentSelectListByOfficeName")">
+            data-get-department-list-url="@Url.Action("GetDepartmentSelectListByOfficeName")"
+            data-vip="@Json.Serialize(Model.Vip).ToString()">
     </script>
-
-    <script type="text/javascript">
-        var updateAGField = function (agFieldId, value, disabled, visible) {
-            var field = '*[data-ag-field="' + agFieldId + '"';
-            $(field).val(value);
-            $(field).prop('readonly', disabled);
-            $(field).prop('data-ag-disabled', disabled);
-            if (!visible) $(field).parents(".form-group").hide(); else $(field).parents(".form-group").show();
-
-            //Need to trigger the change for the select boxes to work (changing to implement server side using tag helpers).
-            //$(field).trigger('change');
-        }
-    </script>
-
-    @if (!String.IsNullOrEmpty(Model.VIPId))
-    {
-        <text>
-        <script type="text/javascript">
-            @Html.Raw(ViewData["updateFieldScript"]);
-        </script>
-        </text>
-    }
 }
