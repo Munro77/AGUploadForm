@@ -6,13 +6,15 @@
     <title>@ViewData["Title"] - AGUploadForm</title>
 
     <environment names="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />-->
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
+        <!--
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        -->
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 
@@ -20,18 +22,49 @@
 
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
-<body>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2016 - AGUploadForm</p>
-        </footer>
-    </div>
+<body class="page page-template-template-level1 page-template-template-form1 submit-form">
+    <div id="overlay"></div>
+    <header class="hero">
+        <image src="/images/AG_Desktop_SubmitFilesHero.jpg" alt="Page Hero Image" class="hero-image"></image>
+        <div class="header-content">
+            <div class="container">
+                <nav class="nav">
+                    <a class="menu-link" herf="#menu">
+                        <span></span>
+                    </a>
+                    <div class="top-bar">
+                        <a class="brand" href="/"><img src="/images/Logo-white.png" alt="Astley Gilbert Logo" class="logo" /></a>
+                        <a class="brand-sticky" href="/"><img src="/images/logo-mobile.png" class="logo-sticky" alt="Astley Gilbert Sticky Logo" /></a>
+                    </div>
+                    <div id="menu" class="menu nav-primary">
+                        <a href="/"><img src="/images/logo-mobile.png" class="menu-logo" alt="Mobile Menu Logo" /></a>
+                        <a href="#" class="menu-close"><span>X</span></a>
+                        <div class="menu-phone"><a href="tel:416-228-8666">Call our head office 416-228-8666</a></div>
+                        <div class="menu-secondary-menu-container">
+                            <ul id="menu-secondary-menu-1" class="nav">
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75"><a href="mailto:it.support@astleygilbert.com?Subject=Web Uploader Feedback">Ask a Question/Send Feedback</a></li>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-83"><a href="/">Alternate File Upload Options</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div class="page-header">
+                    <h1>Submit Files</h1>
+                    <h2></h2>
+                </div>
+            </div>
+        </div>
+    </header>
+    @RenderBody()
+    <footer>
+        <div class="footer-legal">
+            <div class="container"></div>
+        </div>
+    </footer>
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <!--<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>-->
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
@@ -39,10 +72,12 @@
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
         </script>
+        <!--
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
+        -->
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 

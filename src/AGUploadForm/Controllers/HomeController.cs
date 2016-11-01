@@ -124,10 +124,8 @@ namespace AGUploadForm.Controllers
         }
         */
 
-        public IActionResult About()
+        public IActionResult FormSubmitted()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
@@ -223,7 +221,7 @@ namespace AGUploadForm.Controllers
                     GetMailMessageBody(saveLocation, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
             }
 
-            return RedirectToAction("About");
+            return RedirectToAction("FormSubmitted");
         }
 
         private IList<FileInfo> MoveUploadedFiles(string saveLocation, FormViewModel formViewModel, IList<string> errors)
@@ -293,6 +291,10 @@ namespace AGUploadForm.Controllers
             job.ContactName = formViewModel.ContactInformation.Name;
             job.ContactCompanyName = formViewModel.ContactInformation.Company;
             job.ContactAddress = formViewModel.ContactInformation.Address;
+            job.ContactAddressUnitNumber = formViewModel.ContactInformation.UnitNumber;
+            job.ContactAddressCity = formViewModel.ContactInformation.City;
+            job.ContactAddressProvince = formViewModel.ContactInformation.Province;
+            job.ContactAddressPostalCode = formViewModel.ContactInformation.PostalCode;
             job.ContactEmail = formViewModel.ContactInformation.Email;
             job.ContactPhoneNumber = formViewModel.ContactInformation.PhoneNumber;
             return job;

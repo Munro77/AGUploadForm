@@ -17,6 +17,10 @@ namespace AGUploadForm.Models
         public string ContactName { get; set; }
         public string ContactCompanyName { get; set; }
         public string ContactAddress { get; set; }
+        public string ContactAddressUnitNumber { get; set; }
+        public string ContactAddressCity { get; set; }
+        public string ContactAddressProvince { get; set; }
+        public string ContactAddressPostalCode { get; set; }
         public string ContactEmail { get; set; }
         public string ContactPhoneNumber { get; set; }
         public DateTime Created { get; protected set; }

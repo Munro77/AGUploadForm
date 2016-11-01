@@ -67,7 +67,7 @@
     });
     $("#SubmitButton").click(function () {
         var index = 0;
-        $("#fileupload table > tbody.files > tr.template-download > td > span > a").each(function () {
+        $("#fileupload table > tbody.files > tr.template-download > td > p > span").each(function () {
             $("#SubmitForm").prepend("<input type='hidden' name='UploadedFilenames[" + index + "]' value='" + $(this).prop('title') + "' />");
             index++;
         });

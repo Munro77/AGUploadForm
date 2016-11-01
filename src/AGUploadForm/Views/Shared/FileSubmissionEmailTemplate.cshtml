@@ -107,7 +107,16 @@
             </tr>
             <tr>
                 <td width="100">Address</td>
-                <td class="txt">@Model.Job.ContactAddress</td>
+                <td class="txt">
+                    @Model.Job.ContactAddress
+                    @if (!string.IsNullOrEmpty(Model.Job.ContactAddressUnitNumber))
+                    {
+                        <br/>
+                        @Model.Job.ContactAddressUnitNumber
+                    }
+                    <br/>
+                    @string.Format("{0} {1} {2}", Model.Job.ContactAddressCity, Model.Job.ContactAddressProvince, Model.Job.ContactAddressPostalCode)
+                </td>
                 <td width="100">Department</td>
                 <td class="txt">@Model.Job.DepartmentName</td>
             </tr>

@@ -74,6 +74,14 @@ namespace AGUploadForm.Data.Migrations
 
                     b.Property<string>("ContactAddress");
 
+                    b.Property<string>("ContactAddressCity");
+
+                    b.Property<string>("ContactAddressPostalCode");
+
+                    b.Property<string>("ContactAddressProvince");
+
+                    b.Property<string>("ContactAddressUnitNumber");
+
                     b.Property<string>("ContactCompanyName");
 
                     b.Property<string>("ContactEmail");

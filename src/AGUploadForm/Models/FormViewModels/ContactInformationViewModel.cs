@@ -16,6 +16,13 @@ namespace AGUploadForm.Models.FormViewModels
         [Required(ErrorMessage = "*")]
         [Display(Name = "Address")]
         public string Address { get; set; }
+        public string UnitNumber { get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string Province { get; set; }
+        [Required]
+        public string PostalCode { get; set; }
         [Required(ErrorMessage = "*")]
         [Display(Name = "Email")]
         public string Email { get; set; }

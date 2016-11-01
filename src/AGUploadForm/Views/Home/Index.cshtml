@@ -1,14 +1,13 @@
 ﻿@{
-//ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Submit Files - Astley Gilbert WordPress";
 }
 @model AGUploadForm.Models.FormViewModels.FormViewModel
 
 <!-- jQquery File Upload Plugin and Gallery styles -->
+<!--
 <link href="~/Backload/Client/blueimp/bundles/css/jquery.fileupload.bundle.min.css" rel="stylesheet" />
 <link href="~/Backload/Client/blueimp/gallery/css/blueimp-gallery.min.css" rel="stylesheet" />
-
-<!-- The main application styles -->
-<link href="~/Content/demo.styles.css" rel="stylesheet" />
+-->
 
 <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -32,10 +31,9 @@
             </button>
             {% } %}
             {% if (!i) { %}
-            <button class="btn btn-warning cancel">
-                <i class="glyphicon glyphicon-ban-circle"></i>
-                <span>Cancel</span>
-            </button>
+            <div class="clear-files">
+                <a href="javascript:void(0)" class="clear-files-button cancel">Cancel</a>
+            </div>
             {% } %}
         </td>
     </tr>
@@ -49,18 +47,19 @@
         <td>
             <span class="preview">
                 {% if (file.thumbnailUrl) { %}
-                <a href="{%=file.url%}" title="{%=file.extra.originalName%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                <!--<a href="{%=file.url%}" title="{%=file.extra.originalName%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>-->
                 {% } %}
             </span>
         </td>
         <td>
             <p class="name">
                 {% if (file.url) { %}
-                <a href="{%=file.url%}" title="{%=file.extra.originalName%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.extra.originalName%}</a>
+                <!--<a href="{%=file.url%}" title="{%=file.extra.originalName%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.extra.originalName%}</a>-->
+                <span title="{%=file.extra.originalName%}">{%=file.extra.originalName%}</span>
                 {% } else if (file.extra) { %}
-                <span>{%=file.extra.originalName%}</span>
+                <span title="{%=file.extra.originalName%}">{%=file.extra.originalName%}</span>
                 {% } else { %}
-                <span>{%=file.name%}</span>
+                <span title="{%=file.extra.originalName%}">{%=file.name%}</span>
                 {% } %}
             </p>
             {% if (file.error) { %}
@@ -72,220 +71,187 @@
         </td>
         <td>
             {% if (file.deleteUrl) { %}
-            <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
-                <i class="glyphicon glyphicon-trash"></i>
-                <span>Delete</span>
-            </button>
-            <input type="checkbox" name="delete" value="1" class="toggle invisible" checked="checked">
+            <div class="clear-files">
+                <a href="javascript:void(0)" class="clear-files-button delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>Delete</a>
+                <input type="checkbox" name="delete" value="1" class="toggle invisible" checked="checked">
+            </div>
             {% } else { %}
-            <button class="btn btn-warning cancel">
-                <i class="glyphicon glyphicon-ban-circle"></i>
-                <span>Cancel</span>
-            </button>
+            <div class="clear-files">
+                <a href="javascript:void(0)" class="clear-files-button cancel">Cancel</a>
+            </div>
             {% } %}
         </td>
     </tr>
     {% } %}
 </script>
 
-<form id="SubmitForm" method="post" action="@Context.Request.Path">
-    <div class="form-horizontal">
-        <input type="hidden" asp-for="ObjectContextId" />
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="SelectedOfficeName"></label>
-            </div>
-            <div class="col-md-3">
-                <select asp-for="SelectedOfficeName" asp-items="Model.OfficeSelectList" class="form-control" data-ag-field="Branch"></select>
-            </div>
-            <div class="col-md-3">
-                <span asp-validation-for="SelectedOfficeName" class="text-danger"></span>
-            </div>
+<section class="printer-express u-bg-light">
+    <div class="row">
+        <div class="col-sm-6 heading">
+            <h5>Looking for Printer Express?</h5>
         </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="SelectedDepartmentName"></label>
-            </div>
-            <div class="col-md-3">
-                <select asp-for="SelectedDepartmentName" asp-items="Model.DepartmentSelectList" class="form-control"></select>
-            </div>
-            <div class="col-md-3">
-                <span asp-validation-for="SelectedDepartmentName" class="text-danger"></span>
-            </div>
-        </div>
-
-        <!-- Job Information -->
-        <div class="row">
-            <div class="col-md-3 text-right">
-                <h3>
-                    Job Information
-                </h3>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="JobInformation.DueDateTime"></label>
-            </div>
-            <div class="col-md-3">
-                <input type="text" asp-for="JobInformation.DueDateTime" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                <span asp-validation-for="JobInformation.DueDateTime" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="JobInformation.AccountNumber"></label>
-            </div>
-            <div class="col-md-3">
-                <input type="text" asp-for="JobInformation.AccountNumber" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="JobInformation.ProjectNumber"></label>
-            </div>
-            <div class="col-md-3">
-                <input type="text" asp-for="JobInformation.ProjectNumber" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="JobInformation.Instructions"></label>
-            </div>
-            <div class="col-md-3">
-                <textarea asp-for="JobInformation.Instructions" class="form-control"></textarea>
-            </div>
-            <div class="col-md-3">
-                <span asp-validation-for="JobInformation.Instructions" class="text-danger"></span>
-            </div>
-        </div>
-
-        <!-- Contact Information -->
-        <div class="row">
-            <div class="col-md-3 text-right">
-                <h3>
-                    Contact Infromation
-                </h3>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="ContactInformation.Name"></label>
-            </div>
-            <div class="col-md-3">
-                <input type="text" asp-for="ContactInformation.Name" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                <span asp-validation-for="ContactInformation.Name" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="ContactInformation.Company"></label>
-            </div>
-            <div class="col-md-3">
-                <input type="text" asp-for="ContactInformation.Company" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="ContactInformation.Address"></label>
-            </div>
-            <div class="col-md-3">
-                <input type="text" asp-for="ContactInformation.Address" class="form-control" data-ag-field="Address"/>
-            </div>
-            <div class="col-md-3">
-                <span asp-validation-for="ContactInformation.Address" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="ContactInformation.Email"></label>
-            </div>
-            <div class="col-md-3">
-                <input type="text" asp-for="ContactInformation.Email" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                <span asp-validation-for="ContactInformation.Email" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 text-right">
-                <label asp-for="ContactInformation.PhoneNumber"></label>
-            </div>
-            <div class="col-md-3">
-                <input type="text" asp-for="ContactInformation.PhoneNumber" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                <span asp-validation-for="ContactInformation.PhoneNumber" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-10 text-right">
-                <input type="button" onclick="resetSubmitForm()" class="btn btn-warning" value="Clear All Fields" />
-            </div>
-        </div>
+        <div class="col-sm-6 button-container"><a href="" class="button button-thin">Print Express Log In</a></div>
     </div>
-</form>
+</section>
+<main class="main submit-files">
+    <form id="SubmitForm" method="post" action="@Context.Request.Path">
+        <div class="container">
+            <input type="hidden" asp-for="ObjectContextId" />
+            <fieldset class="choose-location">
+                <div class="form-group">
+                    <label asp-for="SelectedOfficeName">
+                        <h3>@Html.DisplayNameFor(m => m.SelectedOfficeName)</h3>
+                    </label>
+                    <div class="input-container">
+                        <select asp-for="SelectedOfficeName" asp-items="Model.OfficeSelectList" class="form-control" data-ag-field="Branch"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SelectedDepartmentName">
+                        <h3>@Html.DisplayNameFor(m => m.SelectedDepartmentName)</h3>
+                    </label>
+                    <div class="input-container">
+                        <select asp-for="SelectedDepartmentName" asp-items="Model.DepartmentSelectList" class="form-control"></select>
+                    </div>
+                </div>
+            </fieldset>
 
-<!-- File Upload -->
-<form id="fileupload" action="/Backload/FileHandler" method="POST" enctype="multipart/form-data">
-    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-    <div class="row fileupload-buttonbar">
-        <div class="col-md-5">
-            <!-- The fileinput-button span is used to style the file input field as button -->
-            <span class="btn btn-success fileinput-button">
-                <i class="glyphicon glyphicon-plus"></i>
-                <span>Add File(s)</span>
-                <input type="file" name="files[]" multiple>
-            </span>
+            <!-- Job Information -->
+            <fieldset>
+                <label>
+                    <h3>Job Information</h3>
+                </label>
+                <div class="form-group">
+                    <label asp-for="JobInformation.DueDateTime" class="label--required"></label>
+                    <div class="input-container">
+                        <input type="text" asp-for="JobInformation.DueDateTime" class="form-control" placeholder="Enter Due Date/Time" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="JobInformation.AccountNumber"></label>
+                    <div class="input-container">
+                        <input type="text" asp-for="JobInformation.AccountNumber" class="form-control" placeholder="Enter Account No. (Optional)" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="JobInformation.ProjectNumber"></label>
+                    <div class="input-container">
+                        <input type="text" asp-for="JobInformation.ProjectNumber" class="form-control" placeholder="Enter Project/PO No. (Optional)" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="JobInformation.Instructions" class="label--required"></label>
+                    <div class="input-container">
+                        <textarea asp-for="JobInformation.Instructions" class="form-control" rows="10" placeholder="Enter Instructions"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Contact Information -->
+            <fieldset class="form-group">
+                <label>
+                    <h3>Contact Infromation</h3>
+                </label>
+                <div class="form-group">
+                    <label asp-for="ContactInformation.Name" class="label--required"></label>
+                    <div class="input-container">
+                        <input type="text" asp-for="ContactInformation.Name" class="form-control lg-size" placeholder="Enter Name" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ContactInformation.Company"></label>
+                    <div class="input-container">
+                        <input type="text" asp-for="ContactInformation.Company" class="form-control lg-size" placeholder="Enter Company" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ContactInformation.Address" class="label--required"></label>
+                    <div class="input-container">
+                        <input type="text" asp-for="ContactInformation.Address" class="form-control xlg-size" placeholder="Enter Address" data-ag-field="Address" />
+                        <input type="text" asp-for="ContactInformation.UnitNumber" class="form-control sm-size" placeholder="Enter Unit Number (Optional)" data-ag-field="UnitNumber" />
+                        <div class="form-control-group">
+                            <input type="text" asp-for="ContactInformation.City" class="form-control sm-size" placeholder="Enter City" data-ag-field="City" />
+                            <input type="text" asp-for="ContactInformation.Province" class="form-control xxs-size" placeholder="PO" data-ag-field="Province" />
+                            <input type="text" asp-for="ContactInformation.PostalCode" class="form-control xs-size" placeholder="Postal Code" data-ag-field="PostalCode" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ContactInformation.Email" class="label--required"></label>
+                    <div class="input-container">
+                        <input type="text" asp-for="ContactInformation.Email" class="form-control lg-size" placeholder="Enter Email Address" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ContactInformation.PhoneNumber" class="label--required"></label>
+                    <div class="input-container">
+                        <input type="text" asp-for="ContactInformation.PhoneNumber" class="form-control sm-size" placeholder="Enter Phone Number" />
+                    </div>
+                </div>
+                <div class="clear-fields">
+                    <a href="javascript:void(0)" onclick="resetSubmitForm()">Clear All Fields</a>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</main>
+
+<section class="u-bg-light">
+    <div class="container">
+        <!-- File Upload -->
+        <form id="fileupload" action="/Backload/FileHandler" method="POST" enctype="multipart/form-data">
+            <h2 class="u-align-center">File Uploader</h2>
+            <div class="clear-files fileupload-buttonbar">
+                <a href="javascript:void(0)" class="clear-files-button delete">Clear All Files</a>
+            </div>
+            <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+            <!-- The table listing the files available for upload/download -->
+            <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+            <div class="fileupload-buttonbar">
+                <span class="fileinput-button">
+                    <span>Add File(s)</span>
+                    <input type="file" name="files[]" multiple>
+                </span>
+                <!--
+                <button type="submit" class="btn btn-primary start">
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel upload</span>
+                </button>
+                <button type="button" class="btn btn-danger delete">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Clear All Files</span>
+                </button>
+                <input type="checkbox" class="toggle">
+                <span class="fileupload-process"></span>
+                //-->
+            </div>
             <!--
-            <button type="submit" class="btn btn-primary start">
-                <i class="glyphicon glyphicon-upload"></i>
-                <span>Start upload</span>
-            </button>
-            <button type="reset" class="btn btn-warning cancel">
-                <i class="glyphicon glyphicon-ban-circle"></i>
-                <span>Cancel upload</span>
-            </button>
-            //-->
-            <button type="button" class="btn btn-danger delete">
-                <i class="glyphicon glyphicon-trash"></i>
-                <span>Clear All Files</span>
-            </button>
-            <!-- <input type="checkbox" class="toggle"> //-->
-            <!-- The global file processing state -->
-            <span class="fileupload-process"></span>
-        </div>
-        <!-- The global progress state -->
-        <div class="col-md-5 fileupload-progress fade">
-            <!-- The global progress bar -->
-            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+            <div class="col-md-5 fileupload-progress fade">
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <div class="progress-extended">&nbsp;</div>
             </div>
-            <!-- The extended global progress state -->
-            <div class="progress-extended">&nbsp;</div>
-        </div>
+            //-->
+        </form>
     </div>
-    <!-- The table listing the files available for upload/download -->
-    <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
-</form>
-
-<div class="row">
-    <div class="col-md-10 text-right">
-        <button type="button" class="btn btn-success" id="SubmitButton">
+    <div class="button-container u-align-center">
+        <button type="button" class="button start" id="SubmitButton">
             <span>Submit</span>
         </button>
     </div>
-</div>
+</section>
 
 @section scripts
 {
     <script src="~/Backload/Client/blueimp/bundles/js/jquery.fileupload.basicplusui.min.js"></script>
 
     <!-- Gallery script (image preview) -->
-    <script src="~/Backload/Client/blueimp/gallery/js/jquery.blueimp-gallery.min.js"></script>
+    <!--<script src="~/Backload/Client/blueimp/gallery/js/jquery.blueimp-gallery.min.js"></script>-->
 
     <!-- The demo application script -->
     <!-- <script src="~/Scripts/demos.blueimp.basicplusui.js"></script> -->
