@@ -16,6 +16,7 @@
         acceptFileTypes: /(jpg)|(jpeg)|(png)|(gif)|(tif)|(pdf)$/i              // Allowed file types
     });
 
+    /*
     $('#fileupload')
         .bind('fileuploaddone', function (e, data) {
             $('#SubmitButton').prop('disabled', ($(this).fileupload('option').getNumberOfFiles() <= 0));
@@ -23,6 +24,7 @@
         .bind('fileuploaddestroyed', function (e, data) {
             $('#SubmitButton').prop('disabled', ($(this).fileupload('option').getNumberOfFiles() <= 0));
         });
+    */
 
     // Load existing files:
     $('#fileupload').addClass('fileupload-processing');
@@ -37,7 +39,7 @@
     }).done(function (result) {
         $(this).fileupload('option', 'done')
             .call(this, $.Event('done'), { result: result });
-        $('#SubmitButton').prop('disabled', ($('#fileupload').fileupload('option').getNumberOfFiles() <= 0));
+        /* $('#SubmitButton').prop('disabled', ($('#fileupload').fileupload('option').getNumberOfFiles() <= 0)); */
     });
 
     $("#SelectedOfficeName").change(function () {
@@ -71,8 +73,38 @@
             $("#SubmitForm").prepend("<input type='hidden' name='UploadedFilenames[" + index + "]' value='" + $(this).prop('title') + "' />");
             index++;
         });
-        $("#SubmitForm").submit();
+        if (index <= 0) {
+            $("#confirm-dialog").dialog({
+                dialogClass: "no-close",
+                resizable: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    },
+                }
+            });
+        } else {
+            $("#SubmitForm").submit();
+        }
     });
+
+    if (!($vars.modelStateIsValid != null && $vars.modelStateIsValid.toLowerCase() == "true")) {
+        $("#validation-dialog").dialog({
+            dialogClass: "no-close",
+            resizable: false,
+            height: "auto",
+            width: 800,
+            modal: true,
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                },
+            }
+        });
+    }
 
     $("#SelectedDepartmentName").prop('disabled', ($("#SelectedOfficeName").val() == ""));
 

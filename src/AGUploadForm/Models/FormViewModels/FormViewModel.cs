@@ -11,12 +11,12 @@ namespace AGUploadForm.Models.FormViewModels
     public class FormViewModel
     {
         public Guid ObjectContextId { get; set; }
-        [Required(ErrorMessage = "*")]
+        [Required]
         [Display(Name = "Choose Printer Location")]
         public string SelectedOfficeName { get; set; }
         public SelectList OfficeSelectList { get; set; }
 
-        [Required(ErrorMessage = "*")]
+        [Required]
         [Display(Name = "Choose Department")]
         public string SelectedDepartmentName { get; set; }
         public SelectList DepartmentSelectList { get; set; }

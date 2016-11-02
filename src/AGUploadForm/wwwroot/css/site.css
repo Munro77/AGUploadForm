@@ -5237,3 +5237,7 @@ body#tinymce {
 .invisible {
   visibility: hidden;
 }
+
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}

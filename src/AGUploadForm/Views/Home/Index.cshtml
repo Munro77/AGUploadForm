@@ -246,6 +246,16 @@
     </div>
 </section>
 
+<div id="confirm-dialog" title="Add File(s)" style="display: none">
+    <p>Please add one or more file(s) before submission</p>
+</div>
+
+<div id="validation-dialog" title="Validation Summary" style="display: none">
+    <div class="text-danger" asp-validation-summary="All">
+        Please correct the following error(s) before submission:
+    </div>
+</div>
+
 @section scripts
 {
     <script src="~/Backload/Client/blueimp/bundles/js/jquery.fileupload.basicplusui.min.js"></script>
@@ -257,6 +267,7 @@
     <!-- <script src="~/Scripts/demos.blueimp.basicplusui.js"></script> -->
 
     <script id="formsubmission.js" src="~/Scripts/filesubmission.js"
+            data-model-state-is-valid="@ViewData.ModelState.IsValid"
             data-object-context="@Model.ObjectContextId"
             data-get-department-list-url="@Url.Action("GetDepartmentSelectListByOfficeName")"
             data-vip="@Json.Serialize(Model.Vip).ToString()">
