@@ -16,6 +16,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.Extensions.Logging;
 
 namespace AGUploadForm.Controllers
 {
@@ -27,6 +28,7 @@ namespace AGUploadForm.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<HomeController> _logger;
 
         public HomeController(
             IOptions<AppSettings> appSettingsOptions,
@@ -34,7 +36,8 @@ namespace AGUploadForm.Controllers
             IOptions<VIPSettings> vipSettingsOptions,
             ApplicationDbContext context,
             IHostingEnvironment hostingEnvironment,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            ILogger<HomeController> logger)
         {
             _appSettings = appSettingsOptions.Value;
             _settings = settingsOptions.Value;
@@ -42,87 +45,15 @@ namespace AGUploadForm.Controllers
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _serviceProvider = serviceProvider;
-
-            //string output = JsonConvert.SerializeObject(_settings);
-
+            _logger = logger;
         }
-
-        //public IActionResult Index()
-        ///{
-        //Test the data from the config file
-        /*ViewData["Title"] = _settings.Title;
-        ViewData["Updates"] = _settings.Updates;
-        _settings.Offices.ForEach(x => { ViewData["Office"] = x.Name; });
-        ViewData["Office"] += " AND dept email = " + _settings.Offices[0].Departments[0].Email;*/
-        //    return View(new FormViewModel(_settings));
-        //}
 
         //Updated to include VIP Settings and the identifier to set them up in the view model
         public IActionResult Index(string id)
         {
-            //return View(new FormViewModel(_settings, _vipsettings, id));
-            //TODO:  Alter form fields based on the model info (in the view)
-
             FormViewModel formViewModel = new FormViewModel(_settings, _vipsettings, id);
-
-            //SetUpdateFieldScript(id);
-            /*
-            if (!string.IsNullOrEmpty(id))
-            {
-                VIP selectedVIP = _vipsettings.GetVIPByID(id);
-
-                if (selectedVIP != null && selectedVIP.Fields.Count > 0)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    selectedVIP.Fields.ForEach(x =>
-                    {
-                        //Write out scripts to manage fields
-                        string val;
-                        //Due to interdependance the Branch and Department can't have values set in Javascript, will be set in code
-                        if (string.Compare(x.AGFieldId, "Branch", true) != 0 || string.Compare(x.AGFieldId, "Department", true) != 0)
-                            val = x.Value;
-                        sb.AppendFormat("updateAGField('{0}','{1}',{2},{3});", x.AGFieldId, x.Value, x.Disabled.ToString().ToLower(), x.Visible.ToString().ToLower());
-                    });
-
-                    ViewData["updateFieldScript"] = sb.ToString();
-
-                    
-                }
-            }*/
-
             return View(formViewModel);
-
-
         }
-
-        /*
-        private void SetUpdateFieldScript(string id)
-        {
-            StringBuilder sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(id))
-            {
-                VIP selectedVIP = _vipsettings.GetVIPByID(id);
-
-                if (selectedVIP != null && selectedVIP.Fields.Count > 0)
-                {
-                    
-                    selectedVIP.Fields.ForEach(x =>
-                    {
-                        //Write out scripts to manage fields
-                        string val;
-                        //Due to interdependance the Branch and Department can't have values set in Javascript, will be set in code
-                        if (string.Compare(x.AGFieldId, "Branch", true) != 0 || string.Compare(x.AGFieldId, "Department", true) != 0)
-                            val = x.Value;
-                        sb.AppendFormat("updateAGField('{0}','{1}',{2},{3});", x.AGFieldId, x.Value, x.Disabled.ToString().ToLower(), x.Visible.ToString().ToLower());
-                    });
-
-                    ViewData["updateFieldScript"] = sb.ToString();
-                    
-                }
-            }
-
-        }
-        */
 
         public IActionResult FormSubmitted()
         {
@@ -151,7 +82,6 @@ namespace AGUploadForm.Controllers
                 {
                     formViewModel.Vip = _vipsettings.GetVIPByID(id);
                 }
-                //SetUpdateFieldScript(id);
                 if (string.IsNullOrEmpty(formViewModel.SelectedOfficeName))
                 {
                     //formViewModel.DepartmentSelectList = new SelectList(string.Empty, "Name", "Name");
@@ -205,6 +135,7 @@ namespace AGUploadForm.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(string.Format("Job failed to persist: {0}", e.Message));
                 errors.Add(string.Format("Job failed to persist: {0}", e.Message));
             }
 
@@ -255,11 +186,13 @@ namespace AGUploadForm.Controllers
                         }
                         catch (Exception e)
                         {
+                            _logger.LogError(string.Format("The uploaded file {0} cannot be moved: {1}", uploadedFilePath, e.Message));
                             errors.Add(string.Format("The uploaded file {0} cannot be moved: {1}", uploadedFilePath, e.Message));
                         }
                     }
                     else
                     {
+                        _logger.LogError(string.Format("The uploaded file {0} cannot be found", uploadedFilePath));
                         errors.Add(string.Format("The uploaded file {0} cannot be found", uploadedFilePath));
                     }
                 }
@@ -269,11 +202,13 @@ namespace AGUploadForm.Controllers
                 }
                 catch (Exception)
                 {
+                    _logger.LogError(string.Format("The uploaded directory {0} cannot be deleted", uploadDirectoryPath));
                     errors.Add(string.Format("The uploaded directory {0} cannot be deleted", uploadDirectoryPath));
                 }
             }
             else
             {
+                _logger.LogError(string.Format("The upload directory {0} does not exist", uploadDirectoryPath));
                 errors.Add(string.Format("The upload directory {0} does not exist", uploadDirectoryPath));
             }
             return uploadedFiles;
@@ -326,24 +261,31 @@ namespace AGUploadForm.Controllers
 
         private void SendMail(string fromAddress, IList<string> toAddresses, string subject, string body)
         {
-            using (SmtpClient smtpClient = new SmtpClient())
+            try
             {
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.Host = _appSettings.SmtpSettings.Host;
-                smtpClient.Port = _appSettings.SmtpSettings.Port;
-                smtpClient.EnableSsl = _appSettings.SmtpSettings.EnableSsl;
-                smtpClient.Credentials = new NetworkCredential(_appSettings.SmtpSettings.Username, _appSettings.SmtpSettings.Password);
-
-                MailMessage mailMessage = new MailMessage();
-                mailMessage.IsBodyHtml = true;
-                mailMessage.From = new MailAddress(_appSettings.SmtpSettings.FromAddress);
-                foreach (string toAddress in toAddresses)
+                using (SmtpClient smtpClient = new SmtpClient())
                 {
-                    mailMessage.To.Add(toAddress);
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.Host = _appSettings.SmtpSettings.Host;
+                    smtpClient.Port = _appSettings.SmtpSettings.Port;
+                    smtpClient.EnableSsl = _appSettings.SmtpSettings.EnableSsl;
+                    smtpClient.Credentials = new NetworkCredential(_appSettings.SmtpSettings.Username, _appSettings.SmtpSettings.Password);
+
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.From = new MailAddress(_appSettings.SmtpSettings.FromAddress);
+                    foreach (string toAddress in toAddresses)
+                    {
+                        mailMessage.To.Add(toAddress);
+                    }
+                    mailMessage.Subject = subject;
+                    mailMessage.Body = body;
+                    smtpClient.Send(mailMessage);
                 }
-                mailMessage.Subject = subject;
-                mailMessage.Body = body;
-                smtpClient.Send(mailMessage);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(string.Format("Email failed to be sent to {0}: {1}", string.Join(", ", toAddresses.ToArray()), e.Message));
             }
         }
     }
