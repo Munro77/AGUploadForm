@@ -155,15 +155,38 @@ namespace AGUploadForm.Controllers
             return RedirectToAction("FormSubmitted");
         }
 
+
+        /// <summary>
+        /// Logger for errors.  Can decide to include the job details or not.
+        /// </summary>
+        /// <param name="error"></param>
+        /// <param name="formViewModel"></param>
+        /// <param name="errors"></param>
+        private void LogError(string error, FormViewModel formViewModel = null, IList<string> errors = null)
+        {
+            string errorToLog = error;
+            if (formViewModel != null)
+            {
+                errorToLog = string.Format(error + "\nJob Details:\n{0}", Newtonsoft.Json.JsonConvert.SerializeObject(formViewModel, Newtonsoft.Json.Formatting.Indented));
+            }
+
+            _logger.LogError(errorToLog);
+
+            if (errors != null)
+                errors.Add(errorToLog);
+        }
+        
         private IList<FileInfo> MoveUploadedFiles(string saveLocation, FormViewModel formViewModel, IList<string> errors)
         {
             string uploadDirectoryPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "Uploads"), formViewModel.ObjectContextId.ToString());
             IList<FileInfo> uploadedFiles = new List<FileInfo>();
             if (Directory.Exists(uploadDirectoryPath))
             {
+                string uploadedFilePath;
+
                 foreach (string uploadedFilename in formViewModel.UploadedFilenames)
                 {
-                    string uploadedFilePath = Path.Combine(uploadDirectoryPath, uploadedFilename);
+                    uploadedFilePath = Path.Combine(uploadDirectoryPath, uploadedFilename);
                     if (System.IO.File.Exists(uploadedFilePath))
                     {
                         FileInfo fileInfo = new FileInfo(uploadedFilePath);
@@ -179,21 +202,33 @@ namespace AGUploadForm.Controllers
                             }
                             fileUploadPath = Path.Combine(saveLocation, (filenameWithoutExtension + "_" + suffix++.ToString() + fileExtension));
                         }
+
+                        //Check if the path exists, and if not, create it
+                        FileInfo droppedFile = new FileInfo(fileUploadPath);
+                        if (!droppedFile.Directory.Exists)
+                            try
+                            {
+                                droppedFile.Directory.Create();
+                            }
+                            catch (Exception e)
+                            {
+                                LogError(string.Format("Path {0} does not exist and cannot be created. Error: {1}.", droppedFile.Directory, e.Message), formViewModel, errors);
+                            }
+
                         try
                         {
                             fileInfo.MoveTo(fileUploadPath);
-                            uploadedFiles.Add(new FileInfo(fileUploadPath));
+                            droppedFile.Refresh();
+                            uploadedFiles.Add(droppedFile);
                         }
                         catch (Exception e)
                         {
-                            _logger.LogError(string.Format("The uploaded file {0} cannot be moved: {1}", uploadedFilePath, e.Message));
-                            errors.Add(string.Format("The uploaded file {0} cannot be moved: {1}", uploadedFilePath, e.Message));
+                            LogError(string.Format("The uploaded file {0} cannot be moved: {1}", droppedFile.Directory, e.Message), formViewModel, errors);
                         }
                     }
                     else
                     {
-                        _logger.LogError(string.Format("The uploaded file {0} cannot be found", uploadedFilePath));
-                        errors.Add(string.Format("The uploaded file {0} cannot be found", uploadedFilePath));
+                        LogError(string.Format("The uploaded file {0} cannot be found", uploadedFilePath), formViewModel, errors);
                     }
                 }
                 try
@@ -202,14 +237,12 @@ namespace AGUploadForm.Controllers
                 }
                 catch (Exception)
                 {
-                    _logger.LogError(string.Format("The uploaded directory {0} cannot be deleted", uploadDirectoryPath));
-                    errors.Add(string.Format("The uploaded directory {0} cannot be deleted", uploadDirectoryPath));
+                    LogError(string.Format("The upload directory {0} cannot be deleted", uploadDirectoryPath), formViewModel, errors);
                 }
             }
             else
             {
-                _logger.LogError(string.Format("The upload directory {0} does not exist", uploadDirectoryPath));
-                errors.Add(string.Format("The upload directory {0} does not exist", uploadDirectoryPath));
+                LogError(string.Format("The upload directory {0} does not exist", uploadDirectoryPath), formViewModel, errors);
             }
             return uploadedFiles;
         }
