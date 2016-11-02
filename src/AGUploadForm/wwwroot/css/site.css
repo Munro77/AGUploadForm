@@ -5241,3 +5241,18 @@ body#tinymce {
 .no-close .ui-dialog-titlebar-close {
   display: none;
 }
+
+#form-submit-overlay {
+    background: #ffffff;
+    opacity: 0.9;
+    color: #666666;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 5000;
+    top: 0;
+    left: 0;
+    float: left;
+    text-align: center;
+    padding-top: 25%;
+}
