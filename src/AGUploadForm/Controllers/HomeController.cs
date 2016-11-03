@@ -17,6 +17,7 @@ using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace AGUploadForm.Controllers
 {
@@ -52,6 +53,33 @@ namespace AGUploadForm.Controllers
         public IActionResult Index(string id)
         {
             FormViewModel formViewModel = new FormViewModel(_settings, _vipsettings, id);
+            if (Request.Cookies != null && Request.Cookies.Keys.Contains("RememberLocation"))
+            {
+                formViewModel.RememberLocation = true;
+                if (string.IsNullOrEmpty(formViewModel.SelectedOfficeName))
+                {
+                    formViewModel.SelectedOfficeName = Request.Cookies["RememberLocation"];
+                }
+                if (!string.IsNullOrEmpty(formViewModel.SelectedOfficeName) && string.IsNullOrEmpty(formViewModel.SelectedDepartmentName))
+                {
+                    List<SelectListItem> departmentSelectList = new List<SelectListItem>();
+                    departmentSelectList.Add(new SelectListItem() { Value = string.Empty, Text = "Select One" });
+                    foreach (Department department in _settings.Offices.Find(o => o.Name.Equals(formViewModel.SelectedOfficeName)).Departments.ToList())
+                    {
+                        departmentSelectList.Add(new SelectListItem() { Value = department.Name, Text = department.Name });
+                    }
+                    formViewModel.DepartmentSelectList = new SelectList(departmentSelectList, "Value", "Text");
+                    formViewModel.SelectedDepartmentName = Request.Cookies["RememberDepartment"];
+                }
+            }
+            if (Request.Cookies != null && Request.Cookies.Keys.Contains("RememberDepartment"))
+            {
+                formViewModel.RememberDepartment = true;
+                if (!string.IsNullOrEmpty(formViewModel.SelectedOfficeName) && string.IsNullOrEmpty(formViewModel.SelectedDepartmentName))
+                {
+                    formViewModel.SelectedDepartmentName = Request.Cookies["RememberDepartment"];
+                }
+            }
             return View(formViewModel);
         }
 
@@ -73,6 +101,33 @@ namespace AGUploadForm.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(FormViewModel formViewModel, string id)
         {
+            CookieOptions cookieOptions = new CookieOptions()
+            {
+                Expires = DateTime.Now.AddDays(30)
+            };
+            if (formViewModel.RememberLocation)
+            {
+                Response.Cookies.Append(
+                    "RememberLocation", 
+                    (string.IsNullOrEmpty(formViewModel.SelectedOfficeName) ? string.Empty : formViewModel.SelectedOfficeName), 
+                    cookieOptions);
+            }
+            else
+            {
+                Response.Cookies.Delete("RememberLocation", cookieOptions);
+            }
+            if (formViewModel.RememberDepartment)
+            {
+                Response.Cookies.Append(
+                    "RememberDepartment", 
+                    (string.IsNullOrEmpty(formViewModel.SelectedDepartmentName) ? string.Empty : formViewModel.SelectedDepartmentName), 
+                    cookieOptions);
+            }
+            else
+            {
+                Response.Cookies.Delete("RememberDepartment", cookieOptions);
+            }
+
             if (!ModelState.IsValid)
             {
                 //formViewModel.OfficeSelectList = new SelectList(_settings.Offices, "Name", "Name");
