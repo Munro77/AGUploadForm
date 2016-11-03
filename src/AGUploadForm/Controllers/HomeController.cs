@@ -100,19 +100,12 @@ namespace AGUploadForm.Controllers
 
             IList<string> errors = new List<string>();
 
-            // Use FallbackOffice if outside office hours
-            string officeName = formViewModel.SelectedOfficeName;
-            Office office = _settings.Offices.Find(o => o.Name.Equals(officeName));
-            int currentHour = DateTime.Now.Hour;
-            if (currentHour < office.HoursStart || currentHour >= office.HoursFinish)
-            {
-                officeName = office.FallbackOfficeName;
-                office = _settings.Offices.Find(o => o.Name.Equals(officeName));
-            }
+            Office office = null;
+            Department department = null;
+            GetOfficeDepartment(formViewModel.SelectedOfficeName, formViewModel.SelectedDepartmentName, out office, out department);
 
             string saveLocation = office.SaveLocation;
             string email = office.Email;
-            Department department = office.Departments.Find(d => d.Name.Equals(formViewModel.SelectedDepartmentName));
             if (department != null)
             {
                 if (!string.IsNullOrEmpty(department.SaveLocation))
@@ -127,7 +120,7 @@ namespace AGUploadForm.Controllers
 
             IList<FileInfo> uploadedFiles = MoveUploadedFiles(saveLocation, formViewModel, errors);
 
-            Job job = CreateJob(officeName, formViewModel);
+            Job job = CreateJob(office.Name, department.Name, formViewModel);
             try
             {
                 _context.Add(job);
@@ -135,8 +128,7 @@ namespace AGUploadForm.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(string.Format("Job failed to persist: {0}", e.Message));
-                errors.Add(string.Format("Job failed to persist: {0}", e.Message));
+                LogError(string.Format("Job failed to persist: {0}", e.Message), formViewModel, errors);
             }
 
             if (!string.IsNullOrEmpty(email))
@@ -155,6 +147,30 @@ namespace AGUploadForm.Controllers
             return RedirectToAction("FormSubmitted");
         }
 
+        private void GetOfficeDepartment(string officeName, string departmentName, out Office office, out Department department)
+        {
+            office = _settings.Offices.Find(o => o.Name.Equals(officeName));
+            department = null;
+            int currentHour = DateTime.Now.Hour;
+            if (office != null)
+            {
+                string fallbackOfficeName = office.FallbackOfficeName;
+                if (office.FallbackHoursStart <= currentHour && office.FallbackHoursFinish > currentHour)
+                {
+                    office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
+                }
+                else if (office.FallbackHoursStart > office.FallbackHoursFinish && (office.FallbackHoursStart <= currentHour || office.FallbackHoursFinish > currentHour))
+                {
+                    office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
+                }
+
+                department = office.Departments.Find(d => d.Name.Equals(departmentName));
+                if (department == null)
+                {
+                    department = office.Departments.First(d => d.Default);
+                }
+            }
+        }
 
         /// <summary>
         /// Logger for errors.  Can decide to include the job details or not.
@@ -247,11 +263,11 @@ namespace AGUploadForm.Controllers
             return uploadedFiles;
         }
 
-        private Job CreateJob(string officeName, FormViewModel formViewModel)
+        private Job CreateJob(string officeName, string departmentName, FormViewModel formViewModel)
         {
             Job job = new Models.Job();
             job.OfficeName = officeName;
-            job.DepartmentName = formViewModel.SelectedDepartmentName;
+            job.DepartmentName = departmentName;
             job.DueDateTime = formViewModel.JobInformation.DueDateTime;
             job.AccountNumber = formViewModel.JobInformation.AccountNumber;
             job.ProjectNumber = formViewModel.JobInformation.ProjectNumber;
