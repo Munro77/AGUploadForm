@@ -2936,6 +2936,7 @@ section {
         padding-top: 48px;
         padding-bottom: 48px;
     }
+
 }
 
 section:after {
@@ -3093,10 +3094,24 @@ hr {
     border-color: #ff6b00;
 }
 
+.checkimage
+{
+    border-radius:unset;
+}
+
 .body img, .callout-image img, .office-img img, .testimonial-image img {
     width: 100%;
     max-width: 200px;
     border-radius: 50%;
+}
+
+.submitbody 
+{
+    padding: 64px;
+}
+
+.submitbody h2{
+    padding-top:48px;
 }
 
 @media only screen and (min-width:768px) {
@@ -4367,8 +4382,9 @@ header .sticky a, header .sticky a:hover, header .sticky h1, header .sticky h2 {
 }
 
 .page-template-template-level1 header .hero-image {
-    max-height: 700px;
-    min-height: 480px;
+    /*removed - superceeded with the hero image max-height*/
+    /*max-height: 700px;
+    min-height: 480px;*/
 }
 
 .menu-close, .menu-link, .menu-logo, .menu-phone {
