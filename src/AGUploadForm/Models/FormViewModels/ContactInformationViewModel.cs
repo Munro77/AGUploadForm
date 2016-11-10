@@ -18,13 +18,10 @@ namespace AGUploadForm.Models.FormViewModels
         public string Address { get; set; }
         [Display(Name = "Unit Number")]
         public string UnitNumber { get; set; }
-        [Required]
         [Display(Name = "City")]
         public string City { get; set; }
-        [Required]
-        [Display(Name = "PO")]
+        [Display(Name = "Prov.")]
         public string Province { get; set; }
-        [Required]
         [Display(Name = "Postal Code")]
         public string PostalCode { get; set; }
         [Required]
