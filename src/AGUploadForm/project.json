@@ -100,7 +100,10 @@
       "Areas/**/Views",
       "appsettings.json",
       "web.config",
-      "nlog.config"
+      "nlog.config",
+      "formsettings.json",
+      "VIPSettings.json",
+      "Backload/Web.Backload.config"
     ]
   },
 

@@ -249,7 +249,12 @@ namespace AGUploadForm.Controllers
         
         private IList<FileInfo> MoveUploadedFiles(string saveLocation, FormViewModel formViewModel, IList<string> errors)
         {
-            string uploadDirectoryPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "Uploads"), formViewModel.ObjectContextId.ToString());
+            //Get the source directory from Backload, not hardcoded
+            Backload.Contracts.FileHandler.IFileHandler handler = Backload.FileHandler.Create();
+            handler.Init(HttpContext,_hostingEnvironment);
+            string uploadDirectoryPath = Path.Combine(handler.BasicStorageInfo.FileDirectory, formViewModel.ObjectContextId.ToString());            
+           
+            //string uploadDirectoryPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "Uploads"), formViewModel.ObjectContextId.ToString());
             IList<FileInfo> uploadedFiles = new List<FileInfo>();
             if (Directory.Exists(uploadDirectoryPath))
             {
@@ -389,7 +394,11 @@ namespace AGUploadForm.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(string.Format("Email failed to be sent to {0}: {1}", string.Join(", ", toAddresses.ToArray()), e.Message));
+                _logger.LogError(string.Format("Email failed to be sent. Error: {0}\nFrom: {1}\nTo: {2}\nBody: {3}", 
+                    e.Message,
+                    fromAddress,
+                    string.Join(", ", toAddresses.ToArray()),
+                    body));
             }
         }
     }
