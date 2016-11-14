@@ -254,19 +254,28 @@
     </div>
 </section>
 
-<div id="confirm-dialog" title="Add File(s)" style="display: none">
+<a id="confirm-dialog-link" class="popup-modal" href="#confirm-dialog"></a>
+<div id="confirm-dialog" class="mfp-hide white-popup">
+    <a class="popup-modal-dismiss" href="#"><span>Dismiss</span></a>
     <p>Please add one or more file(s) before submission</p>
 </div>
 
-<div id="validation-dialog" title="Validation Summary" style="display: none">
-    <div class="text-danger" asp-validation-summary="All">
-        Please correct the following error(s) before submission:
+<a id="validation-dialog-link" class="popup-modal" href="#validation-dialog"></a>
+<div id="validation-dialog" class="mfp-hide white-popup">
+    <a class="popup-modal-dismiss" href="#"><span>Dismiss</span></a>
+    <div class="popup-scroll" asp-validation-summary="All">
+        <h3>Please correct the following error(s) before submission:</h3>
     </div>
 </div>
 
-<div id="form-submit-overlay" style="display: none">
-    <img src="images/loader.gif" alt="Loading" /><br />
-    Submitting Files...
+<a id="form-submit-link" class="popup-modal" href="#form-submit-overlay"></a>
+<div id="form-submit-overlay" class="mfp-hide white-popup">
+    <div class="u-align-center">
+        <p>
+            <img src="images/loader.gif" alt="Loading" />
+            Submitting Files...
+        </p>
+    </div>
 </div>
 
 @section scripts
@@ -275,7 +284,6 @@
 
     <!-- Gallery script (image preview) -->
     <!--<script src="~/Backload/Client/blueimp/gallery/js/jquery.blueimp-gallery.min.js"></script>-->
-
     <!-- The demo application script -->
     <!-- <script src="~/Scripts/demos.blueimp.basicplusui.js"></script> -->
 

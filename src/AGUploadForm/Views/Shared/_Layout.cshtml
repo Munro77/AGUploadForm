@@ -7,7 +7,6 @@
 
     <environment names="Development">
         <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />-->
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
@@ -16,7 +15,6 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         -->
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 
@@ -24,16 +22,14 @@
 
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
-<body class="page page-template-template-level1 page-template-template-form1 submit-form">
-    <div id="overlay"></div>
+<body class="page page-template page-template-template-form1 submit-form">
+    <!-- <div id="overlay"></div> -->
     <header class="hero">
         <image src="/images/AG_Desktop_SubmitFilesHero.jpg" alt="Page Hero Image" class="hero-image"></image>
         <div class="header-content">
             <div class="container">
                 <nav class="nav">
-                    <a class="menu-link" herf="#menu">
-                        <span></span>
-                    </a>
+                    <div class="menu-link"><a href="#menu" title="Menu"><span>Menu</span></a></div>
                     <div class="top-bar">
                         <a class="brand" href="/"><img src="/images/Logo-white.png" alt="Astley Gilbert Logo" class="logo" /></a>
                         <a class="brand-sticky" href="/"><img src="/images/logo-mobile.png" class="logo-sticky" alt="Astley Gilbert Sticky Logo" /></a>
@@ -45,7 +41,7 @@
                         <div class="menu-secondary-menu-container">
                             <ul id="menu-secondary-menu-1" class="nav">
                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75"><a href="mailto:it.support@astleygilbert.com?Subject=Web Uploader Feedback">Ask a Question/Send Feedback</a></li>
-                                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-83"><a href="/">Alternate File Upload Options</a></li>
+                                <li class=" menu-item menu-item-type-post_type menu-item-object-page menu-item-83"><a id="alternate-file-link" class="popup-modal" href="#alternate-file">Alternate File Upload Options</a></li>
                             </ul>
                         </div>
                     </div>
@@ -63,10 +59,46 @@
             <div class="container"></div>
         </div>
     </footer>
+    <div id="alternate-file" class="mfp-hide white-popup alternate-files-popup ">
+        <a class="popup-modal-dismiss" href="#"><span>Dismiss</span></a>
+        <div class="popup-scroll">
+            <h3>Alternate File Submission Instructions</h3>
+            <p>
+                If you are unable to upload your files' using this utility, Astley Gilbert provides an alternative file submission method via FTP.
+            </p>
+            <p>
+                Our FTP site is structured by location then by department. After you have browsed to the appropriate location and department and have finished uploading your files (see below for details), our FTP server will automatically move your files to our production server. If you've uploaded your files and it looks like they've disappeared, the files have probably been moved to our production server already. You will not be able to create folders or copy folders onto this site - you must upload files.
+            </p>
+            <p><strong>Once your files have been uploaded, remember to send an email to the production department that will be fulfilling your job.  This step is important as it allows us to determine when the job is due, how it is to be processed and where it needs to be delivered.</strong></p>
+            <p>
+                Uploading a file using a Web browser
+                <br>
+                <ul>
+                    <li>In the address line key in ftp.clients.astleygilbert.com</li>
+                    <li>When prompted, supply the Username <strong>client</strong> and Password <strong>astley</strong>.</li>
+                    <li>Select the appropriate location and directory where you would like to upload your files.</li>
+                    <li>Drag stuffed/zipped file onto the browser window and it should upload.</li>
+                </ul>
+            <p>
+                Uploading a file using a Web client:
+                <br>
+                <ul>
+                    <li>Provide the Host name of: ftp.clients.astleygilbert.com</li>
+                    <li>Provide Username of: <strong>client</strong></li>
+                    <li>Provide Password of: <strong>astley</strong></li>
+                    <li>Select the appropriate location and directory where you would like to upload your files.</li>
+                    <li>Drag stuffed/zipped file onto the browser window and it should upload. You can also choose the "PUT FILE" button on the web client window and it will prompt you to locate the file you want to upload.</li>
+                </ul>
+            <p>
+                <strong>PLEASE NOTE!</strong> If you have multiple files please zip/stuff your files into one file before copying files over. YOu cannot copy a folder into our FTP site; it must be a file!
+            </p>
+        </div>
+    </div>
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type='text/javascript' src='~/scripts/jquery-migrate.min.js'></script>
+        <script type='text/javascript' src='~/scripts/jquery.magnific-popup.min.js'></script>
         <!--<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>-->
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
@@ -75,7 +107,8 @@
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
         </script>
-        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type='text/javascript' src='~/scripts/jquery-migrate.min.js?ver=1.4.1'></script>
+        <script type='text/javascript' src='~/scripts/jquery.magnific-popup.min.js'></script>
         <!--
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
