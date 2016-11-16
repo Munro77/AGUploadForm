@@ -246,12 +246,13 @@
             </div>
             //-->
         </form>
+        <div class="button-container u-align-center">
+            <button type="button" class="button start" id="SubmitButton">
+                <span>Submit</span>
+            </button>
+        </div>
     </div>
-    <div class="button-container u-align-center">
-        <button type="button" class="button start" id="SubmitButton">
-            <span>Submit</span>
-        </button>
-    </div>
+
 </section>
 
 <div id="confirm-dialog" title="Add File(s)" style="display: none">
@@ -275,7 +276,6 @@
 
     <!-- Gallery script (image preview) -->
     <!--<script src="~/Backload/Client/blueimp/gallery/js/jquery.blueimp-gallery.min.js"></script>-->
-
     <!-- The demo application script -->
     <!-- <script src="~/Scripts/demos.blueimp.basicplusui.js"></script> -->
 
@@ -286,3 +286,4 @@
             data-vip="@Json.Serialize(Model.Vip).ToString()">
     </script>
 }
+
