@@ -58,5 +58,7 @@
 /// <reference path="lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" />
 /// <reference path="Scripts/bootstrap.min.js" />
 /// <reference path="scripts/filesubmission.js" />
+/// <reference path="scripts/jquery.magnific-popup.min.js" />
 /// <reference path="Scripts/jquery-1.12.3.min.js" />
+/// <reference path="scripts/jquery-migrate.min.js" />
 /// <reference path="Scripts/jquery-ui-1.11.4.min.js" />

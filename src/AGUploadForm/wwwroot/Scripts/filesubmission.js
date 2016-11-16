@@ -74,37 +74,15 @@
             index++;
         });
         if (index <= 0) {
-            $("#confirm-dialog").dialog({
-                dialogClass: "no-close",
-                resizable: false,
-                height: "auto",
-                width: 400,
-                modal: true,
-                buttons: {
-                    "OK": function () {
-                        $(this).dialog("close");
-                    },
-                }
-            });
+            $("#confirm-dialog-link").click();
         } else {
-            $("#form-submit-overlay").fadeIn();
+            $("#form-submit-link").click();
             $("#SubmitForm").submit();
         }
     });
 
     if (!($vars.modelStateIsValid != null && $vars.modelStateIsValid.toLowerCase() == "true")) {
-        $("#validation-dialog").dialog({
-            dialogClass: "no-close",
-            resizable: false,
-            height: "auto",
-            width: 800,
-            modal: true,
-            buttons: {
-                "OK": function () {
-                    $(this).dialog("close");
-                },
-            }
-        });
+        $("#validation-dialog-link").click();
     }
 
     $("#SelectedDepartmentName").prop('disabled', ($("#SelectedOfficeName").val() == ""));
