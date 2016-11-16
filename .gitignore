@@ -245,3 +245,11 @@ ModelManifest.xml
 .fake/
 /src/AGUploadForm/wwwroot/Uploads
 
+/src/AGUploadForm/Properties/PublishProfiles/Test_Azure.pubxml
+/src/AGUploadForm/Properties/PublishProfiles/Test_Azure-publish.ps1
+/src/AGUploadForm/Properties/PublishProfiles/publish-module.psm1
+/src/AGUploadForm/Properties/PublishProfiles/LocalDeploy.pubxml
+/src/AGUploadForm/Properties/PublishProfiles/LocalDeploy-publish.ps1
+/src/AGUploadForm/Properties/PublishProfiles/AGUploadFormTest - Web Deploy.pubxml
+/src/AGUploadForm/Properties/PublishProfiles/AGUploadFormTest - Web Deploy-publish.ps1
+/src/AGUploadForm/wwwroot/lib/magnific-popup
