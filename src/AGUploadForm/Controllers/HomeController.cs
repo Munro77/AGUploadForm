@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-//using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using AGUploadForm.Models;
 using AGUploadForm.Models.Settings;
@@ -14,7 +14,6 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using System.Net.Mail;
 using System.Net;
-using System.Text;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
@@ -238,7 +237,7 @@ namespace AGUploadForm.Controllers
             string errorToLog = error;
             if (formViewModel != null)
             {
-                errorToLog = string.Format(error + "\nJob Details:\n{0}", Newtonsoft.Json.JsonConvert.SerializeObject(formViewModel, Newtonsoft.Json.Formatting.Indented));
+                errorToLog = string.Format(error + "\nJob Details:\n{0}", JsonConvert.SerializeObject(formViewModel, Formatting.Indented));
             }
 
             _logger.LogError(errorToLog);
