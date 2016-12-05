@@ -159,6 +159,7 @@ namespace AGUploadForm.Controllers
             GetOfficeDepartment(formViewModel.SelectedOfficeName, formViewModel.SelectedDepartmentName, out office, out department);
 
             string saveLocation = office.SaveLocation;
+            string saveEmailAlias = office.SaveEmailAlias;
             string email = office.Email;
             if (department != null)
             {
@@ -166,12 +167,19 @@ namespace AGUploadForm.Controllers
                 {
                     saveLocation = department.SaveLocation;
                 }
+                if (!string.IsNullOrEmpty(department.SaveEmailAlias))
+                {
+                    saveEmailAlias = department.SaveEmailAlias;
+                }
                 if (!string.IsNullOrEmpty(department.Email))
                 {
                     email = department.Email;
                 }
             }
 
+            string dateTimeStamp = DateTime.Now.ToString("yyyy-MM-dd--hh-mm-ss.fff");
+            saveLocation = Path.Combine(saveLocation, dateTimeStamp);
+            saveEmailAlias = Path.Combine(saveEmailAlias, dateTimeStamp);
             IList<FileInfo> uploadedFiles = MoveUploadedFiles(saveLocation, formViewModel, errors);
 
             Job job = CreateJob(office.Name, department.Name, formViewModel);
@@ -185,6 +193,17 @@ namespace AGUploadForm.Controllers
                 LogError(string.Format("Job failed to persist: {0}", e.Message), formViewModel, errors);
             }
 
+            using (StreamWriter streamWriter = new StreamWriter(Path.Combine(saveLocation, "!JOB_INSTRUCTIONS!.txt")))
+            {
+                streamWriter.Write(
+                    GetInstructionMessageBody(
+                        saveLocation,
+                        saveEmailAlias,
+                        job,
+                        formViewModel.UploadedFilenames,
+                        uploadedFiles, errors));
+            }
+
             if (!string.IsNullOrEmpty(email))
             {
                 SendMail(
@@ -195,7 +214,7 @@ namespace AGUploadForm.Controllers
                         job.ContactName,
                         (string.IsNullOrEmpty(job.ContactCompanyName) ? string.Empty : string.Format(" ({0})", job.ContactCompanyName)),
                         (string.IsNullOrEmpty(job.DueDateTime) ? string.Empty : string.Format(" -- due: {0}", job.DueDateTime))),
-                    GetMailMessageBody(saveLocation, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
+                    GetMailMessageBody(saveLocation, saveEmailAlias, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
             }
 
             return RedirectToAction("FormSubmitted");
@@ -343,10 +362,34 @@ namespace AGUploadForm.Controllers
             return job;
         }
 
-        private string GetMailMessageBody(string saveLocation, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
+        private string GetInstructionMessageBody(string saveLocation, string saveEmailAlias, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
+        {
+            string viewName = "FileSubmissionInstructionTemplate";
+            ViewData.Model = new JobEmailViewModel(saveLocation, saveEmailAlias, job, originalUploadedFilePaths, uploadedFiles, errors);
+            string instructionMessageBody = string.Empty;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                ICompositeViewEngine compositeViewEngine = _serviceProvider.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+                ViewEngineResult viewEngineResult = compositeViewEngine.FindView(ControllerContext, viewName, false);
+                ViewContext viewContext = new ViewContext(
+                    ControllerContext,
+                    viewEngineResult.View,
+                    ViewData,
+                    TempData,
+                    stringWriter,
+                    new Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelperOptions());
+
+                Task task = viewEngineResult.View.RenderAsync(viewContext);
+                task.Wait();
+                instructionMessageBody = stringWriter.GetStringBuilder().ToString();
+            }
+            return instructionMessageBody;
+        }
+
+        private string GetMailMessageBody(string saveLocation, string saveEmailAlias, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
         {
             string viewName = "FileSubmissionEmailTemplate";
-            ViewData.Model = new JobEmailViewModel(saveLocation, job, originalUploadedFilePaths, uploadedFiles, errors);
+            ViewData.Model = new JobEmailViewModel(saveLocation, saveEmailAlias, job, originalUploadedFilePaths, uploadedFiles, errors);
             string mailMessageBody = string.Empty;
             using (StringWriter stringWriter = new StringWriter())
             {

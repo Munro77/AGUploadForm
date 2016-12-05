@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Http.Extensions
+@model AGUploadForm.Models.FormViewModels.JobEmailViewModel
+
+ID #@Model.Job.ID
+----------------------------------------
+New Job Received:       @Model.Job.Created.ToString("MM/dd/yyyy HH:mm:ss tt")
+Destination Branch:     @Model.Job.OfficeName
+Destination Department: @Model.Job.DepartmentName
+@string.Format("Total Files: {0} -- Total Size: {1}", Model.UploadedFiles.Count, Model.FormatToHumanReadableFileSize(Model.UploadedFiles.Sum(f => f.Length)))
+
+--- General Information ---
+Due Date/Time:  @Model.Job.DueDateTime
+Project / PO #: @Model.Job.ProjectNumber
+Account:        @Model.Job.AccountNumber
+
+--- Customer Information ---
+Name:    @Model.Job.ContactName
+Company: @Model.Job.ContactCompanyName
+Address: @string.Format("{0}{1}{2}", 
+        Model.Job.ContactAddress, 
+        ((!string.IsNullOrEmpty(Model.Job.ContactAddressUnitNumber)) ? string.Format(" {0}", Model.Job.ContactAddressUnitNumber) : ""), 
+        string.Format(" {0} {1} {2}", Model.Job.ContactAddressCity, Model.Job.ContactAddressProvince, Model.Job.ContactAddressPostalCode))
+Phone:   @Model.Job.ContactPhoneNumber
+Email:   @Model.Job.ContactEmail
+
+Notes:
+@(new HtmlString(Model.Job.Instructions))
+
+-- - Attached Files-- -
+ @for(int index = 0; index < Model.UploadedFiles.Count; index++)
+{
+    @(new HtmlString(string.Format("{0} ({1}){2}", Model.UploadedFiles[index].Name, Model.FormatToHumanReadableFileSize(Model.UploadedFiles[index].Length), Environment.NewLine)))
+}
