@@ -160,7 +160,7 @@ namespace AGUploadForm.Controllers
 
             string saveLocation = office.SaveLocation;
             string saveEmailAlias = office.SaveEmailAlias;
-            string email = office.Email;
+            List<string> emails = new List<string>(office.Email.Split(';'));
             if (department != null)
             {
                 if (!string.IsNullOrEmpty(department.SaveLocation))
@@ -173,7 +173,16 @@ namespace AGUploadForm.Controllers
                 }
                 if (!string.IsNullOrEmpty(department.Email))
                 {
-                    email = department.Email;
+                    emails = new List<string>(department.Email.Split(';'));
+                }
+            }
+
+            if (!string.IsNullOrEmpty(id) && _vipsettings != null)
+            {
+                VIP vip = _vipsettings.GetVIPByID(id);
+                if ((vip != null) && !string.IsNullOrEmpty(vip.CcEmail))
+                {
+                    emails.AddRange(vip.CcEmail.Split(';'));
                 }
             }
 
@@ -204,11 +213,11 @@ namespace AGUploadForm.Controllers
                         uploadedFiles, errors));
             }
 
-            if (!string.IsNullOrEmpty(email))
+            if ((emails != null) && (emails.Count > 0))
             {
                 SendMail(
                     _appSettings.SmtpSettings.FromAddress,
-                    new List<string>() { email },
+                    emails,
                     string.Format(
                         "File(s) Uploaded by {0}{1}{2}",
                         job.ContactName,
@@ -427,7 +436,10 @@ namespace AGUploadForm.Controllers
                     mailMessage.From = new MailAddress(_appSettings.SmtpSettings.FromAddress);
                     foreach (string toAddress in toAddresses)
                     {
-                        mailMessage.To.Add(toAddress);
+                        if (!string.IsNullOrWhiteSpace(toAddress))
+                        {
+                            mailMessage.To.Add(toAddress);
+                        }
                     }
                     mailMessage.Subject = subject;
                     mailMessage.Body = body;

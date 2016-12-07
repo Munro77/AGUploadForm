@@ -9,6 +9,7 @@ namespace AGUploadForm.Models.Settings
     {
         public string Name { get; set; }
         public string QueryStringCode { get; set; }
+        public string CcEmail { get; set; }
         public List<Field> Fields { get; set; }
     }
 
