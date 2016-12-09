@@ -253,3 +253,4 @@ ModelManifest.xml
 /src/AGUploadForm/Properties/PublishProfiles/AGUploadFormTest - Web Deploy.pubxml
 /src/AGUploadForm/Properties/PublishProfiles/AGUploadFormTest - Web Deploy-publish.ps1
 /src/AGUploadForm/wwwroot/lib/magnific-popup
+/src/AGUploadForm/Properties/PublishProfiles/StagingProduction-publish.ps1

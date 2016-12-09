@@ -1,0 +1,55 @@
+﻿{
+  "Offices": 
+    [
+      {
+        "Name": "Carnforth",
+        "FallbackHoursStart": "0",
+        "FallbackHoursFinish": "0",
+        "SaveLocation": "F:\\temp\\webuploader\\Scarborough-NorthYork\\",
+        "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\Scarborough-NorthYork",
+        "Email": "rob.munro@t4g.com",
+        "Departments": [
+          {
+            "Name": "CADD",
+            "Email": "rob.munro@t4g.com;shannonb@astleygilbert.com",
+            "SaveLocation": "F:\\temp\\webuploader\\Scarborough-NorthYork\\CADD",
+            "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\Scarborough-NorthYork\\CADD",
+            "Default": "true"
+          },
+          {
+            "Name": "Colour",
+            "Email": "rob.munro@t4g.com",
+            "SaveLocation": "F:\\temp\\webuploader\\Scarborough-NorthYork\\Colour",
+            "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\Scarborough-NorthYork\\Colour",
+            "Default": "false"
+          },
+          {
+            "Name": "Offset",
+            "Email": "rob.munro@t4g.com",
+            "SaveLocation": "F:\\temp\\webuploader\\Scarborough-NorthYork\\Offset",
+            "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\Scarborough-NorthYork\\Offset",
+            "Default": "false"
+          }
+        ],
+        "FallbackOfficeName": "Wellington"
+      },
+      {
+        "Name": "Wellington",
+        "FallbackHoursStart": "17",
+        "FallbackHoursFinish": "24",
+        "SaveLocation": "F:\\temp\\webuploader\\DowntownToronto",
+        "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader",
+        "Email": "test@email.com",
+        "Departments": [
+          {
+            "Name": "CADD",
+            "Email": "rob.munro@t4g.com",
+            "SaveLocation": "F:\\temp\\webuploader\\DowntownToronto\\CADD",
+            "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\DowntownToronto\\CADD",
+            "Default": "true"
+          }
+        ],
+        "FallbackOfficeName": "Carnforth"
+      }
+    ]
+}

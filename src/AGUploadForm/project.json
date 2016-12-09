@@ -98,13 +98,15 @@
       "wwwroot",
       "Views",
       "Areas/**/Views",
-      "appsettings.json",
+      "appsettings.*json",
       "web.config",
       "nlog.config",
       "formsettings.json",
       "VIPSettings.json",
-      "Backload/Web.Backload.config"
-    ]
+      "Backload/Web.Backload.config",
+      "Configs"
+    ],
+    "exclude": ["wwwroot/Uploads"]
   },
 
   "scripts": {

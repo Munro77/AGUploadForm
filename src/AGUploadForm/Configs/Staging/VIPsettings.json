@@ -1,0 +1,27 @@
+﻿{
+  "VIPs": [
+    {
+      "Name": "HoltRenfrew",
+      "QueryStringCode": "HR",
+      "CcEmail":  "rob.munro@t4g.com;shannonb@astleygilbert.com",
+      "Fields": [
+        {
+          "AGFieldId": "Address",
+          "Value": "123 Bloor Street",
+          "Disabled": "true"
+        },
+        {
+          "AGFieldId": "Branch",
+          "Value": "Carnforth",
+          "Disabled": "true",
+          "Visible": "true"
+        },
+        {
+          "AGFieldId": "Department",
+          "Value": "CADD",
+          "Disabled": "false"
+        }
+      ]
+    }
+  ]
+}
