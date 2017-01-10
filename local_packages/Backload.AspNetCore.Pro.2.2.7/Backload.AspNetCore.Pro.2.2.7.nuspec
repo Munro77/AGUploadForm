@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+    <metadata>
+        <id>Backload.AspNetCore.Pro</id>
+        <version>2.2.7</version>
+        <title>Backload. A professional full featured ASP.NET Core file handler (ASP.NET Core Edition)</title>
+        <authors>Steffen Habermehl</authors>
+        <owners>Steffen Habermehl</owners>
+        <licenseUrl>https://github.com/blackcity/Backload/License.txt</licenseUrl>
+        <projectUrl>https://github.com/blackcity/Backload/wiki</projectUrl>
+        <iconUrl>https://raw.github.com/blackcity/Backload/master/Examples/images/128/backload.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Backload is a professional, full featured server side file handler for ASP.NET Core (MVC Core, Web API, HTML). It handles the client side jQuery File Upload Plugin from blueimp, PlUpload from Moxiecode and Fine Uploader from Widen Enterprises out of the box, but it can be easily customized to work with any client side plugin.
+More than 20 examples in demo packages.  Continually developed and backed by the software industry.
+
+Demo packages and support: https://github.com/blackcity/Backload/
+
+Licenses: Standard (free), Pro/Enterprise licenses starting from $19.90.
+
+Web: http://backload.org</description>
+        <summary>Backload is a professional, full featured server side file handler for ASP.NET (MVC, Web API, WebForms, HTML).
+
+Storage locations: Filesystem, Database, Azure Blob Storage.
+
+https://www.backload.org/index.htm</summary>
+        <releaseNotes>What's new in release 2.2.7?
+- Support for ASP.NET Core MVC 
+- Support for ASP NET Core targets and NET40, NET45+ (see Backload.Core package)
+- Support for Linux and Max Os X platforms (ASP.NET Core)
+- Integrated middleware (controller, url: ~/Backload/FileHandler) (ASP.NET Core 1.0)
+- Added bundled and minified client side script and style files and
+- Removed ASP.NET bundling (depreciated in ASP.NET Core 1.0)
+- Added server side event ConfigurationLoaded (First event in execution pipeline)
+- Removed Web.config component registration for all target platforms
+- Image processing supports EXIF orientation tag
+- Added fastProcessing config setting in images element
+
+Bug fixes:
+- Image processing failed to create non canvas images (#107)
+- Fixed: Content type changes in config had no effect
+- Linux and Mac Os X: Path not created correctly.
+</releaseNotes>
+        <copyright>Steffen Habermehl 2016</copyright>
+        <tags>Backload,file upload,jquery file upload,fine uploader,plupload,mvc,asp.net,NET Core</tags>
+        <dependencies>
+            <group targetFramework=".NETStandard1.6">
+                <dependency id="System.Diagnostics.TraceSource" version="4.0.0" />
+                <dependency id="System.IO.FileSystem" version="4.0.1" />
+                <dependency id="System.IO.Compression" version="4.1.0" />
+                <dependency id="System.IO.Compression.ZipFile" version="4.0.1" />
+                <dependency id="System.Net.Http" version="4.1.0" />
+                <dependency id="System.Text.RegularExpressions" version="4.1.0" />
+                <dependency id="System.Xml.XmlSerializer" version="4.0.11" />
+                <dependency id="Microsoft.AspNetCore.Hosting.Abstractions" version="1.0.0" />
+                <dependency id="Microsoft.AspNetCore.Http.Extensions" version="1.0.0" />
+                <dependency id="Newtonsoft.Json" version="9.0.1" />
+            </group>
+			<group targetFramework=".NETFramework4.5.1">
+                <dependency id="Microsoft.AspNetCore.Hosting.Abstractions" version="1.0.0" />
+                <dependency id="Microsoft.AspNetCore.Http.Extensions" version="1.0.0" />
+                <dependency id="Newtonsoft.Json" version="9.0.1" />
+            </group>
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="PresentationCore" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.ComponentModel.Composition" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.Configuration" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.IO.Compression" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.IO.Compression.FileSystem" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.Net" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.Net.Http" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.Net.Http.WebRequest" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.Xml" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework=".NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="WindowsBase" targetFramework=".NETFramework4.5.1" />
+        </frameworkAssemblies>
+		
+		<!-- Content files for the new project types (needs NuGet 3.3+) -->
+		<contentFiles>
+			<!-- Include all files from the app root folder -->
+			<files include="**/*.*" buildAction="EmbeddedResource" />
+		</contentFiles>
+    </metadata>
+	
+    <files>
+		<!-- <file src="contentFiles\**" target="contentFiles" /> -->
+ 	
+        <file src="lib\netstandard1.6\Backload.Contracts.dll" target="lib\netstandard1.0\Backload.Contracts.dll" />
+        <file src="lib\netstandard1.6\Backload.dll" target="lib\netstandard1.0\Backload.dll" />
+        <file src="lib\netstandard1.6\Backload.deps.json" target="lib\netstandard1.0\Backload.deps.json" />
+        <file src="lib\net451\Backload.Contracts.dll" target="lib\net451\Backload.Contracts.dll" />
+        <file src="lib\net451\Backload.dll" target="lib\net451\Backload.dll" />
+        <file src="lib\net451\Backload.dll.config" target="lib\net451\Backload.dll.config" />
+        <file src="License.txt" target="License.txt" />
+        <file src="Release.txt" target="Release.txt" />
+    </files>
+</package>

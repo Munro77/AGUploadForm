@@ -6,7 +6,7 @@
     //  "version": "1.0.0",
     //  "type": "platform"
     //},
-    "Backload.AspNetCore": "2.2.7",
+    "Backload.AspNetCore.Pro": "2.2.8",
     "Microsoft.ApplicationInsights.AspNetCore": "1.0.0",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
