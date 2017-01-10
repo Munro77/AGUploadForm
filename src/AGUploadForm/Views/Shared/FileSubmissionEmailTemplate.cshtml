@@ -59,6 +59,12 @@
             background: #f9fcfe;
         }
 
+        .errorCount {
+                background: blue;
+                font-size: 12pt;
+                color: #f8f8f8;
+        }
+
         thead th {
             background: #f4f9fe;
             text-align: center;
@@ -145,7 +151,10 @@
                 <td valign="top" class="txt">@(new HtmlString(Model.Job.Instructions.Replace("\r\n", "<br/>").Replace("\n", "<br/>")))</td>
             </tr>
             <tr>
-                <th>
+                <th @if(Model.OriginalUploadedFilePaths.Count != Model.UploadedFiles.Count)
+                {
+                    @("class=errorCount");
+                }>
                     @string.Format("FILES (Expected {0} / Received {1})", Model.OriginalUploadedFilePaths.Count, Model.UploadedFiles.Count)
                 </th>
             </tr>
