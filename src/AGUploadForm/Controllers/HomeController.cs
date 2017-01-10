@@ -188,7 +188,20 @@ namespace AGUploadForm.Controllers
 
             string dateTimeStamp = DateTime.Now.ToString("yyyy-MM-dd--hh-mm-ss.fff");
             saveLocation = Path.Combine(saveLocation, dateTimeStamp);
-            saveEmailAlias = Path.Combine(saveEmailAlias, dateTimeStamp);
+
+            //Add multiple Email Alias's
+            List<string> saveEmailAliasList = new List<string>();
+            foreach(string alias in saveEmailAlias.Split(';'))
+            {
+                UriBuilder pathBuilder = new UriBuilder(alias);
+                pathBuilder.Path += "/" + dateTimeStamp;
+                if(pathBuilder.Uri.IsUnc)
+                    saveEmailAliasList.Add(pathBuilder.Uri.LocalPath);
+                else
+                    saveEmailAliasList.Add(pathBuilder.Uri.ToString());
+            }
+            //saveEmailAlias = Path.Combine(saveEmailAlias, dateTimeStamp);
+
             IList<FileInfo> uploadedFiles = MoveUploadedFiles(saveLocation, formViewModel, errors);
 
             Job job = CreateJob(office.Name, department.Name, formViewModel);
@@ -207,7 +220,7 @@ namespace AGUploadForm.Controllers
                 streamWriter.Write(
                     GetInstructionMessageBody(
                         saveLocation,
-                        saveEmailAlias,
+                        saveEmailAliasList,
                         job,
                         formViewModel.UploadedFilenames,
                         uploadedFiles, errors));
@@ -223,7 +236,7 @@ namespace AGUploadForm.Controllers
                         job.ContactName,
                         (string.IsNullOrEmpty(job.ContactCompanyName) ? string.Empty : string.Format(" ({0})", job.ContactCompanyName)),
                         (string.IsNullOrEmpty(job.DueDateTime) ? string.Empty : string.Format(" -- due: {0}", job.DueDateTime))),
-                    GetMailMessageBody(saveLocation, saveEmailAlias, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
+                    GetMailMessageBody(saveLocation, saveEmailAliasList, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
             }
 
             return RedirectToAction("FormSubmitted");
@@ -371,10 +384,10 @@ namespace AGUploadForm.Controllers
             return job;
         }
 
-        private string GetInstructionMessageBody(string saveLocation, string saveEmailAlias, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
+        private string GetInstructionMessageBody(string saveLocation, IList<string>saveEmailAliasList, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
         {
             string viewName = "FileSubmissionInstructionTemplate";
-            ViewData.Model = new JobEmailViewModel(saveLocation, saveEmailAlias, job, originalUploadedFilePaths, uploadedFiles, errors);
+            ViewData.Model = new JobEmailViewModel(saveLocation, saveEmailAliasList, job, originalUploadedFilePaths, uploadedFiles, errors);
             string instructionMessageBody = string.Empty;
             using (StringWriter stringWriter = new StringWriter())
             {
@@ -395,10 +408,10 @@ namespace AGUploadForm.Controllers
             return instructionMessageBody;
         }
 
-        private string GetMailMessageBody(string saveLocation, string saveEmailAlias, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
+        private string GetMailMessageBody(string saveLocation, IList<string> saveEmailAliasList, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
         {
             string viewName = "FileSubmissionEmailTemplate";
-            ViewData.Model = new JobEmailViewModel(saveLocation, saveEmailAlias, job, originalUploadedFilePaths, uploadedFiles, errors);
+            ViewData.Model = new JobEmailViewModel(saveLocation, saveEmailAliasList, job, originalUploadedFilePaths, uploadedFiles, errors);
             string mailMessageBody = string.Empty;
             using (StringWriter stringWriter = new StringWriter())
             {

@@ -15,7 +15,7 @@ namespace AGUploadForm.Models.FormViewModels
         public IList<string> Errors { get; set; }
         public string UploadDirectoryPath { get; set; }
         public IList<string> OriginalUploadedFilePaths { get; set; }
-        public string SaveEmailAlias { get; set; }
+        public IList<string> SaveEmailAliasList { get; set; }
 
         public string FormatToHumanReadableFileSize(object value)
         {
@@ -42,14 +42,14 @@ namespace AGUploadForm.Models.FormViewModels
 
         public JobEmailViewModel(
             string uploadDirectoryPath, 
-            string saveEmailAlias,
+            IList<string> saveEmailAliasList,
             Job job,
             IList<string> originalUploadedFilePaths, 
             IList<FileInfo> uploadedFiles, 
             IList<string> errors)
         {
             UploadDirectoryPath = uploadDirectoryPath;
-            SaveEmailAlias = saveEmailAlias;
+            SaveEmailAliasList = saveEmailAliasList;
             Job = job;
             OriginalUploadedFilePaths = ((originalUploadedFilePaths == null) ? new List<string>() : originalUploadedFilePaths);
             UploadedFiles = ((uploadedFiles == null) ? new List<FileInfo>() : uploadedFiles);

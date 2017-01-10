@@ -84,8 +84,11 @@
 </head>
 <body>
     <p>
-        Files have been uploaded for fulfillment. They can be found at the following location(s):<br/>
-        <a href="@Model.SaveEmailAlias">@Model.SaveEmailAlias</a>
+        Files have been uploaded for fulfillment. They can be found at the following location(s):
+        @foreach (string alias in Model.SaveEmailAliasList)
+        {
+            <br /><a href="@alias">@alias</a>
+        }
     </p>
     <table>
         <tbody>
