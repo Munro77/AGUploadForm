@@ -18,6 +18,16 @@
 
     });
 
+
+
+    $('#fileupload')
+        .bind('fileuploadfinished', function (e, data) {
+            updateCount($(this).fileupload('option').getNumberOfFiles());
+        })
+        .bind('fileuploaddestroyed', function (e, data) {
+            updateCount($(this).fileupload('option').getNumberOfFiles());
+        })
+
     /*
     $('#fileupload')
         .bind('fileuploaddone', function (e, data) {
@@ -95,6 +105,14 @@
         });
     }
 });
+
+var updateCount =  function (i)
+{
+    if (i > 0)
+        $('#fileCount').html("(Count : " + i + ")");
+    else
+        $('#fileCount').html("");
+}
 
 var isAgDisabled = function (e) {
     var attr = e.prop("data-ag-disabled");
