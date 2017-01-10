@@ -7,7 +7,7 @@
     {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
         <td>
-            <span class="preview"></span>
+            <span ></span>
         </td>
         <td>
             <p class="name">{%=file.name%}</p>
@@ -39,10 +39,7 @@
     {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
         <td>
-            <span class="preview">
-                {% if (file.thumbnailUrl) { %}
-                <!--<a href="{%=file.url%}" title="{%=file.extra.originalName%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>-->
-                {% } %}
+            <span >
             </span>
         </td>
         <td>
