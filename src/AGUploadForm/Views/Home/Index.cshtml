@@ -277,7 +277,8 @@
             data-model-state-is-valid="@ViewData.ModelState.IsValid"
             data-object-context="@Model.ObjectContextId"
             data-get-department-list-url="@Url.Action("GetDepartmentSelectListByOfficeName")"
-            data-vip="@Json.Serialize(Model.Vip).ToString()">
+            data-vip="@Json.Serialize(Model.Vip).ToString()"
+            asp-append-version="true">
     </script>
 }
 
