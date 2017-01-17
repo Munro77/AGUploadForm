@@ -273,12 +273,23 @@
 @section scripts
 {
     <script src="~/Backload/Client/blueimp/bundles/js/jquery.fileupload.basicplusui.min.js"></script>
-    <script id="formsubmission.js" src="~/js/filesubmission.js"
-            data-model-state-is-valid="@ViewData.ModelState.IsValid"
-            data-object-context="@Model.ObjectContextId"
-            data-get-department-list-url="@Url.Action("GetDepartmentSelectListByOfficeName")"
-            data-vip="@Json.Serialize(Model.Vip).ToString()"
-            asp-append-version="true">
-    </script>
+    <environment names="Development">
+        <script id="formsubmission.js" src="~/js/filesubmission.js"
+                data-model-state-is-valid="@ViewData.ModelState.IsValid"
+                data-object-context="@Model.ObjectContextId"
+                data-get-department-list-url="@Url.Action("GetDepartmentSelectListByOfficeName")"
+                data-vip="@Json.Serialize(Model.Vip).ToString()"
+                asp-append-version="true">
+        </script>
+    </environment>
+    <environment names="Staging,Production">
+        <script id="formsubmission.js" src="~/js/filesubmission.min.js"
+                data-model-state-is-valid="@ViewData.ModelState.IsValid"
+                data-object-context="@Model.ObjectContextId"
+                data-get-department-list-url="@Url.Action("GetDepartmentSelectListByOfficeName")"
+                data-vip="@Json.Serialize(Model.Vip).ToString()"
+                asp-append-version="true">
+        </script>
+    </environment>
 }
 
