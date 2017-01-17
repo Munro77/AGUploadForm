@@ -4,23 +4,23 @@
       {
         "Name": "Carnforth",
         "FallbackHoursStart": "0",
-        "FallbackHoursFinish": "12",
+        "FallbackHoursFinish": "8",
         "SaveLocation": "C:\\Temp\\AGTest1",
         "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest1",
         "Email": "test@email.com",
         "Departments": [
           {
             "Name": "CADD",
-            "Email": "cadd@email.com",
+            "Email": "rob.munro@t4g.com",
             "SaveLocation": "C:\\Temp\\AGTest1",
-            "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest1",
+            "SaveEmailAlias": "\\\\munrorob10\\c\\temp\\AGTest1;ftp://pfstoronto1/t4g/AGTest1",
             "Default": "true"
           },
           {
             "Name": "Colour",
-            "Email": "cadd@email.com",
+            "Email": "rob.munro@t4g.com",
             "SaveLocation": "C:\\Temp\\AGTest1",
-            "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest1",
+            "SaveEmailAlias": "\\\\munrorob10\\c\\temp\\AGTest1",
             "Default": "false"
           },
           {

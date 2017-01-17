@@ -3,7 +3,7 @@
     {
       "Name": "HoltRenfrew",
       "QueryStringCode": "HR",
-      "CcEmail":  "test@email.com",
+      "CcEmail":  "rob.munro@t4g.com",
       "Fields": [
         {
           "AGFieldId": "Address",
