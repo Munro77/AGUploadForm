@@ -46,7 +46,8 @@
       "type": "build"
     },
     "Newtonsoft.Json": "9.0.1",
-    "NLog.Extensions.Logging":  "1.0.0-*"
+    "NLog.Extensions.Logging": "1.0.0-*",
+    "NLog.Web.AspNetCore":  "4.3.0"
   },
 
   "tools": {

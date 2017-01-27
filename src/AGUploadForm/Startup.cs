@@ -15,6 +15,8 @@ using AGUploadForm.Models.Settings;
 using AGUploadForm.Services;
 using Backload.MiddleWare;
 using NLog.Extensions.Logging;
+using NLog.Web;
+
 
 namespace AGUploadForm
 {
@@ -83,6 +85,7 @@ namespace AGUploadForm
             loggerFactory.AddDebug();
 
             loggerFactory.AddNLog();
+
             env.ConfigureNLog("nlog.config");
 
             //app.UseApplicationInsightsRequestTelemetry();

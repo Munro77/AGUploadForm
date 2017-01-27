@@ -1,55 +1,67 @@
 ﻿{
-  "Offices": 
-    [
-      {
-        "Name": "Carnforth",
-        "FallbackHoursStart": "0",
-        "FallbackHoursFinish": "8",
-        "SaveLocation": "C:\\Temp\\AGTest1",
-        "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest1",
-        "Email": "test@email.com",
-        "Departments": [
-          {
-            "Name": "CADD",
-            "Email": "rob.munro@t4g.com",
-            "SaveLocation": "C:\\Temp\\AGTest1",
-            "SaveEmailAlias": "\\\\munrorob10\\c\\temp\\AGTest1;ftp://pfstoronto1/t4g/AGTest1",
-            "Default": "true"
-          },
-          {
-            "Name": "Colour",
-            "Email": "rob.munro@t4g.com",
-            "SaveLocation": "C:\\Temp\\AGTest1",
-            "SaveEmailAlias": "\\\\munrorob10\\c\\temp\\AGTest1",
-            "Default": "false"
-          },
-          {
-            "Name": "Offset",
-            "Email": "cadd@email.com",
-            "SaveLocation": "C:\\Temp\\AGTest1",
-            "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest1",
-            "Default": "false"
-          }
-        ],
-        "FallbackOfficeName": "Wellington"
-      },
-      {
-        "Name": "Wellington",
-        "FallbackHoursStart": "12",
-        "FallbackHoursFinish": "24",
-        "SaveLocation": "C:\\Temp\\AGTest2",
-        "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest2",
-        "Email": "test@email.com",
-        "Departments": [
-          {
-            "Name": "CADD",
-            "Email": "caddwellington@email.com",
-            "SaveLocation": "C:\\Temp\\AGTest2",
-            "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest2",
-            "Default": "true"
-          }
-        ],
-        "FallbackOfficeName": "Carnforth"
-      }
-    ]
+  //Main Header - do not modify
+  "Offices": [
+    //Office 1
+    {
+      //Each office has a Name
+      "Name": "Carnforth",
+      //FallbackHoursStart/Finish (defined using a 24 hr clock) set the hours when any submissions should go to the fallbackOfficeName
+      "FallbackHoursStart": "0",
+      "FallbackHoursFinish": "8",
+      //Specify the name of the FallbackOffice to be used during the time specified for fallback
+      "FallbackOfficeName": "Wellington",
+      "SaveLocation": "C:\\Temp\\AGTest1",
+      "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest1",
+      "Email": "test@email.com",
+      //Each office has multiple Departments
+      "Departments": [
+        {
+          //Department 1
+          //Name is what shows in the dropdown for this selection
+          "Name": "CADD",
+          //Email is who recieves any submitted orders for this office/Department
+          "Email": "rob.munro@t4g.com",
+          //SaveLocation is the local path on the server
+          "SaveLocation": "C:\\Temp\\AGTest1",
+          //SaveEmailAlias are the links to the root folder that will be in the email (i.e. the network share address, ftp address)
+          "SaveEmailAlias": "\\\\munrorob10\\c\\temp\\AGTest1;ftp://pfstoronto1/t4g/AGTest1",
+          "Default": "true"
+        },
+        {
+          //Department 2 etc.
+          "Name": "Colour",
+          "Email": "rob.munro@t4g.com",
+          "SaveLocation": "C:\\Temp\\AGTest1",
+          "SaveEmailAlias": "\\\\munrorob10\\c\\temp\\AGTest1",
+          "Default": "false"
+        },
+        {
+          "Name": "Offset",
+          "Email": "cadd@email.com",
+          "SaveLocation": "C:\\Temp\\AGTest1",
+          "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest1",
+          "Default": "false"
+        }
+      ]
+    },
+    //Office two repeats the pattern above
+    {
+      "Name": "Wellington",
+      "FallbackHoursStart": "12",
+      "FallbackHoursFinish": "24",
+      "SaveLocation": "C:\\Temp\\AGTest2",
+      "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest2",
+      "Email": "test@email.com",
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "caddwellington@email.com",
+          "SaveLocation": "C:\\Temp\\AGTest2",
+          "SaveEmailAlias": "\\\\pfstoronto1\\t4g\\AGTest2",
+          "Default": "true"
+        }
+      ],
+      "FallbackOfficeName": "Carnforth"
+    }
+  ]
 }
