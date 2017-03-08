@@ -104,6 +104,7 @@ namespace AGUploadForm.Controllers
             {
                 Expires = DateTime.Now.AddDays(30)
             };
+
             if (formViewModel.RememberLocation)
             {
                 Response.Cookies.Append(
@@ -215,6 +216,7 @@ namespace AGUploadForm.Controllers
                 LogError(string.Format("Job failed to persist: {0}", e.Message), formViewModel, errors);
             }
 
+            //TODO: Try/Catch this in case the folder cannot be reached...
             using (StreamWriter streamWriter = new StreamWriter(Path.Combine(saveLocation, "!JOB_INSTRUCTIONS!.txt")))
             {
                 streamWriter.Write(
@@ -226,45 +228,121 @@ namespace AGUploadForm.Controllers
                         uploadedFiles, errors));
             }
 
+            string subjectLine = createSubjectLine(formViewModel.SelectedOfficeName, formViewModel.SelectedDepartmentName, office, job);
+
             if ((emails != null) && (emails.Count > 0))
             {
+                //SendMail(
+                //    _appSettings.SmtpSettings.FromAddress,
+                //    emails,
+                //    string.Format(
+                //        "File(s) Uploaded by {0}{1}{2}",
+                //        job.ContactName,
+                //        (string.IsNullOrEmpty(job.ContactCompanyName) ? string.Empty : string.Format(" ({0})", job.ContactCompanyName)),
+                //        (string.IsNullOrEmpty(job.DueDateTime) ? string.Empty : string.Format(" -- due: {0}", job.DueDateTime))),
+                //    GetMailMessageBody(saveLocation, saveEmailAliasList, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
+
                 SendMail(
                     _appSettings.SmtpSettings.FromAddress,
                     emails,
-                    string.Format(
-                        "File(s) Uploaded by {0}{1}{2}",
-                        job.ContactName,
-                        (string.IsNullOrEmpty(job.ContactCompanyName) ? string.Empty : string.Format(" ({0})", job.ContactCompanyName)),
-                        (string.IsNullOrEmpty(job.DueDateTime) ? string.Empty : string.Format(" -- due: {0}", job.DueDateTime))),
+                    subjectLine,
                     GetMailMessageBody(saveLocation, saveEmailAliasList, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
             }
 
             return RedirectToAction("FormSubmitted");
         }
 
+        private string createSubjectLine(string selectedOffice, string selectedDepartment, Office destinationOffice, Job job)
+        {
+            string subjectLine = string.Format(
+                        "File(s) Uploaded by {0}{1}{2}",
+                        job.ContactName,
+                        (string.IsNullOrEmpty(job.ContactCompanyName) ? string.Empty : string.Format(" ({0})", job.ContactCompanyName)),
+                        (string.IsNullOrEmpty(job.DueDateTime) ? string.Empty : string.Format(" -- due: {0}", job.DueDateTime)));
+            if (string.Compare(selectedOffice, destinationOffice.Name, true) != 0)
+                subjectLine = string.Format("[From {0}: {1}] {2}", selectedOffice, selectedDepartment, subjectLine);
+
+            return subjectLine;
+        }
+
+        /// <summary>
+        /// Gets the office and department objects to send the request to based on the selected office and department name.  Depends on the time and the fallback periods in the configuration.
+        /// </summary>
+        /// <param name="officeName"></param>
+        /// <param name="departmentName"></param>
+        /// <param name="office"></param>
+        /// <param name="department"></param>
         private void GetOfficeDepartment(string officeName, string departmentName, out Office office, out Department department)
         {
             office = _settings.Offices.Find(o => o.Name.Equals(officeName));
             department = null;
             int currentHour = DateTime.Now.Hour;
+
+            TimeSpan currentTime = DateTime.Now.TimeOfDay;
+            string[] formats = { "%H", "%H:mm" };
+            string start = office.FallbackHoursStart.ToString();
+            string finish = office.FallbackHoursFinish.ToString();
+            if (finish == "24") finish = "23:59";
+            DateTime fallBackStart;
+            DateTime.TryParseExact(start, formats, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out fallBackStart);
+            DateTime fallBackFinish;
+            DateTime.TryParseExact(finish, formats, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out fallBackFinish);
+
             if (office != null)
             {
                 string fallbackOfficeName = office.FallbackOfficeName;
-                if (office.FallbackHoursStart <= currentHour && office.FallbackHoursFinish > currentHour)
+                //CompareTo results:
+                //Less than zero
+                //This instance is earlier than value.
+                //Zero
+                //This instance is the same as value.
+                //Greater than zero
+                //This instance is later than value.
+
+                //First determine if the start time is later than the finish - for periods that span midnight
+                bool isStartLaterThanFinish = fallBackStart.TimeOfDay.CompareTo(fallBackFinish.TimeOfDay) > 0;
+
+                if (fallBackStart.TimeOfDay.CompareTo(currentTime) < 0 && fallBackFinish.TimeOfDay.CompareTo(currentTime) >= 0)
                 {
+                    //The current time is greater than the start and less than the finish
                     office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
                 }
-                else if (office.FallbackHoursStart > office.FallbackHoursFinish && (office.FallbackHoursStart <= currentHour || office.FallbackHoursFinish > currentHour))
+                else if (isStartLaterThanFinish &&
+                    (fallBackStart.TimeOfDay.CompareTo(currentTime) < 0 ||
+                    fallBackFinish.TimeOfDay.CompareTo(currentTime) >= 0)
+                    )
                 {
+                    //The current time is greater than the start OR less than the finish, if the start/finish spans midnight (into the AM for example)
                     office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
                 }
 
+                //Get the department that matches or the default of the selected office
                 department = office.Departments.Find(d => d.Name.Equals(departmentName));
                 if (department == null)
                 {
                     department = office.Departments.First(d => d.Default);
                 }
             }
+
+        
+            //if (office != null)
+            //{
+            //    string fallbackOfficeName = office.FallbackOfficeName;
+            //    if (office.FallbackHoursStart <= currentHour && office.FallbackHoursFinish > currentHour)
+            //    {
+            //        office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
+            //    }
+            //    else if (office.FallbackHoursStart > office.FallbackHoursFinish && (office.FallbackHoursStart <= currentHour || office.FallbackHoursFinish > currentHour))
+            //    {
+            //        office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
+            //    }
+
+            //    department = office.Departments.Find(d => d.Name.Equals(departmentName));
+            //    if (department == null)
+            //    {
+            //        department = office.Departments.First(d => d.Default);
+            //    }
+            //}
         }
 
         /// <summary>

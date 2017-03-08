@@ -17,8 +17,8 @@ namespace AGUploadForm.Models.Settings
     public class Office
     {
         public string Name { get; set; }
-        public int FallbackHoursStart { get; set; }
-        public int FallbackHoursFinish { get; set; }
+        public string FallbackHoursStart { get; set; }
+        public string FallbackHoursFinish { get; set; }
         public string SaveLocation { get; set; }
         public string SaveEmailAlias { get; set; }
         public string Email { get; set; }

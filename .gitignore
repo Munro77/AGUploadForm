@@ -257,3 +257,4 @@ ModelManifest.xml
 /src/AGUploadForm/wwwroot/js/filesubmission.min.js
 /src/AGUploadForm/Properties/PublishProfiles/Test.pubxml
 /src/AGUploadForm/Properties/PublishProfiles/Test-publish.ps1
+/src/AGUploadForm/Configs/Prod_Configs.zip

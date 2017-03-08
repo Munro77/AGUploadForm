@@ -12,7 +12,7 @@
     var up = $('#fileupload');
     $('#fileupload').fileupload({
         autoUpload: true,
-        maxChunkSize: 500000, //0.5MB
+        maxChunkSize: 5000000, //5MB
         url: url
         //acceptFileTypes: /(jpg)|(jpeg)|(png)|(gif)|(tif)|(pdf)|(pptx)$/i              // Allowed file types
 
