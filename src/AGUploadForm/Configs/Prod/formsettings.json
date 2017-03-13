@@ -11,9 +11,9 @@
       //Specify the name of the FallbackOffice to be used during the time specified for fallback
       "FallbackOfficeName": "Wellington",
       //These two items are currently not used
-      "SaveLocation": "F:\\temp\\webuploader\\Scarborough-NorthYork\\",
-      "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\Scarborough-NorthYork",
-      "Email": "rob.munro@t4g.com",
+      "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork",
+      "Email": "",
       //Each office has multiple Departments
       "Departments": [
         {
@@ -21,48 +21,436 @@
           //Name is what shows in the dropdown for this selection
           "Name": "CADD",
           //Email is who recieves any submitted orders for this office/Department
-          "Email": "rob.munro@t4g.com;shannonb@astleygilbert.com",
+          "Email": "cadd@astleygilbert.com;shannonb@astleygilbert.com",
+		  //"Email": "rob.munro@t4g.com",
           //SaveLocation is the local path on the server
-          "SaveLocation": "F:\\temp\\webuploader\\Scarborough-NorthYork\\CADD",
+          "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\CADD",
           //SaveEmailAlias are the links to the root folder that will be in the email (i.e. the network share address, ftp address)
-          "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\Scarborough-NorthYork\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\CADD",
           "Default": "true"
         },
         {
-          //Department 2 etc.
           "Name": "Colour",
-          "Email": "rob.munro@t4g.com",
-          "SaveLocation": "F:\\temp\\webuploader\\Scarborough-NorthYork\\Colour",
-          "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\Scarborough-NorthYork\\Colour",
+          "Email": "carnforthc2@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\Colour",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\Colour",
+          "Default": "false"
+        },
+        {
+          "Name": "Docutech",
+          "Email": "carnforthd2@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\Docutech",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\Docutech",
           "Default": "false"
         },
         {
           "Name": "Offset",
-          "Email": "rob.munro@t4g.com",
-          "SaveLocation": "F:\\temp\\webuploader\\Scarborough-NorthYork\\Offset",
-          "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\Scarborough-NorthYork\\Offset",
+          "Email": "stevef@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\Offset",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\Offset",
+          "Default": "false"
+        },
+        {
+          "Name": "Document Control / Indexing",
+          "Email": "projectcentral@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\ProjectCentral",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\ProjectCentral",
+          "Default": "false"
+        },
+        {
+          "Name": "Grand Format",
+          "Email": "grandformat@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\GrandFormat",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\GrandFormat",
+          "Default": "false"
+        },
+        {
+          "Name": "IT Solutions",
+          "Email": "it.support@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\ITSupport",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\ITSupport",
+          "Default": "false"
+        },
+        {
+          "Name": "Creative Services",
+          "Email": "ashley@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\Creative",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\Creative",
           "Default": "false"
         }
       ]
     },
-    //Office two repeats the pattern above (note the commas at the end of each office section above, after the curly brace)
+
+
+    // WELLINGTON  Office two repeats the pattern above (note the commas at the end of each office section above, after the curly brace)
     {
-      "Name": "Wellington",
-      "FallbackHoursStart": "17",
+      "Name": "Downtown Toronto",
+      "FallbackHoursStart": "21",
       "FallbackHoursFinish": "24",
-      "SaveLocation": "F:\\temp\\webuploader\\DowntownToronto",
-      "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader",
-      "Email": "test@email.com",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\DowntownToronto",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
       "Departments": [
         {
           "Name": "CADD",
-          "Email": "rob.munro@t4g.com",
-          "SaveLocation": "F:\\temp\\webuploader\\DowntownToronto\\CADD",
-          "SaveEmailAlias": "\\\\WEB-05-DEV\\webuploader\\DowntownToronto\\CADD",
+          "Email": "wellingtoncadd@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\DowntownToronto\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\DowntownToronto\\CADD",
+          "Default": "true"
+        },
+        {
+          "Name": "Colour",
+          "Email": "wellingtonc2@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\DowntownToronto\\Colour",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\DowntownToronto\\Colour",
+          "Default": "false"
+        },
+        {
+          "Name": "Docutech",
+          "Email": "wellingtond2@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\DowntownToronto\\Docutech",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\DowntownToronto\\Docutech",
+          "Default": "false"
+        }
+      ]
+
+    },
+    //Midtown
+    {
+      "Name": "Downtown Toronto / Adelaide",
+      "FallbackHoursStart": "18",
+      "FallbackHoursFinish": "24",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\Midtown",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "adelaide@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Midtown\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Midtown\\CADD",
+          "Default": "true"
+        },
+        {
+          "Name": "Colour",
+          "Email": "adelaide@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Midtown\\Colour",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Midtown\\Colour",
+          "Default": "false"
+        },
+        {
+          "Name": "Docutech",
+          "Email": "adelaide@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Midtown\\Docutech",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Midtown\\Docutech",
+          "Default": "false"
+        }
+      ]
+
+    },
+
+    //Mississauga
+    {
+      "Name": "Mississauga / Airport",
+      "FallbackHoursStart": "17:30",
+      "FallbackHoursFinish": "24",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\Mississauga",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "mississaugaa@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Mississauga\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Mississauga\\CADD",
           "Default": "true"
         }
-      ],
-      "FallbackOfficeName": "Carnforth"
+
+      ]
+
+    },
+
+    //Concord
+    {
+      "Name": "Concord",
+      "FallbackHoursStart": "18",
+      "FallbackHoursFinish": "24",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\Concord",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "concordp@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Concord\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Concord\\CADD",
+          "Default": "true"
+        },
+        {
+          "Name": "Colour",
+          "Email": "Concordp@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Concord\\Colour",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Concord\\Colour",
+          "Default": "false"
+        },
+        {
+          "Name": "Docutech",
+          "Email": "concordp@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Concord\\Docutech",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Concord\\Docutech",
+          "Default": "false"
+        }
+      ]
+
+    },
+
+    //Vaughan
+    {
+      "Name": "Vaughan",
+      "FallbackHoursStart": "18",
+      "FallbackHoursFinish": "24",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\Vaughan",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "keelec@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Vaughan\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Vaughan\\CADD",
+          "Default": "true"
+        }
+
+      ]
+
+    },
+
+    //Markham
+    {
+      "Name": "Markham",
+      "FallbackHoursStart": "18",
+      "FallbackHoursFinish": "24",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\Markham",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "towncentrec@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Markham\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Markham\\CADD",
+          "Default": "true"
+        }
+
+      ]
+
+    },
+
+    //Guelph
+    {
+      "Name": "Guelph",
+      "FallbackHoursStart": "0",
+      "FallbackHoursFinish": "0",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\Guelph",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "guelph@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Guelph\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Guelph\\CADD",
+          "Default": "true"
+        },
+        {
+          "Name": "Colour",
+          "Email": "guelph@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Guelph\\Colour",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Guelph\\Colour",
+          "Default": "false"
+        },
+        {
+          "Name": "Docutech",
+          "Email": "guelph@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Guelph\\Docutech",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Guelph\\Docutech",
+          "Default": "false"
+        }
+      ]
+
+    },
+
+    //Kitchener
+    {
+      "Name": "Kitchener",
+      "FallbackHoursStart": "0",
+      "FallbackHoursFinish": "0",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\Kitchener",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "Kitchener@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Kitchener\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Kitchener\\CADD",
+          "Default": "true"
+        },
+        {
+          "Name": "Colour",
+          "Email": "Kitchener@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Kitchener\\Colour",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Kitchener\\Colour",
+          "Default": "false"
+        },
+        {
+          "Name": "Docutech",
+          "Email": "Kitchener@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Kitchener\\Docutech",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Kitchener\\Docutech",
+          "Default": "false"
+        }
+      ]
+    },
+
+    //London
+    {
+      "Name": "London",
+      "FallbackHoursStart": "0",
+      "FallbackHoursFinish": "0",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\London",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "london@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\London\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\London\\CADD",
+          "Default": "true"
+        },
+        {
+          "Name": "Colour",
+          "Email": "London@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\London\\Colour",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\London\\Colour",
+          "Default": "false"
+        },
+        {
+          "Name": "Docutech",
+          "Email": "London@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\London\\Docutech",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\London\\Docutech",
+          "Default": "false"
+        },
+        {
+          "Name": "Grand Format",
+          "Email": "London@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\London\\GrandFormat",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\London\\GrandFormat",
+          "Default": "false"
+        }
+      ]
+
+    },
+
+    //Ottawa
+    {
+      "Name": "Ottawa",
+      "FallbackHoursStart": "0",
+      "FallbackHoursFinish": "0",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\Ottawa",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "ottawa@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Ottawa\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Ottawa\\CADD",
+          "Default": "true"
+        },
+        {
+          "Name": "Colour",
+          "Email": "Ottawa@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Ottawa\\Colour",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Ottawa\\Colour",
+          "Default": "false"
+        },
+        {
+          "Name": "Docutech",
+          "Email": "Ottawa@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Ottawa\\Docutech",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Ottawa\\Docutech",
+          "Default": "false"
+        }
+      ]
+    },
+
+    //Oshawa
+    {
+      "Name": "Oshawa",
+      "FallbackHoursStart": "0",
+      "FallbackHoursFinish": "0",
+      "FallbackOfficeName": "Carnforth",
+      "SaveLocation": "E:\\temp\\webuploader\\Oshawa",
+      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
+      "Email": "",
+
+      "Departments": [
+        {
+          "Name": "CADD",
+          "Email": "Oshawa@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Oshawa\\CADD",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Oshawa\\CADD",
+          "Default": "true"
+        },
+        {
+          "Name": "Colour",
+          "Email": "Oshawa@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Oshawa\\Colour",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Oshawa\\Colour",
+          "Default": "false"
+        },
+        {
+          "Name": "Docutech",
+          "Email": "Oshawa@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Oshawa\\Docutech",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Oshawa\\Docutech",
+          "Default": "false"
+        },
+        {
+          "Name": "Grand Format",
+          "Email": "Oshawa@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Oshawa\\GrandForamt",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Oshawa\\GrandFormat",
+          "Default": "false"
+        }
+      ]
+
     }
+
+
+
   ]
 }
