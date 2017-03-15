@@ -4157,8 +4157,8 @@ header .sticky a, header .sticky a:hover, header .sticky h1, header .sticky h2 {
 }
 
 .page-template-template-level1 header .hero-image {
-    max-height: 700px;
-    min-height: 480px;
+    max-height: 300px;
+    min-height: 220px;
 }
 
 .menu-close, .menu-link, .menu-logo, .menu-phone {

@@ -1,0 +1,187 @@
+@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Http.Extensions
+@model AGUploadForm.Models.FormViewModels.ConfirmationEmailViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+    <style>
+        body {
+            font: 76%/160% 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+        }
+
+        a:link {
+            text-decoration: none;
+            border-bottom: 1px dotted #ffbac8;
+        }
+
+        a:visited {
+            border-bottom: none;
+            text-decoration: none;
+        }
+
+        a:hover, a:focus {
+            border-bottom: 1px solid ;
+            text-decoration: none;
+        }
+
+        table a, table a:link, table a:visited {
+            border: none;
+        }
+
+        table {
+            width: 99%;
+            border-top: 1px solid #e3f1fe;
+            border-right: 1px solid #e3f1fe;
+            border-collapse: collapse;
+        }
+
+        td {
+            color: #678197;
+            border-bottom: 1px solid #e3f1fe;
+            border-left: 1px solid #e5eff8;
+            padding: .3em 1em;
+            text-align: left;
+            font-size: 8pt;
+        }
+
+        th {
+            font-weight: bold;
+            color: #678197;
+            text-align: left;
+            border-bottom: 1px solid #e3f1fe;
+            border-left: 1px solid #e5eff8;
+            padding: .3em 1em;
+            background: #f9fcfe;
+        }
+
+        .errorCount {
+                background: blue;
+                font-size: 12pt;
+                color: #f8f8f8;
+        }
+
+        thead th {
+            background: #f4f9fe;
+            text-align: center;
+            font: bold 10pt 'Century Gothic', 'Trebuchet MS', Arial, Helvetica, sans-serif;
+            color: #66a3d3;
+        }
+
+        .txt, p {
+            color: #000000;
+        }
+
+        .source {
+            font: 9px 'Courier New', 'Courier, monospace'; 
+            color: #0000ff; 
+        }
+    </style>
+</head>
+<body>
+    <p>
+        @if(Model.ReRouted)
+        {
+            <p>    
+                The order you submitted was received after hours. As a result, it has been routed to our head office location for processing. If you need to follow-up for any reason, the contact information is below:
+                <br/><br/>
+                <span style="font-weight: bold">After Hours Contact</span><br/>
+               
+                    Carnforth CADD<br/>
+
+                    42 Carnforth Road<br/>
+
+                    Toronto ON<br/>
+
+                    <a href="tel:(416)%20288-8666" target="_blank">(416) 288-8666</a><br/>
+
+                    <a href="mailto:cadd@astleygilbert.com" target="_blank">cadd@astleygilbert.com</a>
+               
+            </p>
+        }
+        Your order has been successfully received. If there is a discrepancy in the number of files received, you will be contacted by an Astley Gilbert representative.
+    </p>
+    <table>
+        <tbody>
+            <tr>
+                <th colspan="2">CLIENT INFORMATION</th>
+                <th colspan="2">JOB INFORMATION</th>
+            </tr>
+            <tr>
+                <td width="100">Account</td>
+                <td class="txt">@Model.Job.AccountNumber</td>
+                <td width="100">Job Received</td>
+                <td class="txt">@Model.Job.Created.ToString("MM/dd/yyyy HH:mm:ss tt")</td>
+            </tr>
+            <tr>
+                <td width="100">Name</td>
+                <td class="txt">@Model.Job.ContactName</td>
+                <td width="100" valign="top">Job Due</td>
+                <td class="txt" style="font-weight: bold; font-size: 10pt; color: #FF0000" valign="top">@Model.Job.DueDateTime</td>
+            </tr>
+            <tr>
+                <td width="100">Company</td>
+                <td class="txt">@Model.Job.ContactCompanyName</td>
+                <td width="100">Branch</td>
+                <td class="txt">@Model.Job.OfficeName</td>
+            </tr>
+            <tr>
+                <td width="100">Address</td>
+                <td class="txt">
+                    @Model.Job.ContactAddress
+                    @if (!string.IsNullOrEmpty(Model.Job.ContactAddressUnitNumber))
+                    {
+                        <br/>
+                        @Model.Job.ContactAddressUnitNumber
+                    }
+                    <br/>
+                    @string.Format("{0} {1} {2}", Model.Job.ContactAddressCity, Model.Job.ContactAddressProvince, Model.Job.ContactAddressPostalCode)
+                </td>
+                <td width="100">Department</td>
+                <td class="txt">@Model.Job.DepartmentName</td>
+            </tr>
+            <tr>
+                <td width="100">Phone Number</td>
+                <td class="txt">@Model.Job.ContactPhoneNumber</td>
+                <td width="100">Project / PO#</td>
+                <td class="txt">@Model.Job.ProjectNumber</td>
+            </tr>
+            <tr>
+                <td width="100" valign="top">Email Address</td>
+                <td class="txt" valign="top">@Model.Job.ContactEmail</td>
+                <td width="100">Total Files/Size</td>
+                <td class="txt">
+                    @string.Format("Total Files: {0} -- Total Size: {1}", Model.UploadedFiles.Count, Model.FormatToHumanReadableFileSize(Model.UploadedFiles.Sum(f => f.Length)))
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody>
+            <tr>
+                <th>INSTRUCTIONS / NOTES</th>
+            </tr>
+            <tr>
+                <td valign="top" class="txt">@(new HtmlString(Model.Job.Instructions.Replace("\r\n", "<br/>").Replace("\n", "<br/>")))</td>
+            </tr>
+            <tr>
+                <th @if(Model.OriginalUploadedFilePaths.Count != Model.UploadedFiles.Count)
+                {
+                    @("class=errorCount");
+                }>
+                    @string.Format("FILES (Expected {0} / Received {1})", Model.OriginalUploadedFilePaths.Count, Model.UploadedFiles.Count)
+                </th>
+            </tr>
+            @for (int index = 0; index < Model.UploadedFiles.Count; index++)
+            {
+                <tr>
+                    <td class="txt">
+                        @string.Format("{0}: {1} ({2})", (index + 1).ToString(), Model.UploadedFiles[index].Name, Model.FormatToHumanReadableFileSize(Model.UploadedFiles[index].Length))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

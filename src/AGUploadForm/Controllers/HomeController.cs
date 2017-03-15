@@ -157,11 +157,14 @@ namespace AGUploadForm.Controllers
 
             Office office = null;
             Department department = null;
-            GetOfficeDepartment(formViewModel.SelectedOfficeName, formViewModel.SelectedDepartmentName, out office, out department);
+
+            bool reRouted; // track if the fallback location used
+            GetOfficeDepartment(formViewModel.SelectedOfficeName, formViewModel.SelectedDepartmentName, out office, out department, out reRouted);
 
             string saveLocation = office.SaveLocation;
             string saveEmailAlias = office.SaveEmailAlias;
-            List<string> emails = new List<string>(office.Email.Split(';'));
+
+            List<string> departmentEmails = new List<string>(office.Email.Split(';'));
             if (department != null)
             {
                 if (!string.IsNullOrEmpty(department.SaveLocation))
@@ -174,7 +177,7 @@ namespace AGUploadForm.Controllers
                 }
                 if (!string.IsNullOrEmpty(department.Email))
                 {
-                    emails = new List<string>(department.Email.Split(';'));
+                    departmentEmails = new List<string>(department.Email.Split(';'));
                 }
             }
 
@@ -183,7 +186,7 @@ namespace AGUploadForm.Controllers
                 VIP vip = _vipsettings.GetVIPByID(id);
                 if ((vip != null) && !string.IsNullOrEmpty(vip.CcEmail))
                 {
-                    emails.AddRange(vip.CcEmail.Split(';'));
+                    departmentEmails.AddRange(vip.CcEmail.Split(';'));
                 }
             }
 
@@ -228,43 +231,71 @@ namespace AGUploadForm.Controllers
                         uploadedFiles, errors));
             }
 
-            string subjectLine = createSubjectLine(formViewModel.SelectedOfficeName, formViewModel.SelectedDepartmentName, office, job);
+            //string jobSubjectLine = createJobSubjectLine(formViewModel.SelectedOfficeName, formViewModel.SelectedDepartmentName, job );
+            string jobSubjectLine = createJobSubjectLine(formViewModel.SelectedOfficeName, formViewModel.SelectedDepartmentName, job, reRouted );
+            string confirmSubjectLine = createConfirmSubjectLine();
 
-            if ((emails != null) && (emails.Count > 0))
+            //Send job and confirmation emails
+            if ((departmentEmails != null) && (departmentEmails.Count > 0))
             {
-                //SendMail(
-                //    _appSettings.SmtpSettings.FromAddress,
-                //    emails,
-                //    string.Format(
-                //        "File(s) Uploaded by {0}{1}{2}",
-                //        job.ContactName,
-                //        (string.IsNullOrEmpty(job.ContactCompanyName) ? string.Empty : string.Format(" ({0})", job.ContactCompanyName)),
-                //        (string.IsNullOrEmpty(job.DueDateTime) ? string.Empty : string.Format(" -- due: {0}", job.DueDateTime))),
-                //    GetMailMessageBody(saveLocation, saveEmailAliasList, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
-
                 SendMail(
                     _appSettings.SmtpSettings.FromAddress,
-                    emails,
-                    subjectLine,
-                    GetMailMessageBody(saveLocation, saveEmailAliasList, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
+                    departmentEmails,
+                    jobSubjectLine,
+                    GetJobMailMessageBody(saveLocation, saveEmailAliasList, job, formViewModel.UploadedFilenames, uploadedFiles, errors));
+
+                //Send the confirmation email
+                if ((!String.IsNullOrEmpty(job.ContactEmail)))
+                {
+                    //Choose the first department email as the sender for the confirmation
+                    string fromEmail = departmentEmails.First();
+                    string fromName = string.Format("{0} {1}", office.Name, department.Name);
+
+                    SendMail(
+                        fromEmail,
+                        job.ContactEmail,
+                        confirmSubjectLine,
+                        GetConfirmationMailMessageBody(saveLocation, saveEmailAliasList, job, formViewModel.UploadedFilenames, uploadedFiles, errors, reRouted),
+                        fromName);
+
+                }
             }
 
             return RedirectToAction("FormSubmitted");
         }
 
-        private string createSubjectLine(string selectedOffice, string selectedDepartment, Office destinationOffice, Job job)
+        /// <summary>
+        /// Creates the subject line for the job submission email
+        /// </summary>
+        /// <param name="selectedOffice"></param>
+        /// <param name="selectedDepartment"></param>
+        /// <param name="destinationOffice"></param>
+        /// <param name="job"></param>
+        /// <returns></returns>
+        private string createJobSubjectLine(string selectedOffice, string selectedDepartment, Job job, bool reRouted)
         {
             string subjectLine = string.Format(
                         "File(s) Uploaded by {0}{1}{2}",
                         job.ContactName,
                         (string.IsNullOrEmpty(job.ContactCompanyName) ? string.Empty : string.Format(" ({0})", job.ContactCompanyName)),
                         (string.IsNullOrEmpty(job.DueDateTime) ? string.Empty : string.Format(" -- due: {0}", job.DueDateTime)));
-            if (string.Compare(selectedOffice, destinationOffice.Name, true) != 0)
+
+            //Append some details if the job was forwarded (during "fallback" hours)
+            if (reRouted)
                 subjectLine = string.Format("[From {0}: {1}] {2}", selectedOffice, selectedDepartment, subjectLine);
 
             return subjectLine;
         }
 
+        /// <summary>
+        /// Creates the subject line for the job submission email
+        /// </summary>
+        /// <returns></returns>
+        private string createConfirmSubjectLine()
+        {
+            return @"Astley Gilbert has received your files!";
+        }
+        
         /// <summary>
         /// Gets the office and department objects to send the request to based on the selected office and department name.  Depends on the time and the fallback periods in the configuration.
         /// </summary>
@@ -272,11 +303,12 @@ namespace AGUploadForm.Controllers
         /// <param name="departmentName"></param>
         /// <param name="office"></param>
         /// <param name="department"></param>
-        private void GetOfficeDepartment(string officeName, string departmentName, out Office office, out Department department)
+        private void GetOfficeDepartment(string officeName, string departmentName, out Office office, out Department department, out bool reRouted)
         {
             office = _settings.Offices.Find(o => o.Name.Equals(officeName));
             department = null;
             int currentHour = DateTime.Now.Hour;
+            reRouted = false;
 
             TimeSpan currentTime = DateTime.Now.TimeOfDay;
             string[] formats = { "%H", "%H:mm" };
@@ -306,6 +338,7 @@ namespace AGUploadForm.Controllers
                 {
                     //The current time is greater than the start and less than the finish
                     office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
+                    reRouted = true;
                 }
                 else if (isStartLaterThanFinish &&
                     (fallBackStart.TimeOfDay.CompareTo(currentTime) < 0 ||
@@ -314,6 +347,7 @@ namespace AGUploadForm.Controllers
                 {
                     //The current time is greater than the start OR less than the finish, if the start/finish spans midnight (into the AM for example)
                     office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
+                    reRouted = true;
                 }
 
                 //Get the department that matches or the default of the selected office
@@ -324,25 +358,6 @@ namespace AGUploadForm.Controllers
                 }
             }
 
-        
-            //if (office != null)
-            //{
-            //    string fallbackOfficeName = office.FallbackOfficeName;
-            //    if (office.FallbackHoursStart <= currentHour && office.FallbackHoursFinish > currentHour)
-            //    {
-            //        office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
-            //    }
-            //    else if (office.FallbackHoursStart > office.FallbackHoursFinish && (office.FallbackHoursStart <= currentHour || office.FallbackHoursFinish > currentHour))
-            //    {
-            //        office = _settings.Offices.Find(o => o.Name.Equals(fallbackOfficeName));
-            //    }
-
-            //    department = office.Departments.Find(d => d.Name.Equals(departmentName));
-            //    if (department == null)
-            //    {
-            //        department = office.Departments.First(d => d.Default);
-            //    }
-            //}
         }
 
         /// <summary>
@@ -380,7 +395,8 @@ namespace AGUploadForm.Controllers
 
                 foreach (string uploadedFilename in formViewModel.UploadedFilenames)
                 {
-                    uploadedFilePath = Path.Combine(uploadDirectoryPath, uploadedFilename);
+                    //Titles are escaped in the filesubmission javascript so must be URL decoded here to replce %20 with spaces etc.
+                    uploadedFilePath = Path.Combine(uploadDirectoryPath, WebUtility.UrlDecode(uploadedFilename));
                     if (System.IO.File.Exists(uploadedFilePath))
                     {
                         FileInfo fileInfo = new FileInfo(uploadedFilePath);
@@ -486,10 +502,84 @@ namespace AGUploadForm.Controllers
             return instructionMessageBody;
         }
 
-        private string GetMailMessageBody(string saveLocation, IList<string> saveEmailAliasList, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
+        /// <summary>
+        /// Generate the Confirmation email body
+        /// </summary>
+        /// <param name="saveLocation"></param>
+        /// <param name="saveEmailAliasList"></param>
+        /// <param name="job"></param>
+        /// <param name="originalUploadedFilePaths"></param>
+        /// <param name="uploadedFiles"></param>
+        /// <param name="errors"></param>
+        /// <returns></returns>
+        private string GetConfirmationMailMessageBody(string saveLocation, IList<string> saveEmailAliasList, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors, bool reRouted)
+        {
+            string viewName = "FileConfirmationEmailTemplate";
+            var model = new ConfirmationEmailViewModel(saveLocation, saveEmailAliasList, job, originalUploadedFilePaths, uploadedFiles, errors, reRouted);
+            //return GetMailMessageBody(viewName, saveLocation, saveEmailAliasList, job, originalUploadedFilePaths, uploadedFiles, errors);
+            return GetMailMessageBody(viewName, model);
+
+        }
+
+        /// <summary>
+        /// Generate the job submission email body
+        /// </summary>
+        /// <param name="saveLocation"></param>
+        /// <param name="saveEmailAliasList"></param>
+        /// <param name="job"></param>
+        /// <param name="originalUploadedFilePaths"></param>
+        /// <param name="uploadedFiles"></param>
+        /// <param name="errors"></param>
+        /// <returns></returns>
+        private string GetJobMailMessageBody(string saveLocation, IList<string> saveEmailAliasList, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
         {
             string viewName = "FileSubmissionEmailTemplate";
-            ViewData.Model = new JobEmailViewModel(saveLocation, saveEmailAliasList, job, originalUploadedFilePaths, uploadedFiles, errors);
+            var model = new JobEmailViewModel(saveLocation, saveEmailAliasList, job, originalUploadedFilePaths, uploadedFiles, errors);
+            //return GetMailMessageBody(viewName, saveLocation, saveEmailAliasList, job, originalUploadedFilePaths, uploadedFiles, errors);
+            return GetMailMessageBody(viewName, model);
+        }
+
+        /// <summary>
+        /// Generates a message body based on a view and the necessary job information
+        /// </summary>
+        /// <param name="viewName"></param>
+        /// <param name="saveLocation"></param>
+        /// <param name="saveEmailAliasList"></param>
+        /// <param name="job"></param>
+        /// <param name="originalUploadedFilePaths"></param>
+        /// <param name="uploadedFiles"></param>
+        /// <param name="errors"></param>
+        /// <returns></returns>
+        //private string GetMailMessageBody(string viewName, string saveLocation, IList<string> saveEmailAliasList, Job job, IList<string> originalUploadedFilePaths, IList<FileInfo> uploadedFiles, IList<string> errors)
+        //{
+        //    ViewData.Model = new JobEmailViewModel(saveLocation, saveEmailAliasList, job, originalUploadedFilePaths, uploadedFiles, errors);
+        //    string mailMessageBody = string.Empty;
+        //    using (StringWriter stringWriter = new StringWriter())
+        //    {
+        //        ICompositeViewEngine compositeViewEngine = _serviceProvider.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+        //        ViewEngineResult viewEngineResult = compositeViewEngine.FindView(ControllerContext, viewName, false);
+        //        ViewContext viewContext = new ViewContext(
+        //            ControllerContext,
+        //            viewEngineResult.View,
+        //            ViewData,
+        //            TempData,
+        //            stringWriter,
+        //            new Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelperOptions());
+
+        //        Task task = viewEngineResult.View.RenderAsync(viewContext);
+        //        task.Wait();
+        //        mailMessageBody = stringWriter.GetStringBuilder().ToString();
+        //    }
+        //    return mailMessageBody;
+        //}
+
+        /// <summary>
+        /// Generates a message body based on a view and a model to match the view
+        /// </summary>
+        /// <returns></returns>
+        private string GetMailMessageBody(string viewName, object model)
+        {
+            ViewData.Model = model;
             string mailMessageBody = string.Empty;
             using (StringWriter stringWriter = new StringWriter())
             {
@@ -510,7 +600,13 @@ namespace AGUploadForm.Controllers
             return mailMessageBody;
         }
 
-        private void SendMail(string fromAddress, IList<string> toAddresses, string subject, string body)
+        private void SendMail(string fromAddress, string toAddress, string subject, string body, string fromName=null)
+        {
+            List<string> toAddresses = new List<string>{toAddress};
+            SendMail(fromAddress, toAddresses, subject, body, fromName);
+        }
+
+        private void SendMail(string fromAddress, IList<string> toAddresses, string subject, string body, string fromName=null)
         {
             try
             {
@@ -524,7 +620,14 @@ namespace AGUploadForm.Controllers
 
                     MailMessage mailMessage = new MailMessage();
                     mailMessage.IsBodyHtml = true;
-                    mailMessage.From = new MailAddress(_appSettings.SmtpSettings.FromAddress);
+                    if (string.IsNullOrEmpty(fromName))
+                    {
+                        mailMessage.From = new MailAddress(fromAddress);
+                    }
+                    else
+                    {
+                        mailMessage.From = new MailAddress(fromAddress, fromName);
+                    }
                     foreach (string toAddress in toAddresses)
                     {
                         if (!string.IsNullOrWhiteSpace(toAddress))
