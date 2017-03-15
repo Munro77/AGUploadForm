@@ -19,6 +19,8 @@ namespace AGUploadForm
                 .Build();
 
             host.Run();
+
+
         }
     }
 }
