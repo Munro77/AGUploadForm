@@ -4,7 +4,7 @@
     //Office 1
 
     {
-      "Name": "Carnforth",
+      "Name": "Scarborough / North York (Head Office)",
       //FallbackHoursStart/Finish (defined using a 24 hr clock) set the hours when any submissions should go to the fallbackOfficeName
       "FallbackHoursStart": "0",
       "FallbackHoursFinish": "0",
@@ -31,7 +31,7 @@
         },
         {
           "Name": "Colour",
-          "Email": "carnforthc2@astleygilbert.com",
+          "Email": "carnforthprepressgroup@astleygilbert.com",
           "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\Colour",
           "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\Colour",
           "Default": "false"
@@ -45,7 +45,7 @@
         },
         {
           "Name": "Offset",
-          "Email": "stevef@astleygilbert.com",
+          "Email": "carnforthprepressgroup@astleygilbert.com",
           "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\Offset",
           "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\Offset",
           "Default": "false"
@@ -85,7 +85,7 @@
     // WELLINGTON  Office two repeats the pattern above (note the commas at the end of each office section above, after the curly brace)
     {
       "Name": "Downtown Toronto",
-      "FallbackHoursStart": "21",
+      "FallbackHoursStart": "20:30",
       "FallbackHoursFinish": "24",
       "FallbackOfficeName": "Carnforth",
       "SaveLocation": "E:\\temp\\webuploader\\DowntownToronto",
