@@ -220,15 +220,23 @@ namespace AGUploadForm.Controllers
             }
 
             //TODO: Try/Catch this in case the folder cannot be reached...
-            using (StreamWriter streamWriter = new StreamWriter(Path.Combine(saveLocation, "!JOB_INSTRUCTIONS!.txt")))
+            try
             {
-                streamWriter.Write(
-                    GetInstructionMessageBody(
-                        saveLocation,
-                        saveEmailAliasList,
-                        job,
-                        formViewModel.UploadedFilenames,
-                        uploadedFiles, errors));
+                using (StreamWriter streamWriter = new StreamWriter(Path.Combine(saveLocation, "!JOB_INSTRUCTIONS!.txt")))
+                {
+                    streamWriter.Write(
+                        GetInstructionMessageBody(
+                            saveLocation,
+                            saveEmailAliasList,
+                            job,
+                            formViewModel.UploadedFilenames,
+                            uploadedFiles, errors));
+                }
+            }
+            catch (Exception e)
+            {
+                LogError(string.Format("Unable to write instructions to saveLocation: {0}.  Error Message: {1}", saveLocation, e.Message), formViewModel, errors);
+                //throw (e);
             }
 
             //string jobSubjectLine = createJobSubjectLine(formViewModel.SelectedOfficeName, formViewModel.SelectedDepartmentName, job );
@@ -371,7 +379,7 @@ namespace AGUploadForm.Controllers
             string errorToLog = error;
             if (formViewModel != null)
             {
-                errorToLog = string.Format(error + "\nJob Details:\n{0}", JsonConvert.SerializeObject(formViewModel, Formatting.Indented));
+                errorToLog = string.Format(error + Environment.NewLine + "Job Details:" + Environment.NewLine + "{0}", JsonConvert.SerializeObject(formViewModel, Formatting.Indented));
             }
 
             _logger.LogError(errorToLog);
@@ -396,7 +404,9 @@ namespace AGUploadForm.Controllers
                 foreach (string uploadedFilename in formViewModel.UploadedFilenames)
                 {
                     //Titles are escaped in the filesubmission javascript so must be URL decoded here to replce %20 with spaces etc.
-                    uploadedFilePath = Path.Combine(uploadDirectoryPath, WebUtility.UrlDecode(uploadedFilename));
+
+                    //Have to decode twice, since we're double encoding in the .js.  (Once for the + signs and other legit URL characters, and once for javascript).  
+                    uploadedFilePath = Path.Combine(uploadDirectoryPath, WebUtility.UrlDecode(WebUtility.UrlDecode(uploadedFilename)));
                     if (System.IO.File.Exists(uploadedFilePath))
                     {
                         FileInfo fileInfo = new FileInfo(uploadedFilePath);
@@ -642,7 +652,7 @@ namespace AGUploadForm.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(string.Format("Email failed to be sent. Error: {0}\nFrom: {1}\nTo: {2}\nBody: {3}", 
+                _logger.LogError(string.Format("Email failed to be sent. Error: {0}" + Environment.NewLine + "From: {1} " + Environment.NewLine + "To: {2} " + Environment.NewLine + "Body: {3}", 
                     e.Message,
                     fromAddress,
                     string.Join(", ", toAddresses.ToArray()),

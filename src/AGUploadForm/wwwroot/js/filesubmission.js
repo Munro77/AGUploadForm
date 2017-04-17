@@ -82,7 +82,7 @@
     $("#SubmitButton").click(function () {
         var index = 0;
         $("#fileupload table > tbody.files > tr.template-download > td > p > span").each(function () {
-            $("#SubmitForm").prepend("<input type='hidden' name='UploadedFilenames[" + index + "]' value='" + escape($(this).prop('title')) + "' />");
+            $("#SubmitForm").prepend("<input type='hidden' name='UploadedFilenames[" + index + "]' value='" + escape(encodeURIComponent($(this).prop('title'))) + "' />"); //encoded once to deal with + and other chars, and once for regular javascript
             index++;
         });
         if (index <= 0) {
