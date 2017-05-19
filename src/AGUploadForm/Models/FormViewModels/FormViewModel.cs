@@ -30,6 +30,7 @@ namespace AGUploadForm.Models.FormViewModels
         public VIP Vip { get; set; }
         public bool RememberLocation { get; set; }
         public bool RememberDepartment { get; set; }
+        public bool RememberContactInfo { get; set; }
 
         public void SetDropDowns(FormSettings formSettings, VIPSettings vipSettings = null, string vipQString = "")
         {

@@ -185,6 +185,10 @@
                     <label asp-for="ContactInformation.PhoneNumber" class="label--required"></label>
                     <div class="input-container">
                         <input type="text" asp-for="ContactInformation.PhoneNumber" class="form-control sm-size" placeholder="Enter Phone Number" />
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" asp-for="@Model.RememberContactInfo" />
+                            Remember Contact Information
+                        </label>
                     </div>
                 </div>
                 <div class="clear-fields">

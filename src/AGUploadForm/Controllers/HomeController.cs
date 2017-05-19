@@ -30,6 +30,19 @@ namespace AGUploadForm.Controllers
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<HomeController> _logger;
 
+        private const string LOCATION_COOKIE = "RememberLocation";
+        private const string DEPARTMENT_COOKIE = "RememberDepartment";
+        private const string REMEMBER_CONTACT_COOKIE = "RememberContactInfo";
+        private const string CONTACT_NAME_COOKIE = "ContactName";
+        private const string CONTACT_COMPANY_COOKIE = "ContactCompany";
+        private const string CONTACT_ADDRESS_COOKIE = "ContactAddress";
+        private const string CONTACT_UNIT_COOKIE = "ContactUnit";
+        private const string CONTACT_CITY_COOKIE = "ContactCity";
+        private const string CONTACT_PROV_COOKIE = "ContactProv";
+        private const string CONTACT_POSTAL_COOKIE = "ContactPostal";
+        private const string CONTACT_EMAIL_COOKIE = "ContactEmail";
+        private const string CONTACT_PHONE_COOKIE = "ContactPhone";
+
         public HomeController(
             IOptions<AppSettings> appSettingsOptions,
             IOptions<FormSettings> settingsOptions,
@@ -79,7 +92,60 @@ namespace AGUploadForm.Controllers
                     formViewModel.SelectedDepartmentName = Request.Cookies["RememberDepartment"];
                 }
             }
+
+            //Set the contact informaiton in the form depending on the cookies if stored
+            SetContactInfo(formViewModel);
+
             return View(formViewModel);
+        }
+
+        /// <summary>
+        /// Sets the contact info in the form if it is set to be remembered
+        /// </summary>
+        /// <param name="formViewModel"></param>
+        private void SetContactInfo(FormViewModel formViewModel)
+        {
+            ContactInformationViewModel c = formViewModel.ContactInformation;
+            if (Request.Cookies != null && Request.Cookies.Keys.Contains(REMEMBER_CONTACT_COOKIE))
+            {
+                formViewModel.RememberContactInfo = true;
+                if (string.IsNullOrEmpty(c.Name))
+                {
+                    c.Name = Request.Cookies[CONTACT_NAME_COOKIE];
+                }
+                if (string.IsNullOrEmpty(c.Company))
+                {
+                    c.Company = Request.Cookies[CONTACT_COMPANY_COOKIE];
+                }
+                if (string.IsNullOrEmpty(c.Address))
+                {
+                    c.Address = Request.Cookies[CONTACT_ADDRESS_COOKIE];
+                }
+                if (string.IsNullOrEmpty(c.UnitNumber))
+                {
+                    c.UnitNumber = Request.Cookies[CONTACT_UNIT_COOKIE];
+                }
+                if (string.IsNullOrEmpty(c.City))
+                {
+                    c.City = Request.Cookies[CONTACT_CITY_COOKIE];
+                }
+                if (string.IsNullOrEmpty(c.Province))
+                {
+                    c.Province = Request.Cookies[CONTACT_PROV_COOKIE];
+                }
+                if (string.IsNullOrEmpty(c.PostalCode))
+                {
+                    c.PostalCode = Request.Cookies[CONTACT_POSTAL_COOKIE];
+                }
+                if (string.IsNullOrEmpty(c.Email))
+                {
+                    c.Email = Request.Cookies[CONTACT_EMAIL_COOKIE];
+                }
+                if (string.IsNullOrEmpty(c.PhoneNumber))
+                {
+                    c.PhoneNumber = Request.Cookies[CONTACT_PHONE_COOKIE];
+                }
+            }
         }
 
         public IActionResult FormSubmitted()
@@ -127,6 +193,8 @@ namespace AGUploadForm.Controllers
             {
                 Response.Cookies.Delete("RememberDepartment", cookieOptions);
             }
+
+            StoreContactInfo(formViewModel, cookieOptions);
 
             if (!ModelState.IsValid)
             {
@@ -270,6 +338,80 @@ namespace AGUploadForm.Controllers
             }
 
             return RedirectToAction("FormSubmitted");
+        }
+
+
+        /// <summary>
+        /// Stores contact info in cookies if option is selected
+        /// </summary>
+        /// <param name="formViewModel"></param>
+        /// <param name="cookieOptions"></param>
+        private void StoreContactInfo(FormViewModel formViewModel, CookieOptions cookieOptions)
+        {
+            ContactInformationViewModel c = formViewModel.ContactInformation;
+
+            if (formViewModel.RememberContactInfo)
+            {
+                Response.Cookies.Append(
+                    REMEMBER_CONTACT_COOKIE,
+                    "true",
+                    cookieOptions);
+
+                Response.Cookies.Append(
+                    CONTACT_NAME_COOKIE,
+                    (string.IsNullOrEmpty(c.Name) ? string.Empty : c.Name),
+                    cookieOptions);
+
+                Response.Cookies.Append(
+                    CONTACT_COMPANY_COOKIE,
+                    (string.IsNullOrEmpty(c.Company) ? string.Empty : c.Company),
+                    cookieOptions);
+                Response.Cookies.Append(
+                    CONTACT_ADDRESS_COOKIE,
+                    (string.IsNullOrEmpty(c.Address) ? string.Empty : c.Address),
+                    cookieOptions);
+                Response.Cookies.Append(
+                    CONTACT_UNIT_COOKIE,
+                    (string.IsNullOrEmpty(c.UnitNumber) ? string.Empty : c.UnitNumber),
+                    cookieOptions);
+                Response.Cookies.Append(
+                    CONTACT_CITY_COOKIE,
+                    (string.IsNullOrEmpty(c.City) ? string.Empty : c.City),
+                    cookieOptions);
+                Response.Cookies.Append(
+                    CONTACT_PROV_COOKIE,
+                    (string.IsNullOrEmpty(c.Province) ? string.Empty : c.Province),
+                    cookieOptions);
+                Response.Cookies.Append(
+                    CONTACT_POSTAL_COOKIE,
+                    (string.IsNullOrEmpty(c.PostalCode) ? string.Empty : c.PostalCode),
+                    cookieOptions);
+                Response.Cookies.Append(
+                    CONTACT_EMAIL_COOKIE,
+                    (string.IsNullOrEmpty(c.Email) ? string.Empty : c.Email),
+                    cookieOptions);
+                Response.Cookies.Append(
+                    CONTACT_PHONE_COOKIE,
+                    (string.IsNullOrEmpty(c.PhoneNumber) ? string.Empty : c.PhoneNumber),
+                    cookieOptions);
+
+            }
+            else
+            {
+                Response.Cookies.Delete(REMEMBER_CONTACT_COOKIE, cookieOptions);
+                Response.Cookies.Delete(CONTACT_NAME_COOKIE, cookieOptions);
+                Response.Cookies.Delete(CONTACT_COMPANY_COOKIE, cookieOptions);
+                Response.Cookies.Delete(CONTACT_ADDRESS_COOKIE, cookieOptions);
+                Response.Cookies.Delete(CONTACT_UNIT_COOKIE, cookieOptions);
+                Response.Cookies.Delete(CONTACT_CITY_COOKIE, cookieOptions);
+                Response.Cookies.Delete(CONTACT_PROV_COOKIE, cookieOptions);
+                Response.Cookies.Delete(CONTACT_POSTAL_COOKIE, cookieOptions);
+                Response.Cookies.Delete(CONTACT_EMAIL_COOKIE, cookieOptions);
+                Response.Cookies.Delete(CONTACT_PHONE_COOKIE, cookieOptions);
+
+            }
+            
+
         }
 
         /// <summary>
