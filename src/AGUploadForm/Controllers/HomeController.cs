@@ -158,6 +158,12 @@ namespace AGUploadForm.Controllers
             return View();
         }
 
+        public IActionResult ForceError()
+        {
+            LogError(string.Format("Testing error logging.  Error Message: Test"));
+            return View("Error");
+        }
+
         public JsonResult GetDepartmentSelectListByOfficeName(string officeName)
         {
             return Json(new SelectList(_settings.Offices.Find(o => o.Name.Equals(officeName)).Departments.ToList(), "Name", "Name"));

@@ -1,24 +1,22 @@
 ﻿{
   "VIPs": [
     {
-      //Customer name (not used in code)
-      "Name": "HoltRenfrew",
-      //The code to use in the path /VIP/HR for example
-      "QueryStringCode": "HR",
-      //Default CC email
-      "CcEmail": "rob.munro@t4g.com;shannonb@astleygilbert.com",
+      //Entry #1 - repeat entire entry after curly bracket with commas in between
+      "Name": "HoltRenfrew", //Display name
+      "QueryStringCode": "HR", //Path that is used in the URL for this VIP.  "HR" would light up the URL http://..../VIP/HR 
+      "CcEmail": "rob.munro@t4g.com", //Email address that is cc'd for all VIP submissions
       "Fields": [
         {
-          //Field pre-populate info
-          "AGFieldId": "Address",
-          "Value": "123 Bloor Street",
-          "Disabled": "true"
+          //List of fields, each separated by a comma
+          "AGFieldId": "Address", //The value of the "ag-field-id" attribute for the form field in the Index.chtml file
+          "Value": "123 Bloor Street", //The value that the field should be set to - string for text fields or the value of the option items in the dropdowns
+          "Disabled": "true" //Set to true if you want the field to be unchangeable by the customer
         },
         {
           "AGFieldId": "Branch",
           "Value": "Carnforth",
           "Disabled": "true",
-          "Visible": "true"
+          "Visible": "true" //Set to false if you want the field to be hidden
         },
         {
           "AGFieldId": "Department",
