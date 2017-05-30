@@ -1,6 +1,8 @@
 # Astley Gilbert Upload Form
 *Technical Documentation*
 
+[TOC]
+
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Administrative Tasks](#administrative-tasks)
