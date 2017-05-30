@@ -16,17 +16,17 @@
 The formsettings.json file is responsible for most configuration of the application, including file save and share locations, email addresses, branch/department configs etc.  Instructions for modifying the file are below:
 
 1. The formsettings.json file is located in the root of the application directory
-  1. This is the folder that is the physical source of the AGUploadForm application configured in IIS Manager
-  2. The initial location for this folder is E:\Sites\AGUploadForm
+    1. This is the folder that is the physical source of the AGUploadForm application configured in IIS Manager
+    2. The initial location for this folder is E:\Sites\AGUploadForm
 2.	Before making any changes, make a backup of the configuration file
-  1. Recommended approach is to store in another folder using a date stamp label (i.e. E:\Backups\Feb28\formsettings.json)
-  2. Back up either the files being updated or an entire copy of the AGUploadForm folder
+    1. Recommended approach is to store in another folder using a date stamp label (i.e. E:\Backups\Feb28\formsettings.json)
+    2. Back up either the files being updated or an entire copy of the AGUploadForm folder
 3.	Modify the formsettings.json file with any new configurations
 4.	Once the file is modified and saved, the application will need to be restarted.  
-  * [Restarting the Application](#restarting-the-application)
-  * Clicking “Browse \*:80” will open the browser and cause the site to re-start
+    * [Restarting the Application](#restarting-the-application)
+    * Clicking “Browse \*:80” will open the browser and cause the site to re-start
 5.	Test the changes that were updated in the formsettings.json on the site
-a.	If the site throws unexpected errors, re-check the changes to the file to ensure nothing is configured incorrectly
+    * If the site throws unexpected errors, re-check the changes to the file to ensure nothing is configured incorrectly
 
 
 
