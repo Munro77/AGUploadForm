@@ -130,12 +130,12 @@ The appsettings.json files are responsible for system configuration of the appli
 		* This is the folder that is the physical source of the AGUploadForm application configured in IIS Manager
 		* The initial location for this folder is: E:\Sites\AGUploadForm
 2.	Choose the appropriate file for editing
-		* There is a file for each environment.
-		* Appsettings.json is the “base” file and used in development and for storing the default values
-		* Appsettings.production.json is the file used to store production specific values
+    * There is a file for each environment.
+    * Appsettings.json is the “base” file and used in development and for storing the default values
+    * Appsettings.production.json is the file used to store production specific values
 3.	Before making any changes, make a backup of the required configuration file
-		* Recommended approach is to store in another folder using a datastamp label (i.e. E:\Backups\Feb28\appsettings.production.json)
-		* Back up either the files being updated or an entire copy of the AGUploadForm folder
+    * Recommended approach is to store in another folder using a datastamp label (i.e. E:\Backups\Feb28\appsettings.production.json)
+    * Back up either the files being updated or an entire copy of the AGUploadForm folder
 4.	Edit the file in a text editor such as Notepad++
 5.	Saving the file should trigger a re-start of the application
 		* You can force a restart by following [Restarting the Application](#restarting-the-application)
@@ -146,15 +146,15 @@ The appsettings.json files are responsible for system configuration of the appli
 The site copy shown to the end user is stored in View pages in the application.  These can be edited/refreshed without recompiling or deploying the application.
 
 1.	Locate the View file you would like to update in the application folder.
-		* The default folder is E:\Sites\AGUploadForm
+    * The default folder is E:\Sites\AGUploadForm
 2.	The notable view files are stored in the \Views\Home sub folder
-		* *Index.cshtml* – This is the main page containing all form items, as well as the alternative upload instructions
-		* *FormSubmitted.cshtml* – This page contains the thank you content
+    * *Index.cshtml* – This is the main page containing all form items, as well as the alternative upload instructions
+    * *FormSubmitted.cshtml* – This page contains the thank you content
 3.	Backup the file being edited
-		* Copy to an alternative location, ideally date stamped, such as E:\Backups\Feb28
+    * Copy to an alternative location, ideally date stamped, such as E:\Backups\Feb28
 4.	Open the file and edit the HTML as required.  
-		* Use a text editor such as Notepad++
-		* Generally avoid all content within the HTML <> tags or Razor markup (lines starting with “@”)
-		* Change written content as necessary
+    * Use a text editor such as Notepad++
+    * Generally avoid all content within the HTML <> tags or Razor markup (lines starting with “@”)
+    * Change written content as necessary
 5.	Save the file and browse to the application in the browser to see desired changes.  
 		* *It may be necessary to force a re-fresh of the site (Ctrl-R or Ctrl-F5) to see the new content.*
