@@ -104,6 +104,7 @@ This can be accomplished in two ways.
 
 ## Configuration Tasks
 ### Changing formsettings.json
+
 The *formsettings.json* file is responsible for most configuration of the application, including file save and share locations, email addresses, branch/department configs etc.  Instructions for modifying the file are below:
 
 1. The formsettings.json file is located in the root of the application directory
@@ -139,8 +140,6 @@ The appsettings.json files are responsible for system configuration of the appli
 5.	Saving the file should trigger a re-start of the application
 		* You can force a restart by following [Restarting the Application](#restarting-the-application)
 6.	Browse the application to test the changes
-
-
 
 ## Content Tasks
 ### Changing “copy” on the site pages
