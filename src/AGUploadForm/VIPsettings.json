@@ -1,9 +1,9 @@
 ﻿{
   "VIPs": [
     {
-      //Entry #1 - repeat entire entry after curly bracket with commas in between
+      //SAMPLE - repeat entire entry after curly bracket with commas in between
       "Name": "HoltRenfrew", //Display name
-      "QueryStringCode": "HR", //Path that is used in the URL for this VIP.  "HR" would light up the URL http://..../VIP/HR 
+      "QueryStringCode": "HR", //Path that is used in the URL for this VIP.  "HR" would light up the URL http://..../VIP/HR
       "CcEmail": "rob.munro@t4g.com", //Email address that is cc'd for all VIP submissions
       "Fields": [
         {
@@ -11,7 +11,7 @@
           "AGFieldId": "Address", //The value of the "ag-field-id" attribute for the form field in the Index.chtml file
           "Value": "123 Bloor Street", //The value that the field should be set to - string for text fields or the value of the option items in the dropdowns
           "Disabled": "true" //Set to true if you want the field to be unchangeable by the customer
-        },
+        } /*,
         {
           "AGFieldId": "Branch",
           "Value": "Carnforth",
@@ -22,8 +22,75 @@
           "AGFieldId": "Department",
           "Value": "CADD",
           "Disabled": "false"
+        }*/
+      ]
+    },
+    {
+      //Entry #1 - repeat entire entry after curly bracket with commas in between
+      "Name": "quadrangle", //Display name
+      "QueryStringCode": "QUAD", //Path that is used in the URL for this VIP.  "HR" would light up the URL http://..../VIP/HR
+      "CcEmail": "", //Email address that is cc'd for all VIP submissions
+      "Fields": [
+        {
+          //List of fields, each separated by a comma
+          "AGFieldId": "Address", //The value of the "ag-field-id" attribute for the form field in the Index.chtml file
+          "Value": "901 king st. west", //The value that the field should be set to - string for text fields or the value of the option items in the dropdowns
+          "Disabled": "false" //Set to true if you want the field to be unchangeable by the customer
+        },
+        {
+          "AGFieldId": "Branch",
+          "Value": "Carnforth",
+          "Disabled": "true",
+          "Visible": "true" //Set to false if you want the field to be hidden
+        }, /*
+        {
+          "AGFieldId": "Department",
+          "Value": "CADD",
+          "Disabled": "false"
+        },*/
+        {
+          "AGFieldId": "AccountNumber",
+          "Value": "QUA004",
+          "Disabled": "false"
+        }
+      ]
+    },
+    {
+      //Entry #2 - repeat entire entry after curly bracket with commas in between
+      "Name": "JacknifeDesign", //Display name
+      "QueryStringCode": "jacknife", //Path that is used in the URL for this VIP.  "HR" would light up the URL http://..../VIP/HR
+      "CcEmail": "", //Email address that is cc'd for all VIP submissions
+      "Fields": [
+        {
+          //List of fields, each separated by a comma
+          "AGFieldId": "Address", //The value of the "ag-field-id" attribute for the form field in the Index.chtml file
+          "Value": "401 Richmond st. west", //The value that the field should be set to - string for text fields or the value of the option items in the dropdowns
+          "Disabled": "false" //Set to true if you want the field to be unchangeable by the customer
+        },
+        {
+          //List of fields, each separated by a comma
+          "AGFieldId": "UnitNumber", //The value of the "ag-field-id" attribute for the form field in the Index.chtml file
+          "Value": "Studio 410", //The value that the field should be set to - string for text fields or the value of the option items in the dropdowns
+          "Disabled": "false" //Set to true if you want the field to be unchangeable by the customer
+        },
+        {
+          "AGFieldId": "Branch",
+          "Value": "Carnforth",
+          "Disabled": "true",
+          "Visible": "true" //Set to false if you want the field to be hidden
+        }, /*
+        {
+          "AGFieldId": "Department",
+          "Value": "CADD",
+          "Disabled": "false"
+        },*/
+        {
+          "AGFieldId": "AccountNumber",
+          "Value": "JAC001",
+          "Disabled": "false"
         }
       ]
     }
+
   ]
 }

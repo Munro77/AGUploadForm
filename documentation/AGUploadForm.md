@@ -141,6 +141,14 @@ The vipsettings.json file contains all the configuration for VIP sub Sites
 1.  Follow the same process as the formsettings.json file Instructions
 2.  Details on the configuration are annotated in the vipsettings.json file
 
+Special Notes for the dropdowns:
+The annotation in the json file describes how to do the dropdowns as well, but explicitly, you use the same setup approach:
+
+1. Find the data-ag-field id (the dropdowns are "Branch" and "Department") 
+2. You have to set them to the selected option value you want.  
+- However,the values are pulled from the formsettings.json file (the "name" values of the various options).
+3. In the sample JSON, the example sets "Branch" to "Carnforth" for example.  You'll need to match them to whatever you want set, like "Scarbororough North York / Head Office" for example, that matches your FormSettings.json.
+
 ### Changing appsettings.json
 
 The appsettings.json files are responsible for system configuration of the application, notably the email and database configurations

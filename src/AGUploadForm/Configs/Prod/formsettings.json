@@ -22,7 +22,7 @@
           "Name": "CADD",
           //Email is who recieves any submitted orders for this office/Department
           "Email": "cadd@astleygilbert.com",
-		  //"Email": "rob.munro@t4g.com",
+          //"Email": "rob.munro@t4g.com",
           //SaveLocation is the local path on the server
           "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\CADD",
           //SaveEmailAlias are the links to the root folder that will be in the email (i.e. the network share address, ftp address)
@@ -52,7 +52,7 @@
         },
         {
           "Name": "Document Control / Indexing",
-          "Email": "projectcentral@astleygilbert.com;cadd@astleygilbert.com", 
+          "Email": "projectcentral@astleygilbert.com;cadd@astleygilbert.com",
           "SaveLocation": "E:\\temp\\webuploader\\Scarborough-NorthYork\\ProjectCentral",
           "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Scarborough-NorthYork\\ProjectCentral",
           "Default": "false"
@@ -82,45 +82,10 @@
     },
 
 
-    // WELLINGTON  Office two repeats the pattern above (note the commas at the end of each office section above, after the curly brace)
-    {
-      "Name": "Downtown Toronto",
-      "FallbackHoursStart": "20:30",
-      "FallbackHoursFinish": "24",
-      "FallbackOfficeName": "Scarborough / North York (Head Office)",
-      "SaveLocation": "E:\\temp\\webuploader\\DowntownToronto",
-      "SaveEmailAlias": "\\\\192.168.10.80\\webuploader",
-      "Email": "",
-
-      "Departments": [
-        {
-          "Name": "CADD",
-          "Email": "wellingtoncadd@astleygilbert.com",
-          "SaveLocation": "E:\\temp\\webuploader\\DowntownToronto\\CADD",
-          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\DowntownToronto\\CADD",
-          "Default": "true"
-        },
-        {
-          "Name": "Colour",
-          "Email": "wellingtonc2@astleygilbert.com",
-          "SaveLocation": "E:\\temp\\webuploader\\DowntownToronto\\Colour",
-          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\DowntownToronto\\Colour",
-          "Default": "false"
-        },
-        {
-          "Name": "Docutech",
-          "Email": "wellingtond2@astleygilbert.com",
-          "SaveLocation": "E:\\temp\\webuploader\\DowntownToronto\\Docutech",
-          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\DowntownToronto\\Docutech",
-          "Default": "false"
-        }
-      ]
-
-    },
-    //Midtown
+    //Downtown Adelaide
     {
       "Name": "Downtown Toronto / Adelaide",
-      "FallbackHoursStart": "18",
+      "FallbackHoursStart": "21",
       "FallbackHoursFinish": "24",
       "FallbackOfficeName": "Scarborough / North York (Head Office)",
       "SaveLocation": "E:\\temp\\webuploader\\Midtown",
@@ -130,23 +95,30 @@
       "Departments": [
         {
           "Name": "CADD",
-          "Email": "adelaide@astleygilbert.com",
+          "Email": "422c@astleygilbert.com",
           "SaveLocation": "E:\\temp\\webuploader\\Midtown\\CADD",
           "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Midtown\\CADD",
           "Default": "true"
         },
         {
           "Name": "Colour",
-          "Email": "adelaide@astleygilbert.com",
+          "Email": "422s@astleygilbert.com",
           "SaveLocation": "E:\\temp\\webuploader\\Midtown\\Colour",
           "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Midtown\\Colour",
           "Default": "false"
         },
         {
           "Name": "Docutech",
-          "Email": "adelaide@astleygilbert.com",
+          "Email": "422s@astleygilbert.com",
           "SaveLocation": "E:\\temp\\webuploader\\Midtown\\Docutech",
           "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Midtown\\Docutech",
+          "Default": "false"
+        },
+        {
+          "Name": "Grandformat",
+          "Email": "422g@astleygilbert.com",
+          "SaveLocation": "E:\\temp\\webuploader\\Midtown\\GrandFormat",
+          "SaveEmailAlias": "\\\\192.168.10.80\\webuploader\\Midtown\\GrandFormat",
           "Default": "false"
         }
       ]
@@ -238,7 +210,7 @@
     //Markham
     {
       "Name": "Markham",
-      "FallbackHoursStart": "18",
+      "FallbackHoursStart": "17",
       "FallbackHoursFinish": "24",
       "FallbackOfficeName": "Scarborough / North York (Head Office)",
       "SaveLocation": "E:\\temp\\webuploader\\Markham",
